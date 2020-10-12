@@ -15,7 +15,9 @@ var comments = []
 // 读取日志数据
 fs.readFile('./data/log.json', function(err, data) {
     if (err) { return console.log('读取数据文件失败') }
+    // 这里需要转换 data 数据类型为字符串(原本是二进制数据)
     var jsObj = JSON.parse(data.toString())
+    // 这里只需要将 Json 文件中的各个值传入 comments 数组就行
     for (key in jsObj) {
         comments[key] = jsObj[key]
     }
