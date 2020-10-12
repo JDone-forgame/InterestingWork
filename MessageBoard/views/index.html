@@ -38,11 +38,12 @@
         <div id=writeLogBtn class=btn onclick="toUrl('/postLog')">发表留言</div>
         <br> {{each comments}}
         <div class=content>
+            <div id=deleteLogBtn class=btn onclick="toUrl('/deleteLog?id='+'{{$value.id}}')">删除留言</div>
             <p><span style="font-size: 20px;"><strong>
-                        <{{$value.name}}>
+                        【{{$value.name}}】
                     </strong></span>说：</p>
             <p>&emsp;&emsp;{{$value.message}}</p>
-            <p style="text-align: right;"><span style="font-size: 15px;">发表于{{$value.dateTime}}&emsp;&emsp;</span></p>
+            <p style="text-align: right;"><span style="font-size: 15px;">发表于{{$value.dateTime}}&emsp;#{{$value.listId}}楼&emsp;&emsp;</span></p>
         </div>
         {{/each}}
     </div>

@@ -44,21 +44,6 @@ http.createServer(function(req, res) {
                 comments: comments
             })
 
-            // 保存数据
-            for (let i = 0; i < comments.length; i++) {
-                cJson[i] = comments[i]
-            }
-            JSON.stringify(cJson)
-
-            fs.writeFile('./data/log.json', JSON.stringify(cJson), function(error) {
-                if (error) {
-                    console.log('文件写入失败')
-                } else {
-                    console.log('文件写入成功')
-                }
-
-            })
-
             // 响应页面
             res.end(htmlStr)
         })
@@ -75,9 +60,32 @@ http.createServer(function(req, res) {
         //      1，获取表单数据
         //      2，生成日期数据，存储到数组中
         //      3，重定向到首页
-        var comment = parseObj.query
-        comment.dateTime = new Date().Format("yyyy-MM-dd hh:mm:ss")
-        comments.unshift(comment)
+        let comment = parseObj.query
+        if(comment.message != ""){
+            // id 用于删除使用，相当于数组下标
+            comment.id = comments.length + 1
+            // listId 用于展示楼数，即使曾经的楼删除了，新的楼数只增不减
+            comment.listId = comments[0]?comments[0].listId+1:1
+            comment.name === "" ? comment.name = '没留名的狠人' : comment.name
+            comment.dateTime = new Date().Format("yyyy-MM-dd hh:mm:ss")
+            comments.unshift(comment)
+    
+            // 保存数据
+            for (let i = 0; i < comments.length; i++) {
+                cJson[i] = comments[i]
+            }
+            JSON.stringify(cJson)
+    
+            fs.writeFile('./data/log.json', JSON.stringify(cJson), function(error) {
+                if (error) {
+                    console.log('文件写入失败')
+                } else {
+                    console.log('文件写入成功')
+                }
+    
+            })
+        }
+        
 
         // 服务端已经处理好数据了，接下来让用户重新请求 / 首页
         // 1，状态码设置为 302 临时重定向
@@ -101,6 +109,36 @@ http.createServer(function(req, res) {
             if (err) { return res.end('404') }
             res.end(data)
         })
+    }
+    else if (pathname === '/deleteLog') {
+        let data = parseObj.query
+        let temp = []
+        for(let i=0 ;i<comments.length;i++){
+            if(i != comments.length-data.id){
+                temp.push(comments[i])
+            }
+        }
+        comments = temp
+
+        // 保存数据
+        for (let i = 0; i < comments.length; i++) {
+            cJson[i] = comments[i]
+        }
+        JSON.stringify(cJson)
+
+        fs.writeFile('./data/log.json', JSON.stringify(cJson), function(error) {
+            if (error) {
+                console.log('文件写入失败')
+            } else {
+                console.log('文件写入成功')
+            }
+
+        })
+
+        res.statusCode = 302
+        res.setHeader('Location', '/')
+        res.end()
+
     } else {
         // 其他的都处理成 404 页面
         fs.readFile('./views/404.html', function(err, data) {

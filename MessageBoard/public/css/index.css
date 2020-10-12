@@ -55,6 +55,11 @@ body {
     margin-bottom: 10px;
 }
 
+#deleteLogBtn {
+    position: absolute;
+    right: 10px;
+}
+
 .content {
     position: relative;
     width: 96%;
