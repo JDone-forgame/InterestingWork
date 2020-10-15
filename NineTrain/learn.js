@@ -1,0 +1,116 @@
+// 棋盘函数
+arr = [[0, 1, 2],[0, 3, 6],[1, 4, 7],[2, 5, 8],[3, 4, 5],[6, 7, 8],[0, 4, 8],[2, 4, 6]]
+
+// 判定结果
+function checkSituation() {
+    if (arr.some(function(item) {
+            return concatBox(item) == "111";
+        })) {
+        result("你输了 :-(");
+    } else if ($("button[disabled]").length === 9) {
+        result("平局");
+    }
+}
+
+//  "0"为空子，"1"为AI棋子，"-1"为玩家棋子
+function attack(arr) {
+    switch (concatBox(arr)) {
+        case "011":
+            aiClick(arr[0]);
+            return true;
+        case "101":
+            aiClick(arr[1]);
+            return true;
+        case "110":
+            aiClick(arr[2]);
+            return true;
+    }
+}
+function defense(arr) {
+    switch (concatBox(arr)) {
+        case "0-1-1":
+            aiClick(arr[0]);
+            return true;
+        case "-10-1":
+            aiClick(arr[1]);
+            return true;
+        case "-1-10":
+            aiClick(arr[2]);
+            return true;
+    }
+}
+
+function aiRound() {
+    //  连三子
+        if (arr.some(function(item) {
+                return attack(item);
+            })) {
+            return;
+        }
+    //  拦住玩家三子
+        if (arr.some(function(item) {
+                return defense(item);
+            })) {
+            return;
+        }
+    //  AI先手
+        if (AI === "X") {
+            if (aiSteps === 1) {
+                switch (true) {
+                    case box(1) == -1 || box(3) == -1:
+                        Xcase = "1";
+                        aiClick(4);
+                        break;
+                    case box(2) == -1 || box(6) == -1:
+                        Xcase = "2";
+                        aiClick(8);
+                        break;
+                    case box(5) == -1 || box(7) == -1:
+                        Xcase = "3";
+                        aiClick(4);
+                        break;
+                    case box(8) == -1:
+                        Xcase = "4";
+                        aiClick(2);
+                        break;
+                    default:
+                        aiClick(8);
+                        break;
+                }
+            }
+            if (aiSteps === 2) {
+                switch (Xcase) {
+                    case "1":
+                        if (box(3) == -1) { aiClick(2); } else { aiClick(6); }
+                        break;
+                    case "2":
+                        if (box(2) == -1) { aiClick(6); } else { aiClick(2); }
+                        break;
+                    case "3":
+                        if (box(5) == -1) { aiClick(2); } else { aiClick(6); }
+                        break;
+                    case "4":
+                        aiClick(6);
+                        break;
+                }
+            }
+        }
+    //  AI后手
+        if (AI === "O") {
+            if (aiSteps === 0) {
+                if (box(4) == -1) {
+                    aiClick(0);
+                } else {
+                    aiClick(4);
+                }
+            } else if (aiSteps === 1) {
+                if (parseInt(box(0)) + parseInt(box(2)) + parseInt(box(6)) + parseInt(box(8)) == 2) { aiClick(1); } 
+                else if (twoBox(2, 3) || twoBox(1, 6) || twoBox(1, 3)) { aiClick(0); } 
+                else if (twoBox(0, 5) || twoBox(1, 8) || twoBox(1, 5)) { aiClick(2); } 
+                else if (twoBox(0, 7) || twoBox(3, 8) || twoBox(3, 7)) { aiClick(6); } 
+                else if (twoBox(5, 7) || twoBox(5, 6) || twoBox(2, 7)) { aiClick(8); } 
+                else if (twoBox(0, 8) || twoBox(2, 6)) { aiClick(1); } 
+                else { aiClick(2); }
+            } else if (aiSteps === 2 || aiSteps === 3) { randomStep(); }
+        }
+    }
