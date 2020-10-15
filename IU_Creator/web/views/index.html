@@ -9,7 +9,7 @@
 </head>
 
 <script>
-    //弹窗点击
+    // 弹窗点击
     function windowPageControl(state){
         var abD = document.getElementById('aboutBoard');
         var abC = document.getElementById('aboutContent');       
@@ -27,14 +27,13 @@
         }
     }
 
-    //开始点击
+    // 开始点击
     function startClick(){
-        var nP = document.getElementById('nextPage');
-        nP.style.top="0rem";
-        nP.style.left="0rem";
+        var loading = document.getElementById('loading');
+        loading.style.top="0%";
         setTimeout(function(){
-            //跳转
-            window.location.href='center.html';
+            // 跳转
+            window.location.href='/game/loadcenter';
         },750);
     }
     
@@ -69,8 +68,13 @@
         </div>
     </div>
     <div id=footer>推荐使用全屏体验</div>
-    <div id=nextPage>
-        <iframe src="./center.html" frameborder="0" scrolling="No" leftmargin="0" topmargin="0"></iframe>
+
+    <div id=loading>
+        <div class="loadingStar">★☆★☆★☆★☆</div>
+        <div class="loadingStar">★☆★☆★☆★☆</div>
+        <div class="loadingStar">★☆★☆★☆★☆</div>
+        <div class="loadingStar">★☆★☆★☆★☆</div>
+        <div class="loadingStar">★☆★☆★☆★☆</div>
     </div>
 </body>
 </html>

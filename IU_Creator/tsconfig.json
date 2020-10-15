@@ -10,6 +10,7 @@
     "forceConsistentCasingInFileNames": true  /* 禁止对同一个文件的不一致的引用*/   
   },
   "include": [
-    "**/*.ts"
+    "app/*.ts",
+    "game/*.ts"
   ]
 }

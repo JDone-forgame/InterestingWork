@@ -1,0 +1,128 @@
+[
+	{
+		"coordinate": {
+			"x": -1,
+			"y": 1
+		},
+		"typeId": "c1",
+		"selfAnima": 10,
+		"boom": 0,
+		"effectInfo": "这是一片灵气盎然的灵杉区",
+		"pieceName": "灵杉",
+		"pieceColor": "MediumTurquoise",
+		"pieceImage": "",
+		"pieceMaxPeopleLimit": 1
+	},
+	{
+		"coordinate": {
+			"x": 0,
+			"y": 1
+		},
+		"typeId": "c0",
+		"selfAnima": 0,
+		"boom": 0,
+		"effectInfo": "就是一块普通的土地",
+		"pieceName": "土地",
+		"pieceColor": "DimGray",
+		"pieceImage": "",
+		"pieceMaxPeopleLimit": 0
+	},
+	{
+		"coordinate": {
+			"x": 1,
+			"y": 1
+		},
+		"typeId": "c0",
+		"selfAnima": 0,
+		"boom": 0,
+		"effectInfo": "就是一块普通的土地",
+		"pieceName": "土地",
+		"pieceColor": "DimGray",
+		"pieceImage": "",
+		"pieceMaxPeopleLimit": 0
+	},
+	{
+		"coordinate": {
+			"x": -1,
+			"y": 0
+		},
+		"typeId": "c0",
+		"selfAnima": 0,
+		"boom": 0,
+		"effectInfo": "就是一块普通的土地",
+		"pieceName": "土地",
+		"pieceColor": "DimGray",
+		"pieceImage": "",
+		"pieceMaxPeopleLimit": 0
+	},
+	{
+		"coordinate": {
+			"x": 0,
+			"y": 0
+		},
+		"typeId": "c1",
+		"selfAnima": 10,
+		"boom": 0,
+		"effectInfo": "这是一片灵气盎然的灵杉区",
+		"pieceName": "灵杉",
+		"pieceColor": "MediumTurquoise",
+		"pieceImage": "",
+		"pieceMaxPeopleLimit": 1
+	},
+	{
+		"coordinate": {
+			"x": 1,
+			"y": 0
+		},
+		"typeId": "c0",
+		"selfAnima": 0,
+		"boom": 0,
+		"effectInfo": "就是一块普通的土地",
+		"pieceName": "土地",
+		"pieceColor": "DimGray",
+		"pieceImage": "",
+		"pieceMaxPeopleLimit": 0
+	},
+	{
+		"coordinate": {
+			"x": -1,
+			"y": -1
+		},
+		"typeId": "c0",
+		"selfAnima": 0,
+		"boom": 0,
+		"effectInfo": "就是一块普通的土地",
+		"pieceName": "土地",
+		"pieceColor": "DimGray",
+		"pieceImage": "",
+		"pieceMaxPeopleLimit": 0
+	},
+	{
+		"coordinate": {
+			"x": 0,
+			"y": -1
+		},
+		"typeId": "c0",
+		"selfAnima": 0,
+		"boom": 0,
+		"effectInfo": "就是一块普通的土地",
+		"pieceName": "土地",
+		"pieceColor": "DimGray",
+		"pieceImage": "",
+		"pieceMaxPeopleLimit": 0
+	},
+	{
+		"coordinate": {
+			"x": 1,
+			"y": -1
+		},
+		"typeId": "c0",
+		"selfAnima": 0,
+		"boom": 0,
+		"effectInfo": "就是一块普通的土地",
+		"pieceName": "土地",
+		"pieceColor": "DimGray",
+		"pieceImage": "",
+		"pieceMaxPeopleLimit": 0
+	}
+]
