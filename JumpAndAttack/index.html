@@ -29,14 +29,16 @@
     var addtime = 0
     // 计时柄
     var handle
+    // 控制弹窗
+    var hasMsg = false
 
     var a = document.getElementsByName('changeD1')
     var b = document.getElementsByName('changeD2')
     var c = document.getElementsByName('changeD3')
 
     // 游戏结束处理
-    function endGame(){
-        openAndCloseMsg(1,'<p><span style="font-size:7rem;color:red">死</span></p>'+'<p>你获得了'+score+'分</p>')
+    function endGame() {
+        openAndCloseMsg(1, '<p><span style="font-size:7rem;color:red">死</span></p>' + '<p>你获得了' + score + '分</p>')
     }
 
     // 辅助模式
@@ -81,18 +83,27 @@
     // 响应键盘操作
     document.onkeydown = function (event) {
         var e = event || window.event || arguments.callee.caller.arguments[0];
-        if (e && e.keyCode == 74) { // 按 j
-            userOption('X')
+        if (hasMsg) {
+            if (e && e.keyCode == 13) { // 按 回车关闭弹窗
+                openAndCloseMsg(0)
+            }
+        } else {
+            if (e && e.keyCode == 74) { // 按 j
+                userOption('X')
+            }
+            if (e && e.keyCode == 75 || e && e.keyCode == 32) { // 按 k 或者空格
+                userOption('O')
+            }
+            if (e && e.keyCode == 72) { // 按 h
+                help()
+            }
+            if (e && e.keyCode == 82) { // 按 r
+                location.reload()
+            }
         }
-        if (e && e.keyCode == 75 || e && e.keyCode == 32) { // 按 k 或者空格
-            userOption('O')
-        }
-        if (e && e.keyCode == 72) { // 按 h
-            help()
-        }
-        if (e && e.keyCode == 82) { // 按 r
-            location.reload()
-        }
+
+
+
     }
 
     // 判定
@@ -134,13 +145,12 @@
                 // 加一分
                 score += 1
                 updataDscore()
-
+                // 加0.2s
                 addtime += 0.1
-
+                // 这里加显示效果
                 for (let i = 1; i < enemy[0].length; i++) {
                     if (enemy[0][i] == 1) {
                         enemy[0][i] = 0
-                        // 这里加显示效果
                         a[i].style.backgroundColor = 'white'
                         break
                     }
@@ -172,6 +182,8 @@
             } else if (Opt == 'O') {
                 // 加两分
                 score += 2
+                // 加0.2s
+                addtime += 0.2
                 // 删除台阶
                 enemy.shift()
                 // 随机生成新台阶
@@ -224,12 +236,12 @@
     }
 
     //开关msg弹窗
-    function openAndCloseMsg(cho,msgT){
+    function openAndCloseMsg(cho, msgT) {
         var msg = document.getElementById('msg');
         var msgCA = document.getElementById('msgConAdd');
-        msgCA.innerHTML=msgT;
-        if(cho==0){msg.style.display="none";location.reload()}
-        if(cho==1){msg.style.display="block";stopTimer()}
+        msgCA.innerHTML = msgT;
+        if (cho == 0) { msg.style.display = "none"; hasMsg = false; location.reload() }
+        if (cho == 1) { msg.style.display = "block"; hasMsg = true; stopTimer() }
     }
 </script>
 
@@ -240,6 +252,7 @@
         <p>按J(攻击)或K(跳跃)开始游戏</p>
         <p>按H关闭辅助模式,按R开启辅助模式</p>
         <p>或者使用下方屏幕按键</p>
+        <p>每跳一步加0.1秒</p>
     </div>
 
     <!-- 信息提示弹窗 -->
@@ -249,7 +262,7 @@
             <h1>提示</h1>
             <div id="msgConAdd"></div>
         </div>
-    </div>  
+    </div>
 
     <div id=view>
         <div class="Dl">
