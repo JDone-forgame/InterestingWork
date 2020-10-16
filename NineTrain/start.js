@@ -29,6 +29,6 @@ http.createServer(function(req, res) {
         // 其他的都处理成 404 页面
         res.end("404")
     }
-}).listen(4000, function() {
+}).listen(4020, function() {
     console.log('>>>app start!')
 })
