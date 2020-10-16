@@ -1,0 +1,287 @@
+@font-face {
+    font-family: sanjiguyuan; 
+    src: url(../font/sanjiguyuan.ttf);
+}
+
+::-webkit-scrollbar{
+display:none;
+}
+
+html{
+    font-size: 10px;
+}
+
+*{
+    transition: all 0.3s;
+}
+
+body{
+    position: absolute;
+    margin: 0;
+    background: black;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    text-align: center;
+    user-select: none;
+    font-family: sanjiguyuan; 
+}
+/* 背板 */
+.bord{
+    position: absolute;
+    background: black;
+    height: 100%;
+    overflow: hidden;
+}
+
+/* 过渡背板 */
+#preBord{
+    background: rgba(0, 0, 0, 0.911);
+    position: absolute;
+    top:0;
+    left:0;
+    width: 0rem;
+    height: 85rem;
+    overflow: hidden;
+    z-index: 1;
+}
+#preBordCon{
+    position: relative;
+    top:5%;
+    left:50%;
+    transform: translate(-50%,0);
+    width: 90%;
+    height: 50%;
+    font-size: 4rem;
+    text-align: center;
+    background: rgb(255, 255, 255);
+    border-radius: 1rem;
+}
+#pCho1{
+    top:70%;
+    left:50%;
+}
+.bordno{
+    display: none;
+}
+
+
+
+/* 背板 */
+#bord1{
+    width: 100%;
+    background: linear-gradient(90deg, black 10%, white 90%);
+}
+#bord2,#bord3,#bord4,#bord5,#bord6{
+    width: 0rem;
+    display: none;
+    background: rgb(0, 0, 0);
+}
+
+/* 第一个背板的移动块 */
+#moveDiv{
+    width: 20rem;
+    height: 15rem;
+    background: rgb(93, 93, 93);
+    font-size: 5rem;
+    color: black;
+    position: absolute;
+    transform: translate(-50%);
+    top:20%;
+    left: 10%;
+    text-align: center;
+    line-height: 15rem;
+    animation: moveDiv 3s linear 0s infinite alternate;
+}
+@keyframes moveDiv {
+    from{
+        color:black;
+        left: 20%;
+    }
+    to{
+        color:white;
+        left: 80%;
+    }
+}
+
+/* 关卡文本区 */
+.levelCon{
+    position: absolute;
+    top:40%;
+    left:50%;
+    transform: translate(-50%,0);
+    width: 80%;
+    text-align: center;
+    height: 20%;
+    font-size: 3rem;
+    color: white;
+    /* background-color: green; */
+}
+
+/* 按键样式 */
+.chooseC{
+    position: absolute;
+    transform: translate(-50%,0);
+    width: 20rem;
+    height: 9rem;
+    text-align: center;
+    font-size: 4rem;
+    line-height: 9rem;
+    color: white;
+    background: black;
+}
+.chooseC:hover{
+    color: black;
+    background: white;
+}
+.Cho1{
+    top:70%;
+    left:30%;
+}
+.Cho2{
+    top:70%;
+    left:70%;
+}
+.Cho3{
+    top:70%;
+    /* right:30rem; */
+    left:50%;
+}
+
+/* 图片 */
+#bord2 img{
+    position: relative;
+    top:5rem;
+    left: auto;
+    width: 53.5rem;
+    height: 40rem;
+}
+
+#bord3 img{
+    position: relative;
+    top:5rem;
+    left: auto;
+    width: 35rem;
+    height: 35rem;
+}
+
+/* 标题 */
+.title{
+    background-color: white;
+    color: black;
+    text-align: center;
+    font-size: 4rem;
+    width: 60%;
+    height: 30rem;
+    line-height: 30rem;
+    position: relative;
+    border-radius: 0.5rem;
+    top: 5%;
+    left: 50%;
+    transform: translate(-50%,0);
+}
+
+/* 确认按键 */
+#sureC{
+    position: relative;
+    background: white;
+    color: black;
+    line-height: 10rem;
+    font-size: 4rem;
+    top:10%;
+    left: 50%;
+    transform: translate(-50%,0);
+    width: 20rem;
+    height: 10rem;
+    border: solid 0.2rem rgba(0, 0, 0, 0);
+}
+#sureC:hover{
+    background: black;
+    color: white;
+    border: solid 0.2rem rgb(255, 255, 255);
+}
+
+
+
+/* 三大按钮 */
+.itemBord{
+    position: relative;
+    width: 100%;
+    height: 10rem;
+    background: rgb(0, 0, 0);
+    margin-top: 10rem;
+}
+.chooseItem{
+    height: 10rem;
+    width: 30rem;
+    background: white;
+    color: black;
+    line-height: 10rem;
+    font-size: 4.5rem;
+    border-radius: 1rem;
+    float: left;
+    margin-left: 5rem;
+}
+.chooseImg{
+    width: 10rem;
+    height: 10rem;
+    float: left;
+    margin-left: 50rem;
+}
+#bord6 img{
+    width: 10rem;
+    height: 10rem;
+}
+
+.chooseItem:hover{
+    background: rgb(44, 44, 44);
+    color: white;
+}
+
+
+
+.fistTxt{
+    position: absolute;
+    left: 0rem;
+    top: 2rem;
+    width: 80rem;
+    height: 7rem;
+    background: rgb(71, 71, 71);
+    color: white;
+    text-align: left;
+    line-height: 7rem;
+    font-size: 3rem;
+    border-top-right-radius: 1rem;
+    border-bottom-right-radius: 1rem;
+}
+
+.detailTxt{
+    position: absolute;
+    padding: 3rem;
+    top: 11rem;
+    width:95%;
+    height: 75%;
+    background: rgb(187, 187, 187);
+    color: black;
+    font-size: 3rem;
+    text-align: left;
+    border-radius:0.5rem;
+}
+
+.close{
+    position: absolute;
+    left: 80%;
+    top: 2rem;
+    width: 16rem;
+    height: 7rem;
+    color: rgb(0, 0, 0);
+    font-size: 5rem;
+    line-height: 7rem;
+    background: rgb(187, 187, 187);
+    border: solid 0.2rem white;
+    border-radius: 0.5rem;
+}
+.close:hover{
+    color: rgb(255, 255, 255);
+    background: rgb(29, 29, 29);
+}

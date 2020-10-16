@@ -3,182 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="../css/level.css">
     <title>Document</title>
 </head>
 
-<style>
-    @font-face {
-    font-family: sanjiguyuan; 
-    src: url(../font/sanjiguyuan.ttf);
-    }
-    
-    ::-webkit-scrollbar{
-    display:none;
-    }
-
-    *{
-        transition: all 0.3s;
-    }
-
-    body{
-        margin: 0;
-        background: black;
-        overflow: hidden;
-        text-align: center;
-        user-select: none;
-        font-family: sanjiguyuan; 
-    }
-    .bord{
-        width: 0px;
-        height: 850px;
-        overflow: hidden;
-        position: absolute;
-        top: 0px;
-        left: 0px;
-        background: black;
-    }
-
-    #bord1{
-        width: 1840px;
-    }
-
-    #bord3,#bord4,#bord5{
-        background: white;
-    }
-
-    .title{
-        background-color: white;
-        color: black;
-        text-align: center;
-        font-size: 40px;
-        width: 900px;
-        height: 300px;
-        line-height: 300px;
-        position: relative;
-        border-radius: 5px;
-        top: 100px;
-        left: 470px;
-    }
-
-    #sureC{
-        position: relative;
-        background: white;
-        color: black;
-        line-height: 100px;
-        font-size: 40px;
-        top:200px;
-        left: 800px;
-        width: 200px;
-        height: 100px;
-        border: solid 2px rgba(0, 0, 0, 0);
-    }
-
-    #sureC:hover{
-        background: black;
-        color: white;
-        border: solid 2px rgb(255, 255, 255);
-    }
-
-    .chooseImg{
-        width: 100px;
-        height: 100px;
-        float: left;
-        margin-left: 695px;
-    }
-
-    .img{
-        width: 100px;
-        height: 100px;
-    }
-
-    .chooseItem{
-        height: 100px;
-        width: 300px;
-        background: white;
-        color: black;
-        line-height: 100px;
-        font-size: 45px;
-        border-radius: 10px;
-        float: left;
-        margin-left: 50px;
-    }
-
-    .chooseItem:hover{
-        background: rgb(44, 44, 44);
-        color: white;
-    }
-
-    .itemBord{
-        position: relative;
-        width: 1840px;
-        height: 100px;
-        background: rgb(0, 0, 0);
-        margin-top: 100px;
-    }
-
-    .fistTxt{
-        position: absolute;
-        left: 0px;
-        top: 20px;
-        width: 700px;
-        height: 80px;
-        background: rgb(71, 71, 71);
-        color: white;
-        text-align: left;
-        line-height: 80px;
-        font-size: 40px;
-        border-top-right-radius: 10px;
-        border-bottom-right-radius: 10px;
-    }
-
-    .detailTxt{
-        position: absolute;
-        left: 10px;
-        top: 110px;
-        width: 1820px;
-        height: 730px;
-        background: rgb(187, 187, 187);
-        color: black;
-        font-size: 40px;
-        text-align: left;
-        border-radius: 5px;
-    }
-
-    .close{
-        position: absolute;
-        left: 1600px;
-        top: 20px;
-        width: 160px;
-        height: 80px;
-        color: rgb(0, 0, 0);
-        font-size: 50px;
-        line-height: 80px;
-        background: rgb(187, 187, 187);
-        border: solid 2px white;
-        border-radius: 5px;
-    }
-    .close:hover{
-        color: rgb(255, 255, 255);
-        background: rgb(29, 29, 29);
-    }
-
-</style>
-
 <script>
+
+    // 确定点击
     var sureCtime = 0;
     function onSureCClick(){
         var sureC = document.getElementById('sureC');
         var bord1 = document.getElementById('bord1');
         if(sureCtime == 1){
-            bord1.style.width="0px";
-            document.getElementById('bord2').style.width="1840px";
+            bord1.style.width="0rem";
+            document.getElementById('bord6').style.display = 'block'
+            document.getElementById('bord6').style.width="100%";
         }else{
-            sureC.style.left="100px";
-            sureC.style.top="50px"; 
+            sureC.style.left="10%";
+            sureC.style.top="5%"; 
             sureCtime = 1;
         }
     }
 
+    // 音效部分
     var audio;
     function playSound(url){
         var surl = "../sound/"+url
@@ -191,13 +38,16 @@
         audio.currentTime = 0;
     }
 
+    // 选择
     function chooseItemClick(num1,num2){
         var id = "bord" + num1;
         if(num2 == 0){
-            document.getElementById(id).style.width="0px"; 
+            document.getElementById(id).style.display="none";
+            document.getElementById(id).style.width="0rem"; 
         }
         if(num2 == 1){
-            document.getElementById(id).style.width="1840px";
+            document.getElementById(id).style.display="block";
+            document.getElementById(id).style.width="100%";
         }  
     }
 
@@ -210,21 +60,21 @@
         <div id=sureC onclick="onSureCClick()">确认</div>
     </div>
 
-    <div id=bord2 class="bord">
+    <div id=bord6 class="bord">
         <div class="itemBord">
-            <div class="chooseImg"><img class="img" src="../image/level3img1.png"></div>
+            <div class="chooseImg"><img src="../image/level3img1.png"></div>
             <div class="chooseItem" onmouseover="playSound('l3t1.wav')" onmouseout="stopSound()" 
             onclick="chooseItemClick(3,1)">手机震动</div>
         </div>
 
         <div class="itemBord">
-            <div class="chooseImg"><img class="img" src="../image/level3img2.png"></div>
+            <div class="chooseImg"><img src="../image/level3img2.png"></div>
             <div class="chooseItem" onmouseover="playSound('l3t2.wav')" onmouseout="stopSound()" 
             onclick="chooseItemClick(4,1)">我能反杀</div>
         </div>
 
         <div class="itemBord">
-            <div class="chooseImg"><img class="img" src="../image/level3img3.png"></div>
+            <div class="chooseImg"><img src="../image/level3img3.png"></div>
             <div class="chooseItem" onmouseover="playSound('l3t3.wav')" onmouseout="stopSound()" 
             onclick="chooseItemClick(5,1)">她喜欢我</div>
         </div>

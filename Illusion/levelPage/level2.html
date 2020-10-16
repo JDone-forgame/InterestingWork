@@ -3,120 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="../css/level.css">
     <title>Document</title>
 </head>
 
-<style>
-    @font-face {
-    font-family: sanjiguyuan; 
-    src: url(../font/sanjiguyuan.ttf);
-    }
-    
-    ::-webkit-scrollbar{
-    display:none;
-    }
 
-    *{
-        transition: all 0.3s;
-    }
-
-    body{
-        margin: 0;
-        background: black;
-        overflow: hidden;
-        text-align: center;
-        user-select: none;
-        font-family: sanjiguyuan; 
-    }
-    .bord{
-        background: black;
-        height: 850px;
-        overflow: hidden;
-        width: 0px;
-    }
-    #preBord{
-        background: rgba(0, 0, 0, 0.911);
-        position: absolute;
-        top:0;
-        left:0;
-        width: 0px;
-        height: 850px;
-        overflow: hidden;
-        z-index: 1;
-    }
-    .bordno{
-        display: none;
-    }
-
-    .levelCon{
-        position: absolute;
-        top:150px;
-        left:420px;
-        width: 1000px;
-        text-align: center;
-        height: 300px;
-        font-size: 40px;
-        color: white;
-    }
-    .chooseC{
-        position: absolute;
-        width: 300px;
-        height: 100px;
-        text-align: center;
-        font-size: 50px;
-        line-height: 100px;
-        color: white;
-        background: black;
-    }
-    .chooseC:hover{
-        color: black;
-        background: white;
-    }
-    .Cho1{
-        top:600px;
-        left:300px;
-    }
-    .Cho2{
-        top:600px;
-        /* right:300px; */
-        left:1240px;
-    }
-    .Cho3{
-        top:600px;
-        /* right:300px; */
-        left:780px;
-    }
-    #preBordCon{
-        position: absolute;
-        top:150px;
-        left:460px;
-        width: 1000px;
-        height: 300px;
-        font-size: 40px;
-        text-align: center;
-        background: rgb(255, 255, 255);
-        border-radius: 10px;
-    }
-    #pCho1{
-        top:700px;
-        left:1480px;
-    }
-    #bord2 img{
-        position: relative;
-        top:50px;
-        left: auto;
-        width: 535px;
-        height: 400px;
-    }
-
-    #bord3 img{
-        position: relative;
-        top:50px;
-        left: auto;
-        width: 350px;
-        height: 350px;
-    }
-</style>
 
 <script>
     var nowID;//控制不同页面显示与否
@@ -130,8 +21,8 @@
         nowID = bordIdNum+1;
         var preB = document.getElementById('preBord');
         var preBC = document.getElementById('preBordCon');
-        bord.style.width="0px";
-        preB.style.width="1840px";
+        bord.style.width="0rem";
+        preB.style.width="100%";
         preBC.innerHTML=InHTML;
         setTimeout(function(){
             bord.style.display="none";   
@@ -157,7 +48,7 @@
             }
             
             setTimeout(function(){
-            preB.style.width="0px";
+            preB.style.width="0rem";
             preBC.innerHTML=""; 
             // 通过控制最顶层页面
             top.location.href="../center.html";
@@ -166,8 +57,8 @@
             var bord = document.getElementById(bordId);
             bord.style.display="block";
             setTimeout(function(){
-                bord.style.width="1840px";
-                preB.style.width="0px";
+                bord.style.width="100%";
+                preB.style.width="0rem";
             },100);
         }    
     }
