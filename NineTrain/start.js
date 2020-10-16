@@ -2,9 +2,6 @@ var http = require('http')
 var fs = require('fs')
 var url = require('url')
 
-var cJson = {}
-var comments = []
-
 http.createServer(function(req, res) {
     // 通过 parse 方法，true 参数确定是否将 url 转换为一个对象方便处理
     var parseObj = url.parse(req.url, true)
