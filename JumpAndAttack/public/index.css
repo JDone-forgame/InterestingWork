@@ -21,8 +21,9 @@ body {
 }
 
 /* 信息 */
-#info{
-    position: absolute; 
+
+#info {
+    position: absolute;
     background-color: rgb(58, 58, 58);
     border-radius: 1rem;
     width: 40rem;
@@ -35,8 +36,9 @@ body {
 }
 
 /* 分数 */
-#score{
-    position: absolute; 
+
+#score {
+    position: absolute;
     background-color: rgb(27, 27, 27);
     border-radius: 1rem;
     width: 10rem;
@@ -50,8 +52,9 @@ body {
 }
 
 /* 倒计时 */
-#time{
-    position: absolute; 
+
+#time {
+    position: absolute;
     background-color: rgb(27, 27, 27);
     border-radius: 1rem;
     width: 10rem;
@@ -76,7 +79,6 @@ body {
     top: 10rem;
     left: 30rem;
 }
-
 
 .Dl {
     position: relative;
@@ -151,7 +153,6 @@ body {
     transition: all 0.2s;
 }
 
-
 .option_btn:hover {
     width: 105%;
     height: 105%;
@@ -159,7 +160,8 @@ body {
 }
 
 /* 信息提示弹窗 */
-#msg{
+
+#msg {
     position: absolute;
     left: 0%;
     top: 0%;
@@ -169,7 +171,8 @@ body {
     display: none;
     background: rgba(0, 0, 0, 0.739);
 }
-#msgCon{
+
+#msgCon {
     position: absolute;
     text-align: center;
     left: 50%;
@@ -177,12 +180,14 @@ body {
     transform: translate( -50%, -50%);
     width: 38%;
     height: 50%;
-    background: rgb(255, 255, 255);  
+    background: rgb(255, 255, 255);
 }
-#msgConAdd{
+
+#msgConAdd {
     font-size: 5rem;
 }
-.close{
+
+.close {
     position: absolute;
     left: 70%;
     top: 25%;
@@ -197,7 +202,8 @@ body {
     transition: all 0.2s;
     border-radius: 0.2rem;
 }
-.close:hover{
+
+.close:hover {
     color: black;
     border-radius: 2.6rem;
     background: white;

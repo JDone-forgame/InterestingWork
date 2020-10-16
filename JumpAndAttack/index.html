@@ -38,7 +38,11 @@
 
     // 游戏结束处理
     function endGame() {
-        openAndCloseMsg(1, '<p><span style="font-size:7rem;color:red">死</span></p>' + '<p>你获得了' + score + '分</p>')
+        let PingJia = '菜'
+        if (score < 50 && score > 10) { PingJia = '勇' }
+        else if (score > 50 && score < 100) { PingJia = '强' }
+        else if (score > 50 && score < 100) { PingJia = '神' }
+        openAndCloseMsg(1, '<p><span style="font-size:7rem;color:red">-' + PingJia + '-</span></p>' + '<p>你获得了' + score + '分</p>')
     }
 
     // 辅助模式
@@ -52,6 +56,27 @@
             isHelp = false
             document.getElementById('help').style.color = "green"
             return
+        }
+    }
+
+    // 辅助改变
+    function helpEffect() {
+        for (let i = 0; i < a.length; i++) {
+            if (score <= 20) {
+                a[i].style.backgroundColor = '#800000'
+            }
+            else if (score > 20 && score <= 40) {
+                a[i].style.backgroundColor = '#FF4500'
+            }
+            else if (score > 40 && score <= 60) {
+                a[i].style.backgroundColor = '#FFD700'
+            }
+            else if (score > 60 && score <= 80) {
+                a[i].style.backgroundColor = '#00FFFF'
+            }
+            else if (score > 80) {
+                a[i].style.backgroundColor = '#9932CC'
+            }
         }
     }
 
@@ -76,7 +101,6 @@
     }
     function stopTimer() {
         clearInterval(handle)
-        second = 5
         document.getElementById('time').innerHTML = second + "s"
     }
 
@@ -156,26 +180,9 @@
                     }
                 }
                 // 辅助模式
-                console.log(enemy[0][parseInt(enemy[0].length) - 1])
                 if (enemy[0][parseInt(enemy[0].length) - 1] == 0) {
                     if (isHelp) {
-                        for (let i = 0; i < a.length; i++) {
-                            if (score <= 20) {
-                                a[i].style.backgroundColor = '#800000'
-                            }
-                            else if (score > 20 && score <= 40) {
-                                a[i].style.backgroundColor = '#FF4500'
-                            }
-                            else if (score > 40 && score <= 60) {
-                                a[i].style.backgroundColor = '#FFD700'
-                            }
-                            else if (score > 60 && score <= 80) {
-                                a[i].style.backgroundColor = '#00FFFF'
-                            }
-                            else if (score > 80) {
-                                a[i].style.backgroundColor = '#9932CC'
-                            }
-                        }
+                        helpEffect()
                     }
                 }
                 return
