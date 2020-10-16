@@ -146,7 +146,7 @@ http.createServer(function(req, res) {
             res.end(data)
         })
     }
-}).listen(3000, function() {
+}).listen(4010, function() {
     console.log('>>>app start!')
 })
 
