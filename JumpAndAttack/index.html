@@ -31,6 +31,8 @@
     var handle
     // 控制弹窗
     var hasMsg = false
+    // 无差别操作状态
+    var isGod = false
 
     var a = document.getElementsByName('changeD1')
     var b = document.getElementsByName('changeD2')
@@ -80,6 +82,20 @@
         }
     }
 
+    // 作弊模式
+    function god() {
+        if (isGod == false) {
+            isGod = true
+            document.getElementById('god').style.color = "green"
+            return
+        }
+        if (isGod == true) {
+            isGod = false
+            document.getElementById('god').style.color = "white"
+            return
+        }
+    }
+
     // 开始计时
     function startTime() {
         hasTime = true
@@ -121,6 +137,9 @@
             if (e && e.keyCode == 72) { // 按 h
                 help()
             }
+            if (e && e.keyCode == 71) { // 按 g
+                god()
+            }
             if (e && e.keyCode == 82) { // 按 r
                 location.reload()
             }
@@ -135,7 +154,10 @@
         let e0length = parseInt(enemy[0].length)
         if (enemy[0][e0length - 1] == 0) {
             if (Opt == 'X') {
-                endGame()
+                if(isGod){
+                    return true
+                }
+                endGame() 
                 return false
             }
             if (Opt == 'O') {
@@ -148,6 +170,9 @@
                         return true
                     }
                     if (Opt == 'O') {
+                        if(isGod){
+                            return true
+                        }
                         endGame()
                         return false
                     }
@@ -162,6 +187,22 @@
     function userOption(Opt) {
         // 如果计时执行，就不再重复开启
         hasTime ? "" : startTime()
+
+        // 判断是否处于无差别操作状态
+        if (isGod) {
+            if(enemy[0][parseInt(enemy[0].length) - 1] == 0){
+                Opt = "O"
+            }else{
+                Opt = "X"
+            }
+            
+        }   
+        optionEffect(Opt)
+    }
+
+    // 操作实现
+    function optionEffect(Opt){
+        console.log("实现",Opt)
         // 判断是否游戏结束
         if (judge(Opt)) {
             if (Opt == 'X') {
@@ -208,7 +249,7 @@
             }
         }
     }
-
+    
     // 更新台阶
     function updataDl() {
         // 重置一级台阶
@@ -327,6 +368,9 @@
         </div>
         <div class=option_Dbtn>
             <div id=help class="option_btn" onclick="help()">H关闭辅助</div>
+        </div>
+        <div class=option_Dbtn>
+            <div id=god class="option_btn" onclick="god()">G作弊模式</div>
         </div>
     </div>
 </body>
