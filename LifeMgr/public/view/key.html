@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/public/css/key.css">
+    <script type="text/javascript" src="/public/js/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="/public/js/key.js"></script>
+    <title>key</title>
+</head>
+
+<body>
+    <div id=recPassword class="bord1">
+        <div class="inputArea">
+            <form id=newkey autocomplete="off" action="/savekey" method="GET">
+                <p><span style="font-size: 20px;">用处：</span>
+                    <input type="text" name="useWhere" required minlength="2" maxlength="20" placeholder="何处使用"></p>
+                <p><span style="font-size: 20px;">账号：</span>
+                    <input type="text" name="userName" required minlength="2" maxlength="20" placeholder="账号"></p>
+                <p><span style="font-size: 20px;">密码：</span>
+                    <input type="text" name="password" required minlength="2" maxlength="20" placeholder="密码"></p>
+                <p><span style="font-size: 20px;">邮箱：</span>
+                    <input type="text" name="email" placeholder="邮箱"></p>
+                <p><span style="font-size: 20px;">链接：</span>
+                    <input type="text" name="link" placeholder="若是网址则填写链接"></p>
+                <p><span style="font-size: 20px;">备注：</span>
+                    <input type="text" name="note" placeholder="二级密码，安全信息等"></p>
+            </form>
+        </div>
+        <div class="btnArea">
+            <div id="saveKey" class="btn">保存</div>
+        </div>
+    </div>
+
+    <div class="mid-line"></div>
+
+    <div id=showPassword class="bord1">
+        {{each keys}}
+        <div class="bord2">
+            <div class="firstWord">{{$value.firstWord}}</div>
+            <div class="otherWord">{{$value.otherWord}}</div>
+            <div class="information">
+                <p>账号：{{$value.userName}}</p>
+                <p>密码：{{$value.password}}</p>
+            </div>
+        </div>
+        {{/each}}
+    </div>
+</body>
+
+</html>

@@ -147,7 +147,7 @@ http.createServer(function(req, res) {
         })
     }
 }).listen(4010, function() {
-    console.log('>>>app start!')
+    console.log('>>>app start!点击以下链接进行访问：127.0.0.1:4010/')
 })
 
 Date.prototype.Format = function(fmt) { // author: meizz
