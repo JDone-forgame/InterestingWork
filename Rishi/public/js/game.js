@@ -1,20 +1,20 @@
-$(function () {
+$(function() {
     /**-------------------------------------------------全局变量----------------------------------------------------------------- */
-    let ATKknow = [
-        {
+    let ATKknow = [{
             atkName: '青元剑诀',
             needFelement: 'Wood|8',
             handledSpeed: 0.8,
+            maxLevel: 15,
         },
         {
             atkName: '基础功法',
             needFelement: 'any|2',
             handledSpeed: 0.2,
+            maxLevel: 15,
         }
     ]
 
-    let Rlevel = [
-        {
+    let Rlevel = [{
             levelName: '练气',
             needReiki: '1|1999',
             eachGroup: 120
@@ -99,16 +99,17 @@ $(function () {
         setInterval(() => {
             countReiki(curPlayer)
             checkRlevel(curPlayer)
-            $('#reiki').text("灵力" + curPlayer.reiki);
+            $('#reiki').text("灵力" + round(curPlayer.reiki, 2));
             $('#xinxi').html('<p>' + curPlayer.name + '</p>' + '<p>' + curPlayer.learnAtk + '</p>' + '<p>' + curPlayer.Rlevel + '</p>');
         }, 1000);
     }
 
     function learn() {
         if (curPlayer.isNew) {
-            learnAtkUsed(curPlayer, '基础功法', true)
+            learnAtkUsed(curPlayer, '基础功法', true);
+            curPlayer.isNew = false;
         } else {
-            learnAtkUsed(curPlayer, '基础功法', false)
+            learnAtkUsed(curPlayer, '基础功法', false);
         }
         // learnAtkUsed(curPlayer, '青元剑诀', true)
     }
@@ -186,7 +187,7 @@ $(function () {
             Rlevel: '',
             itms: []
         }
-        if(checkFiveElemets(player)==1){
+        if (checkFiveElemets(player) == 1) {
             showErrMsg('惊人!你居然是百年难得一见的天灵根!');
             player.label.push('幸运儿');
         }
@@ -257,7 +258,13 @@ $(function () {
         let fel = player.Felements;
 
         if (!isNew) {
-            player.atkLevel += 1;
+            if (player.atkLevel < atk.maxLevel) {
+                player.atkLevel += 1;
+            } else {
+                showErrMsg('你已修炼到该功法的最高等级!');
+                return;
+            }
+
         } else {
             player.atkLevel = 1;
         }
@@ -275,7 +282,7 @@ $(function () {
                 if (i == needFelement[0]) {
                     if (fel[i] >= needFelement[1]) {
                         player.learnAtk = atkName + player.atkLevel + '阶';
-                        player.handledSpeed = atk.handledSpeed * player.atkLevel;
+                        player.handledSpeed = Math.round(atk.handledSpeed * player.atkLevel);
                     } else {
                         showErrMsg('你的' + changeElement(i) + '灵根能力不够!');
                         return;
@@ -283,7 +290,8 @@ $(function () {
                 }
             }
         }
-        showErrMsg('学习' + atkName + '成功，当前修炼速度为每秒' + player.handledSpeed + '灵气!')
+        let eefect = countEEffect(checkFiveElemets(player));
+        showErrMsg('学习' + atkName + '成功，当前修炼速度为每秒' + round((player.handledSpeed * eefect), 2) + '灵气!')
     }
 
     function changeElement(elementName) {
@@ -320,7 +328,7 @@ $(function () {
         let eefect = countEEffect(checkFiveElemets(player));
         if (nowTime > player.lastCTime) {
             let earnTime = (nowTime - player.lastCTime) / 1000;
-            player.reiki = Math.round(player.reiki + earnTime * player.handledSpeed * eefect);
+            player.reiki += round((earnTime * player.handledSpeed * eefect), 2);
             player.lastCTime = nowTime;
             return;
         } else {
@@ -404,6 +412,10 @@ $(function () {
                 return;
             }
         }
+    }
+
+    function round(number, precision) {
+        return Math.round(+number + 'e' + precision) / Math.pow(10, precision);
     }
 
     /**-------------------------------------------------主函数------------------------------------------------------------------ */
