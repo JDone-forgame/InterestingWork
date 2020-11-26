@@ -37,34 +37,31 @@ input {
     background-color: black;
     /* 设置高度*/
     padding: 0.9rem 0rem;
-    width: 20rem;
+    width: 18rem;
     color: white;
     font-size: 1.8rem;
     font-family: xiangsu;
 }
 
 input:focus {
-    border-color: #228B22;
+    border-color: #F0FFFF;
     outline: 0;
-    -webkit-box-shadow: inset 0 0.1rem 0.1rem rgba(0, 0, 0, .075), 0 0 0.8rem #228B22;
-    box-shadow: inset 0 0.1rem 0.1rem rgba(0, 0, 0, .075), 0 0 0.8rem #228B22
-}
-
-textarea:focus {
-    border-color: #228B22;
-    outline: 0;
-    -webkit-box-shadow: inset 0 0.1rem 0.1rem rgba(0, 0, 0, .075), 0 0 0.8rem #228B22;
-    box-shadow: inset 0 0.1rem 0.1rem rgba(0, 0, 0, .075), 0 0 0.8rem #228B22
+    -webkit-box-shadow: inset 0 0.1rem 0.1rem rgba(0, 0, 0, .075), 0 0 0.8rem #F0FFFF;
+    box-shadow: inset 0 0.1rem 0.1rem rgba(0, 0, 0, .075), 0 0 0.8rem #F0FFFF
 }
 
 /* --------------------------------------------------------------------------------------------------------- */
 
 .btn {
+    position: relative;
+    width: 15rem;
+    height: 5rem;
+    font-size: 2rem;
+    line-height: 5rem;
     transform: translate(-50%, -50%);
     background-color: black;
     border: solid 0.2rem gainsboro;
     text-align: center;
-    font-size: 3em;
     color: white;
     transition: all 0.3s;
 }
@@ -76,3 +73,172 @@ textarea:focus {
 
 /* --------------------------------------------------------------------------------------------------------- */
 
+.mainPage {
+    position: absolute;
+    width: 38rem;
+    height: 68rem;
+    border: white solid 0.5rem;
+    border-radius: 0.5rem;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    overflow: hidden;
+    color: white;
+    font-size: 2rem;
+}
+
+.text {
+    position: relative;
+    width: 100%;
+    height: 5rem;
+    line-height: 5rem;
+    transform: translate(0, -50%);
+    text-align: center;
+}
+
+.wood {
+    color: #228B22;
+    font-weight: bold;
+}
+
+.fire {
+    color: #B22222;
+    font-weight: bold;
+}
+
+.earth {
+    color: #D2691E;
+    font-weight: bold;
+}
+
+.metal {
+    color: #FFD700;
+    font-weight: bold;
+}
+
+.water {
+    color: #00BFFF;
+    font-weight: bold;
+}
+
+#MSG {
+    position: absolute;
+    z-index: 2;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 38rem;
+    height: 68rem;
+    border: solid white 0.5rem;
+    background: rgba(0, 0, 0, 0.747);
+    text-align: center;
+    font-size: 2rem;
+    color: white;
+}
+
+#msg {
+    position: relative;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 28rem;
+    height: 20rem;
+    border: solid white 0.5rem;
+    background: gray;
+}
+
+#close {
+    top: 35%;
+    left: 50%;
+}
+
+#KAISHI {
+    text-align: center;
+    line-height: 3rem;
+}
+
+#inputName {
+    top: 10%;
+}
+
+#name {
+    position: relative;
+    top: 5%;
+}
+
+#startGame {
+    top: 20%;
+    left: 50%;
+}
+
+#jingmai {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 29.15rem;
+    height: 28.45rem;
+    animation: bgChange 1s linear 0s infinite alternate;
+}
+
+@keyframes bgChange {
+    0% {
+        background: url('../img/xiulian/jingmai.png');
+        background-size: 100%;
+    }
+    100% {
+        background: url('../img/xiulian/jingmai1.png');
+        background-size: 100%;
+    }
+}
+
+#reiki {
+    position: relative;
+    top: 75%;
+    color: #00FFFF;
+}
+
+#learnAtk {
+    top: 78%;
+    left: 50%;
+}
+
+#xinxi {
+    position: absolute;
+    left: 1rem;
+    top: 1rem;
+    width: 15rem;
+    height: 10rem;
+}
+
+#save {
+    top: 80%;
+    left: 50%;
+}
+
+#head {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 10rem;
+    height: 10rem;
+    border: rgb(66, 66, 66) solid 0.5rem;
+    border-radius: 0.8rem;
+    background: url("../img/head/toudi.png");
+    background-size: 100%;
+    overflow: hidden;
+}
+
+#head img{
+    width: 105%;
+    height: 105%;
+}
+
+#fel{
+    position: absolute;
+    right: 1rem;
+    top: 12rem;
+    width: 5rem;
+    height: 10rem;
+    text-align: right;
+}
