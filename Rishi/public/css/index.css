@@ -22,6 +22,7 @@ html {
     padding: 0;
     user-select: none;
     font-family: xiangsu;
+    text-align: center;
 }
 
 body {
@@ -61,7 +62,6 @@ input:focus {
     transform: translate(-50%, -50%);
     background-color: black;
     border: solid 0.2rem gainsboro;
-    text-align: center;
     color: white;
     transition: all 0.3s;
 }
@@ -93,7 +93,6 @@ input:focus {
     height: 5rem;
     line-height: 5rem;
     transform: translate(0, -50%);
-    text-align: center;
 }
 
 .wood {
@@ -121,6 +120,42 @@ input:focus {
     font-weight: bold;
 }
 
+.S {
+    color: #FFD700;
+    font-weight: bold;
+}
+
+.A {
+    color: #9400D3;
+    font-weight: bold;
+}
+
+.B {
+    color: #87CEFA;
+    font-weight: bold;
+}
+
+.item {
+    position: relative;
+    float: left;
+    margin: 1rem;
+    width: 5.6rem;
+    height: 7.6rem;
+    line-height: 2rem;
+    background-size: 100%;
+    font-size: 1rem;
+    overflow: hidden;
+}
+
+.item img {
+    position: relative;
+    width: 5rem;
+    height: 5rem;
+    border: 0.3rem solid white;
+}
+
+/* -------------------------------------MSG---------------------------------------- */
+
 #MSG {
     position: absolute;
     z-index: 2;
@@ -131,7 +166,6 @@ input:focus {
     height: 68rem;
     border: solid white 0.5rem;
     background: rgba(0, 0, 0, 0.747);
-    text-align: center;
     font-size: 2rem;
     color: white;
 }
@@ -145,15 +179,22 @@ input:focus {
     height: 20rem;
     border: solid white 0.5rem;
     background: gray;
+    overflow: hidden;
 }
 
-#close {
+#msgClose {
     top: 35%;
     left: 50%;
 }
 
+#msgConfim {
+    top: 34%;
+    left: 50%;
+}
+
+/* -------------------------------------KAISHI---------------------------------------- */
+
 #KAISHI {
-    text-align: center;
     line-height: 3rem;
 }
 
@@ -170,6 +211,8 @@ input:focus {
     top: 20%;
     left: 50%;
 }
+
+/* -------------------------------------XIULIAN---------------------------------------- */
 
 #jingmai {
     position: absolute;
@@ -198,7 +241,7 @@ input:focus {
     color: #00FFFF;
 }
 
-#learnAtk {
+.xbtn1 {
     top: 78%;
     left: 50%;
 }
@@ -209,6 +252,10 @@ input:focus {
     top: 1rem;
     width: 15rem;
     height: 10rem;
+}
+
+#xinxi p {
+    text-align: left;
 }
 
 #save {
@@ -229,16 +276,42 @@ input:focus {
     overflow: hidden;
 }
 
-#head img{
+#head img {
     width: 105%;
     height: 105%;
 }
 
-#fel{
+#fel {
     position: absolute;
     right: 1rem;
     top: 12rem;
     width: 5rem;
     height: 10rem;
     text-align: right;
+}
+
+#items {
+    position: absolute;
+    left: 1rem;
+    bottom: 1rem;
+    width: 5rem;
+    height: 5rem;
+    color: white;
+    font-size: 4rem;
+    line-height: 5rem;
+    border: solid white 0.5rem;
+    background: #000000;
+    border-radius: 0.5rem;
+}
+
+#items:hover {
+    background: #B22222;
+}
+
+/* -------------------------------------ITEMS---------------------------------------- */
+
+#itemsClose {
+    position: absolute;
+    top: 95%;
+    left: 50%;
 }
