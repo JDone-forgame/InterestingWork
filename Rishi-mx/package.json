@@ -1,0 +1,26 @@
+{
+  "name": "rishi-mx",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "生成RPC": "npx mx-rpc-creator -t nodesocket -o ./rpcs/ -d ../defines/ ./serveBackend ./serveFrontend/webServe/app"
+  },
+  "author": "JDone",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^14.0.27",
+    "ts-node": "^8.10.2",
+    "typescript": "^3.9.7"
+  },
+  "dependencies": {
+    "express-swagger-generator": "^1.1.17",
+    "mx-database": "^1.1.2",
+    "mx-logger": "^1.0.10",
+    "mx-resource": "^1.0.2",
+    "mx-rpc": "^1.1.3",
+    "mx-tool": "^1.0.16",
+    "mx-webserve": "^1.1.15",
+    "node-cache": "^5.1.2"
+  }
+}

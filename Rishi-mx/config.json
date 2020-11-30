@@ -1,0 +1,16 @@
+{
+    "id": "rishi",
+    "channel": "",
+    "Swagger": true,
+    "web": {
+        "port": 12000
+    },
+    "db": {
+        "database": "rishi",
+        "host": "10.0.0.10",
+        "port": 27017
+    },
+    "host": "127.0.0.1:12000",
+    "gm": true,
+    "appKey": ""
+}
