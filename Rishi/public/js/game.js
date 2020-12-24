@@ -1,29 +1,40 @@
 $(function () {
     let curPlayerName = '';
-    let upHandle;
+    setInterval(() => {
+        updata();
+    }, 1000);
+    // 信息弹窗是否已经打开
+    let msgOpen = false;
+    // 是否循环显示信息
+    let isCycle = false;
+
+    let BACKGAME = require('./back')
+
+    // 刷新的信息
+    let showInfo = {
+        reiki: 0,
+        lastCTime: 0,
+        rlevel: '',
+        atkInfo: '',
+    }
 
     // 开始游戏
     function startGame() {
         var name = $('#name').val();
         if (name == null || name == '') {
-            return addMsg('请输入您的名称!');
+            return  BACKGAME.addMsg('请输入您的名称!');
         }
 
         curPlayerName = name;
-        let player = getPlayerData(curPlayerName);
-
-        if (player.isNew) {
-            console.log('新玩家');
-            addItem(player.name, 'i003', 1);
-            addItem(player.name, 'i101', 2);
-        }
+        let player = BACKGAME.getPlayerData(curPlayerName);
 
         // 测试用
         console.log(player);
         showFel(curPlayerName);
 
-        updata(curPlayerName);
-        
+        initShowInfo();
+        isCycle = true;
+
         $('#items').click(openPackage)
         $('#xbtn1').click(xbtn1);
         $('#head').html('<img src="./public/img/head/' + player.headUrl + '">')
@@ -74,13 +85,15 @@ $(function () {
 
     // *提示信息
     function showErrMsg() {
-        for(let msg of msgs){
+        for (let msg of msgs) {
             $('#msg').append(msg);
         }
+        msgOpen = true;
         $('#MSG').show();
         $('#msgConfim').hide();
         $('.close').click(() => {
-            msgs.splice(0);
+            msgOpen = false;
+            msgs.splice(0, msgs.length);
             $('#msg').empty();
             $('#MSG').hide();
         });
@@ -100,10 +113,10 @@ $(function () {
             $('#MSG').hide();
             switch (info.funcName) {
                 case 'useItem':
-                    useItem(name, info.itemId);
+                     BACKGAME.useItem(name, info.itemId);
                     break;
                 case 'learnAtkDrop':
-                    learnAtkDrop(name);
+                     BACKGAME.learnAtkDrop(name);
                     break;
             }
         });
@@ -112,7 +125,7 @@ $(function () {
 
     // 展示道具
     function showItems(name) {
-        let items = getItems(name)
+        let items =  BACKGAME.getItems(name)
         for (let item of items) {
             if (item.number > 0) {
                 $('#ITEMS').append('<div id="' + item.itemId + '" class="item"><img src="./public/img/items/' + item.imgUrl + '"><span class="' + item.quality + '">' + item.itemName + '*' + item.number + '</span></div>')
@@ -123,10 +136,10 @@ $(function () {
 
     // 显示元素
     function showFel(name) {
-        let fel = getFel(name)
+        let fel =  BACKGAME.getFel(name)
         for (let i in fel) {
             if (fel[i] > 0) {
-                let felName = changeElement(i);
+                let felName =  BACKGAME.changeElement(i);
                 $('#fel').append('<p>' + felName + fel[i] + '</p>')
             }
         }
@@ -134,28 +147,44 @@ $(function () {
 
 
 
-    // 计时器
-    function updata(name) {
-        let player = getPlayerData(name);
-        let curReiki = player.reiki;
-        let curLastCTime = player.lastCTime;
+    // 第一层循环
+    function updata() {
+        // 检测消息板
+        if (!msgOpen && msgs.length > 0) {
+            showErrMsg();
+        }
 
-        upHandle = setInterval(() => {
-            if(msgs.length>0){
-                showErrMsg()
-            }
+        // 检测是否需要刷新
+        if (refreshData) {
+             BACKGAME.savePlayer(curPlayerName, showInfo);
+            refreshData = false;
+            initShowInfo();
+        }
 
-            let res = countReiki(name, 0);
-            curReiki += res.addReiki;
-            curLastCTime = res.newTime;
+        // 循环显示
+        if (isCycle) {
+            showCycleInfo();
+        }
+    }
 
-            checkRlevel(name);
+    // 更新展示信息
+    function initShowInfo() {
+        let player =  BACKGAME.getPlayerData(curPlayerName);
+        showInfo.reiki = player.reiki;
+        showInfo.lastCTime = player.lastCTime;
+        showInfo.rlevel = player.Rlevel;
+        showInfo.atkInfo = player.atk.learnAtk;  
+    }
 
-            $('#reiki').text("灵力" + round(curReiki, 2));
-
-            player = getPlayerData(name);
-            $('#xinxi').html('<p>' + player.name + '</p>' + '<p>' + player.atk.learnAtk + '</p>' + '<p>' + player.Rlevel + '</p>');
-        }, 1000);
+    // 第二层循环
+    function showCycleInfo() {
+        let player =  BACKGAME.getPlayerData(curPlayerName);
+        let res =  BACKGAME.countAddReiki(player, showInfo.reiki, showInfo.lastCTime);
+        showInfo.reiki += res.addReiki;
+        showInfo.lastCTime = res.newTime;
+        showInfo.rlevel =  BACKGAME.checkRlevel(showInfo.reiki);
+        $('#xinxi').html('<p>' + player.name + '</p>' + '<p>' + showInfo.atkInfo + '</p>' + '<p>' + showInfo.rlevel + '</p>');
+        $('#reiki').text("灵力" +  BACKGAME.round(showInfo.reiki, 2));
     }
 
 

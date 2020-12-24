@@ -1,4 +1,5 @@
 const fs = require('fs');
+
 let msgs = [];
 
 const ATKknow = [{
@@ -78,12 +79,9 @@ let refreshData = false;
 // 初始元素总量
 const DEFAULT_ELENUM = 10;
 
-class gameControl {
-
-    static Task = []
-
+module.exports = {
     // 保存游戏
-    static saveGameData(player) {
+    saveGameData(player) {
         // if (this.checkLocalData(player.name)) {
         //     localStorage.removeItem(player.name);
         // }
@@ -103,10 +101,10 @@ class gameControl {
         });
 
         return;
-    }
+    },
 
     // 获取玩家数据
-    static getPlayerData(name) {
+    getPlayerData(name) {
         // let player = JSON.parse(sessionStorage.getItem(name));
 
         // // 先从缓存找
@@ -121,7 +119,7 @@ class gameControl {
         //     }
         // }
         let player = null;
-        fs.readFile('../../data/gameData.json', function (err, data) {
+        fs.readFile('../../data/gameData.json', (err, data) => {
             if (err) {
                 player = this.playerInit(name);
             }
@@ -130,10 +128,10 @@ class gameControl {
         })
 
         return player
-    }
+    },
 
     // 检查本地数据
-    static checkLocalData(name) {
+    checkLocalData(name) {
         // let qData = localStorage.getItem(name);
         // if (qData) {
         //     return true;
@@ -141,28 +139,28 @@ class gameControl {
         // return false
 
 
-        fs.readFile('../../data/gameData.json', function (err, data) {
+        fs.readFile('../../data/gameData.json', (err, data) => {
             if (err) {
                 return false;
             }
         })
         return true;
-    }
+    },
 
     // 获取道具信息
-    static getItems(name) {
+    getItems(name) {
         let player = this.getPlayerData(name);
         return player.items;
-    }
+    },
 
     // 获取灵根属性
-    static getFel(name) {
+    getFel(name) {
         let player = this.getPlayerData(name);
         return player.Felements
-    }
+    },
 
     // 添加道具
-    static addItem(player, itemId, number) {
+    addItem(player, itemId, number) {
         // 待添加道具
         let aitem;
         // 是否是已定义的道具
@@ -198,10 +196,10 @@ class gameControl {
 
         this.saveGameData(player);
         return;
-    }
+    },
 
     //// 更新道具
-    static updataItem(player) {
+    updataItem(player) {
         for (let item of player.items) {
             if (item.itemId == itemId) {
                 item.number += number;
@@ -209,10 +207,10 @@ class gameControl {
                 return;
             }
         }
-    }
+    },
 
     // 删除道具
-    static delItem(name, itemId) {
+    delItem(name, itemId) {
         let player = this.getPlayerData(name);
         let items = player.items;
         let newItems = [];
@@ -225,17 +223,17 @@ class gameControl {
 
         player.items = newItems;
         this.saveGameData(player);
-    }
+    },
 
     // *是否是同一天
-    static isSameDay(timeStampA, timeStampB) {
+    isSameDay(timeStampA, timeStampB) {
         let dateA = new Date(timeStampA);
         let dateB = new Date(timeStampB);
         return (dateA.setHours(0, 0, 0, 0) == dateB.setHours(0, 0, 0, 0));
-    }
+    },
 
     // *检查有几种属性
-    static checkFiveElemets(player) {
+    checkFiveElemets(player) {
         let obj = player.Felements
         let count = 0;
         if (!obj) {
@@ -247,10 +245,10 @@ class gameControl {
             }
         }
         return count;
-    }
+    },
 
     // *计算几种属性对修炼的影响
-    static countEEffect(num) {
+    countEEffect(num) {
         let expEffect = 0;
         switch (num) {
             case 0:
@@ -273,10 +271,10 @@ class gameControl {
                 break;
         }
         return expEffect;
-    }
+    },
 
     // 角色初始化
-    static playerInit(name) {
+    playerInit(name) {
         let a = this.randomFel();
         let b = this.randomSHead();
         let player = {
@@ -310,16 +308,16 @@ class gameControl {
         this.addItem(player, 'i003', 1);
         this.addItem(player, 'i101', 2);
         return player;
-    }
+    },
 
     // 消息板
-    static addMsg(msg) {
+    addMsg(msg) {
         msg = '<p>' + msg + '</p>';
         msgs.push(msg)
-    }
+    },
 
     // 随机五属性
-    static randomFel() {
+    randomFel() {
         let result = [0, 0, 0, 0, 0]
         let min = 0;
         let max = DEFAULT_ELENUM;
@@ -333,10 +331,10 @@ class gameControl {
         }
 
         return this.shuffle(result);
-    }
+    },
 
     // 随机指定一条属性 eg:'R',0,0
-    static randomEle(elementName, min, max) {
+    randomEle(elementName, min, max) {
         let result = {
             elementName: "",
             num: 0
@@ -374,10 +372,10 @@ class gameControl {
         }
 
         return result;
-    }
+    },
 
     // 随机性别头像
-    static randomSHead() {
+    randomSHead() {
         let result = []
         let sex = this.getRandom(0, 1)
         if (sex == 0) {
@@ -388,25 +386,25 @@ class gameControl {
             result[1] = 'nv/' + this.getRandom(1, 10) + '.png';
         }
         return result
-    }
+    },
 
     // 查询功法
-    static searchAtk(atkName) {
+    searchAtk(atkName) {
         for (let i in ATKknow) {
             if (atkName == ATKknow[i].atkName) {
                 return ATKknow[i];
             }
         }
         return null;
-    }
+    },
 
     // *随机从[min,max]区间取值
-    static getRandom(min, max) {
+    getRandom(min, max) {
         return min + Math.floor(Math.random() * (max - min + 1));
-    }
+    },
 
     // *数组、洗牌算法乱序
-    static shuffle(arr) {
+    shuffle(arr) {
         for (let i = arr.length - 1; i >= 0; i--) {
             let rIndex = Math.floor(Math.random() * (i + 1));
             let temp = arr[rIndex];
@@ -414,10 +412,10 @@ class gameControl {
             arr[i] = temp;
         }
         return arr;
-    }
+    },
 
     // 学习功法
-    static learnAtkUsed(player, atkName, isFirst) {
+    learnAtkUsed(player, atkName, isFirst) {
         let atk = this.searchAtk(atkName);
         if (atk == null) {
             return this.addMsg('没有这种功法!');
@@ -481,10 +479,10 @@ class gameControl {
         this.saveGameData(player);
 
         return this.addMsg('学习' + atkName + '成功，当前修炼速度为每秒' + this.round((player.handledSpeed * eefect), 2) + '灵气!')
-    }
+    },
 
     // *元素转文字
-    static changeElement(elementName) {
+    changeElement(elementName) {
         let result = '';
         switch (elementName) {
             case "Metal":
@@ -504,10 +502,10 @@ class gameControl {
                 break;
         }
         return result;
-    }
+    },
 
     // 散功
-    static learnAtkDrop(name) {
+    learnAtkDrop(name) {
         let player = this.getPlayerData(name);
 
 
@@ -523,10 +521,10 @@ class gameControl {
         refreshData = true;
         this.saveGameData(player);
         return this.addMsg('散功完成!');
-    }
+    },
 
     // 计算灵气
-    static countReiki(name) {
+    countReiki(name) {
         let player = this.getPlayerData(name);
 
 
@@ -543,10 +541,10 @@ class gameControl {
             this.addMsg('灵气尚未聚集!');
             return { addReiki: 0, newTime: nowTime };
         }
-    }
+    },
 
     // *计算灵气
-    static countAddReiki(player, nowReiki, lastCTime) {
+    countAddReiki(player, nowReiki, lastCTime) {
         let nowTime = Date.now();
         let eefect = this.countEEffect(this.checkFiveElemets(player));
 
@@ -560,10 +558,10 @@ class gameControl {
             this.addMsg('灵气尚未聚集!');
             return { addReiki: 0, newTime: nowTime };
         }
-    }
+    },
 
     // 计算修炼等级
-    static checkRlevel(reiki) {
+    checkRlevel(reiki) {
         for (let i in Rlevel) {
             let needReiki = Rlevel[i].needReiki.split('|');
             if (needReiki.length != 2) {
@@ -641,15 +639,15 @@ class gameControl {
                 return rlevel.levelName + bRlevel;
             }
         }
-    }
+    },
 
     // *取指定位数小数
-    static round(number, precision) {
+    round(number, precision) {
         return Math.round(+number + 'e' + precision) / Math.pow(10, precision);
-    }
+    },
 
     // 使用道具
-    static useItem(name, itemId) {
+    useItem(name, itemId) {
         let player = this.getPlayerData(name);
         let itemInfo = null;
 
@@ -712,16 +710,16 @@ class gameControl {
         }
 
         this.saveGameData(player);
-    }
+    },
 
     // 计算暴击
-    static crit(damage, cri, csd) {
+    crit(damage, cri, csd) {
         let r = Math.floor(Math.random() * 101);
         return damage = cri >= r ? Math.floor(damage * (csd / 100)) : damage
-    }
+    },
 
     // 元素反应
-    static elementReaction(mainElement, reactElement) {
+    elementReaction(mainElement, reactElement) {
         let result = '';
         if (
             (mainElement == 'Fire' && reactElement == 'Metal') ||
@@ -764,10 +762,10 @@ class gameControl {
             result = '无反应'
         }
         return result;
-    }
+    },
 
     // 元素伤害加成
-    static reactDamage(damage, attackedOne) {
+    reactDamage(damage, attackedOne) {
         let reactDescri = this.elementReaction(damage.elementType, attackedOne.elementType);
 
         let rStr = reactDescri.split('|');
@@ -802,10 +800,10 @@ class gameControl {
         }
 
         return { damage: damage, attackedOne: attackedOne }
-    }
+    },
 
     // 同步信息
-    static savePlayer(name, showInfo) {
+    savePlayer(name, showInfo) {
         let player = this.getPlayerData(name);
 
         player.reiki = this.round(showInfo.reiki, 2);
@@ -813,8 +811,11 @@ class gameControl {
         player.Rlevel = showInfo.rlevel;
 
         this.saveGameData(player);
-    }
+    },
 }
+
+
+
 
 
 // let damageA = {
