@@ -1,0 +1,14 @@
+{
+    "port": 10301,
+    "host":"127.0.0.1",
+    "proto":"http",
+    "logger": true,
+    "db": true,
+    "center": [
+        "loadBalanceServe"
+    ],
+    "backend": [
+        "gameServe"
+    ],
+    "frontend": ["webServe"]
+}

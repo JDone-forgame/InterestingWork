@@ -1,0 +1,39 @@
+{
+    // 使用 IntelliSense 了解相关属性。 
+    // 悬停以查看现有属性的描述。
+    // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "启动项目",
+            "console": "integratedTerminal",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}\\index.ts",
+            "args": [
+                "${workspaceFolder}/startApp/all.json"
+            ],
+            "outFiles": [
+                "${workspaceFolder}/bin/**/*.js"
+            ]
+        },
+
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "TS编译",
+            "console": "integratedTerminal",
+            "runtimeArgs": [
+                "--nolazy",
+                "-r",
+                "ts-node/register"
+            ],
+            "args": ["app/start","startApp/all.json"],
+            "skipFiles": [
+                "<node_internals>/**"
+            ]
+        }
+    
+    ]
+}
