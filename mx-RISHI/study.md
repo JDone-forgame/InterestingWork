@@ -24,3 +24,5 @@
     "strict": false,
 9. 表格
     表格的属性要用 s、r、i开头，不然生成的 interface 会有问题。
+10. static
+    带有 static 修饰的方法在不创建该实例对象时也可以使用，但里面无法调用其他的非 static 方法，这里需要注意哪种方法用 static 方法，哪种不用。

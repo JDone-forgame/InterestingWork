@@ -3,7 +3,7 @@
  */
 
 /**
- * SeEnumItemssItemType generate in[Thu Dec 31 2020 16:38:03 GMT+0800 (GMT+08:00)] 
+ * SeEnumItemssItemType generate in[Mon Jan 04 2021 18:36:04 GMT+0800 (GMT+08:00)] 
  */
 export enum SeEnumItemssItemType{ 
       DanYao=1,
@@ -12,7 +12,7 @@ export enum SeEnumItemssItemType{
 
 
 /**
- * SeEnumRlevelsLevelName generate in[Thu Dec 31 2020 16:38:03 GMT+0800 (GMT+08:00)] 
+ * SeEnumRlevelsLevelName generate in[Mon Jan 04 2021 18:36:04 GMT+0800 (GMT+08:00)] 
  */
 export enum SeEnumRlevelsLevelName{ 
       LianQi=1,
@@ -23,7 +23,7 @@ export enum SeEnumRlevelsLevelName{
 
 
 /**
- * SeResAtkMethods generate in[Thu Dec 31 2020 16:38:03 GMT+0800 (GMT+08:00)] 
+ * SeResAtkMethods generate in[Mon Jan 04 2021 18:36:04 GMT+0800 (GMT+08:00)] 
  */
 export interface SeResAtkMethods{ 
       sID:string;
@@ -37,7 +37,7 @@ export interface SeResAtkMethods{
 
 
 /**
- * SeResItems generate in[Thu Dec 31 2020 16:38:03 GMT+0800 (GMT+08:00)] 
+ * SeResItems generate in[Mon Jan 04 2021 18:36:04 GMT+0800 (GMT+08:00)] 
  */
 export interface SeResItems{ 
       sID:string;
@@ -51,7 +51,7 @@ export interface SeResItems{
 
 
 /**
- * SeResRlevel generate in[Thu Dec 31 2020 16:38:03 GMT+0800 (GMT+08:00)] 
+ * SeResRlevel generate in[Mon Jan 04 2021 18:36:04 GMT+0800 (GMT+08:00)] 
  */
 export interface SeResRlevel{ 
       sID:string;

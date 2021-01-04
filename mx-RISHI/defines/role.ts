@@ -61,6 +61,8 @@ export interface ifPractice {
     rLevelLayer: number,
     // 修炼总称
     rLevel:string,
+    // 当前每秒所增加的灵气
+    earnSpeed:number,
 }
 
 // 功法信息

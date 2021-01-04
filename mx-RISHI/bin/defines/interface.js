@@ -5,7 +5,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SeEnumRlevelsLevelName = exports.SeEnumItemssItemType = void 0;
 /**
- * SeEnumItemssItemType generate in[Thu Dec 31 2020 16:38:03 GMT+0800 (GMT+08:00)]
+ * SeEnumItemssItemType generate in[Mon Jan 04 2021 18:36:04 GMT+0800 (GMT+08:00)]
  */
 var SeEnumItemssItemType;
 (function (SeEnumItemssItemType) {
@@ -13,7 +13,7 @@ var SeEnumItemssItemType;
     SeEnumItemssItemType[SeEnumItemssItemType["GongFa"] = 2] = "GongFa";
 })(SeEnumItemssItemType = exports.SeEnumItemssItemType || (exports.SeEnumItemssItemType = {}));
 /**
- * SeEnumRlevelsLevelName generate in[Thu Dec 31 2020 16:38:03 GMT+0800 (GMT+08:00)]
+ * SeEnumRlevelsLevelName generate in[Mon Jan 04 2021 18:36:04 GMT+0800 (GMT+08:00)]
  */
 var SeEnumRlevelsLevelName;
 (function (SeEnumRlevelsLevelName) {

@@ -114,6 +114,7 @@ class UnitRole {
             baseInfo: this.baseInfo,
             atkMethod: this.atkMethod,
             practice: this.practice,
+            fElements: this.fElements,
         };
         return loginInfo;
     }
@@ -250,6 +251,7 @@ class UnitRole {
                 rLevelName: '',
                 rLevelLayer: 0,
                 rLevel: '',
+                earnSpeed: 0,
             };
             role.dbInfo.set('practice', practice);
             // 初始化功法
@@ -263,6 +265,8 @@ class UnitRole {
     }
     // 登录前流程处理
     beforeLogin() {
+        // 更新修炼信息
+        this.refreshPractice();
         // 初始化信息
         // 重置
     }
@@ -319,7 +323,10 @@ class UnitRole {
                 practice.reiki += (parseInt(effect[1]) * itemCount);
                 this.dbInfo.set('practice', practice);
                 break;
+            // 学习功法
             case 'learnAtk':
+                // 学习前更新一下灵气
+                this.refreshPractice();
                 let lResult = this.learnAtkMethod(effect[1], itemCount);
                 if (lResult.code != define_1.ErrorCode.OK) {
                     return { code: lResult.code || define_1.ErrorCode.ITEM_USE_FAILED, errMsg: lResult.errMsg || 'learn atkmethod failed!' };
@@ -567,6 +574,7 @@ class UnitRole {
             let addReiki = earnTime * practice.handledSpeed * eefect;
             practice.reiki += addReiki;
             practice.lastSave = nowTime;
+            practice.earnSpeed = practice.handledSpeed * eefect;
             this.dbInfo.set('practice', practice);
         }
     }
@@ -640,6 +648,6 @@ exports.UnitRole = UnitRole;
 UnitRole.DEFAULT_ELENUM = 10;
 /**------------------------------缓存部分----------------------------------------------- */
 // role缓存数据：必须通过封装函数操作缓存数据
-UnitRole.stdTTL = 60; //3 * 60 * 60;
+UnitRole.stdTTL = 3 * 60 * 60;
 UnitRole.roleCache = new node_cache_1.default({ stdTTL: UnitRole.stdTTL, checkperiod: 120, useClones: false });
 //# sourceMappingURL=role.js.map
