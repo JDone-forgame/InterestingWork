@@ -39,6 +39,8 @@ export enum ErrorCode {
     ATKMETHOD_LEARN_FAIED = 300,
 
     ELEMENTS_NOT_ENOUGH = 400,
+
+    ENERGY_NOT_ENOUGH = 500,
 }
 
 let map: { [code: number]: string } = {};

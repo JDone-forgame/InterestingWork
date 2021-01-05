@@ -43,15 +43,20 @@ $(function () {
             if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
                 data = JSON.parse(xmlhttp.responseText);
 
-                let role = data.role;
-                sRole = JSON.stringify(role);
+                if (data.code == 0) {
+                    let role = data.role;
+                    sRole = JSON.stringify(role);
 
-                // 保存到 session 中
-                sessionStorage.setItem('loginData', xmlhttp.responseText);
-                sessionStorage.setItem('role', sRole);
+                    // 保存到 session 中
+                    sessionStorage.setItem('loginData', xmlhttp.responseText);
+                    sessionStorage.setItem('role', sRole);
 
-                // 展示页面
-                startPage(role)
+                    // 展示页面
+                    startPage(role)
+                } else {
+                    msgs.push('<p>code:' + data.code + '</p><p>errMsg:' + data.errMsg + '</p>')
+                }
+
             }
         });
     }
@@ -140,7 +145,14 @@ $(function () {
             funcName: "use",
             itemId: itemId
         }
-        showUseMsg(Items.get(itemId).sDescribe, info);
+
+        let item = Items.get(itemId);
+        let msgInfo = '<p>'+item.sDescribe+'</p>';
+        if(item.sItemType == 2){
+            msgInfo += '<p>注意：你将要使用功法道具，如果你已经修行了别的功法，改学功法可能会损失一定的灵气！</p>';
+        }
+        
+        showUseMsg(msgInfo, info);
     }
 
 
@@ -171,10 +183,13 @@ $(function () {
                         // 保存到 session 中
                         sRole = JSON.stringify(role);
                         sessionStorage.setItem('role', sRole)
+                        // 更新修炼信息
+                        changePP = true;
+                    } else {
+                        msgs.push('<p>code:' + data.code + '</p><p>errMsg:' + data.errMsg + '</p>')
                     }
 
-                    // 更新修炼信息
-                    changePP = true;
+
 
                     // 页面操作
                     $('div').remove(".item");

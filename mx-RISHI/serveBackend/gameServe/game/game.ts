@@ -1,6 +1,7 @@
 import { createHash } from "crypto";
 import { ErrorCode } from "../../../defines/define";
-import { eUType, ifLoginInfo, ifRegInfo } from "../../../defines/role";
+import { SeEnumLuckChancesLType, SeResLuckChance } from "../../../defines/interface";
+import { eUType, ifLoginInfo, ifPractice, ifRegInfo } from "../../../defines/role";
 import { TablesService } from "../../../lib/tables";
 import { UnitRole } from "../role/role";
 
@@ -122,6 +123,73 @@ export class GameService {
 
         role.refreshPractice();
         return { code: ErrorCode.OK, playerItems: role.playerItems };
+    }
+
+
+    // 机缘事件
+    static async luckChance(gameId: string, token: string, type: number, count: number) {
+        // 获取对象
+        let gData = await UnitRole.getRole(gameId, token);
+        if (!gData) {
+            return { code: ErrorCode.NO_ROLE, errMsg: 'can not find player!' }
+        }
+        let role = gData.role;
+        let practice: ifPractice = role.practice;
+
+        // 所需精力
+        let needEnergy = count * 20;
+        if (practice.energy < needEnergy) {
+            // 精力不够
+            return { code: ErrorCode.ENERGY_NOT_ENOUGH, errMsg: 'energy is not enough!' }
+        }
+
+        // 获取对应奖励
+        let resultLC = [];
+        for (let i = 0; i < count; i++) {
+            let rLc = this.getLuckChance(role, type);
+            resultLC.push(rLc);
+        }
+
+        // 扣除精力
+        practice.energy -= needEnergy;
+        role.dbInfo.set('practice', practice);
+
+
+        role.refreshPractice();
+        return { code: ErrorCode.OK, practice: role.practice, resultLC: resultLC }
+    }
+
+    // 获取一个机缘事件结果
+    static async getLuckChance(role: UnitRole, type: number) {
+        // 获取对应池
+        let allLuckChance = TablesService.getModule('LuckChance').getAllRes();
+
+        let targetLC: SeResLuckChance[] = [];
+        let totalWeight = 0;
+
+        for (let key in allLuckChance) {
+            let lc: SeResLuckChance = allLuckChance[key];
+            if (lc.sLType == type) {
+                totalWeight += parseInt(lc.sWeight);
+                targetLC.push(lc);
+            }
+        }
+
+        // 按权重抽出道具
+        let lcDescri: string;
+        let remainDistance = Math.random() * totalWeight;
+        for (let i = 0; i < targetLC.length; ++i) {
+            let res: SeResLuckChance = targetLC[i];
+            remainDistance -= parseInt(res.sWeight);
+            if (remainDistance < 0) {
+                // 更新道具
+                role.updateItem(res.sItemId, 1, eUType.add);
+                lcDescri = res.sDescri;
+                break;
+            }
+        }
+
+        return lcDescri;
     }
 
 }

@@ -46,5 +46,23 @@ class local {
         return await gameRPC.inst.itemsOption(param.gameId, param.token, param.optionStr);
     }
 
+    /**
+     * 机缘事件
+     * @route post /game/local/luckChance
+     * @group main - 基础信息
+     * @param {string} gameId.query.required - 玩家id
+     * @param {string} token.query.required - 令牌
+     * @param {number} type.query.required - 机缘类型
+     * @param {number} count.query.required - 机缘次数
+     * @returns {{code:number}} 0 - 返回成功
+     */
+    @WebRouteModule.route()
+    @WebRouteModule.paramRequired("gameId", "string", true)
+    @WebRouteModule.paramOptional("token", "string", true)
+    @WebRouteModule.paramRequired("type", "number", true)
+    @WebRouteModule.paramRequired("count", "number", true)
+    async luckChance(param: { gameId: string, token: string, type: number, count: number }) {
+        return await gameRPC.inst.luckChance(param.gameId, param.token, param.type, param.count);
+    }
 
 }

@@ -281,8 +281,14 @@ export class UnitRole {
         let role = await this.getRoleCache(gameId);
         if (role) {
             // 初始赠送道具
-            role.updateItem('i003', 5, eUType.set);
-            role.updateItem('i101', 3, eUType.set);
+            role.updateItem('i001', 500, eUType.set);
+            role.updateItem('i002', 300, eUType.set);
+            role.updateItem('i003', 300, eUType.set);
+            role.updateItem('i101', 30, eUType.set);
+            role.updateItem('i102', 35, eUType.set);
+            role.updateItem('i103', 30, eUType.set);
+            role.updateItem('i104', 40, eUType.set);
+            role.updateItem('i105', 38, eUType.set);
 
             // 初始化信息
             let sH = this.randomSHead();
@@ -321,6 +327,7 @@ export class UnitRole {
                 rLevelLayer: 0,
                 rLevel: '',
                 earnSpeed: 0,
+                energy: 150,
             }
             role.dbInfo.set('practice', practice);
 
@@ -497,7 +504,7 @@ export class UnitRole {
             atkMethod.atkLevel = 1;
         } else {
             // 升级功法
-            if (atkMethod.atkLevel >= parseInt(atkInfo.sMaxLevel)) {
+            if (atkMethod.atkLevel >= parseFloat(atkInfo.sMaxLevel)) {
                 // 到达上限
                 return { code: ErrorCode.ATKMETHOD_LEARN_FAIED, errMsg: 'your atkMethod is max!' }
             }
@@ -507,7 +514,7 @@ export class UnitRole {
 
         // 计算新的修炼效率
         let effect = this.countEEffect(this.checkFiveElemets());
-        practice.handledSpeed = (parseInt(atkInfo.sHandleSpeed) + parseInt(atkInfo.sUpAddSpeed) * atkMethod.atkLevel) * effect;
+        practice.handledSpeed = (parseFloat(atkInfo.sHandleSpeed) + parseFloat(atkInfo.sUpAddSpeed) * atkMethod.atkLevel) * effect;
 
         this.dbInfo.set('practice', practice);
         this.dbInfo.set('atkMethod', atkMethod)

@@ -4,6 +4,7 @@ exports.GameService = void 0;
 const crypto_1 = require("crypto");
 const define_1 = require("../../../defines/define");
 const role_1 = require("../../../defines/role");
+const tables_1 = require("../../../lib/tables");
 const role_2 = require("../role/role");
 class GameService {
     static init() {
@@ -101,6 +102,61 @@ class GameService {
         }
         role.refreshPractice();
         return { code: define_1.ErrorCode.OK, playerItems: role.playerItems };
+    }
+    // 机缘事件
+    static async luckChance(gameId, token, type, count) {
+        // 获取对象
+        let gData = await role_2.UnitRole.getRole(gameId, token);
+        if (!gData) {
+            return { code: define_1.ErrorCode.NO_ROLE, errMsg: 'can not find player!' };
+        }
+        let role = gData.role;
+        let practice = role.practice;
+        // 所需精力
+        let needEnergy = count * 20;
+        if (practice.energy < needEnergy) {
+            // 精力不够
+            return { code: define_1.ErrorCode.ENERGY_NOT_ENOUGH, errMsg: 'energy is not enough!' };
+        }
+        // 获取对应奖励
+        let resultLC = [];
+        for (let i = 0; i < count; i++) {
+            let rLc = this.getLuckChance(role, type);
+            resultLC.push(rLc);
+        }
+        // 扣除精力
+        practice.energy -= needEnergy;
+        role.dbInfo.set('practice', practice);
+        role.refreshPractice();
+        return { code: define_1.ErrorCode.OK, practice: role.practice, resultLC: resultLC };
+    }
+    // 获取一个机缘事件结果
+    static async getLuckChance(role, type) {
+        // 获取对应池
+        let allLuckChance = tables_1.TablesService.getModule('LuckChance').getAllRes();
+        let targetLC = [];
+        let totalWeight = 0;
+        for (let key in allLuckChance) {
+            let lc = allLuckChance[key];
+            if (lc.sLType == type) {
+                totalWeight += parseInt(lc.sWeight);
+                targetLC.push(lc);
+            }
+        }
+        // 按权重抽出道具
+        let lcDescri;
+        let remainDistance = Math.random() * totalWeight;
+        for (let i = 0; i < targetLC.length; ++i) {
+            let res = targetLC[i];
+            remainDistance -= parseInt(res.sWeight);
+            if (remainDistance < 0) {
+                // 更新道具
+                role.updateItem(res.sItemId, 1, role_1.eUType.add);
+                lcDescri = res.sDescri;
+                break;
+            }
+        }
+        return lcDescri;
     }
 }
 exports.GameService = GameService;

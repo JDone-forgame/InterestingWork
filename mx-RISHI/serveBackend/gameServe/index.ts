@@ -45,4 +45,20 @@ class _ {
     itemsOption(gameId: string, token: string, optionStr: string) {
         return GameService.itemsOption(gameId, token, optionStr);
     }
+
+    /**
+     * 机缘事件
+     * @route request luckChance
+     * @group game - 活动管理器
+     * @key gameId
+     * @param {string} gameId.query.required - 玩家id
+     * @param {string} token.query.required - 令牌
+     * @param {number} type.query.required - 机缘类型
+     * @param {number} count.query.required - 机缘次数
+     * @returns {{code: ErrorCode}} 0 - 返回信息
+     */
+    @RPCHandle.route()
+    luckChance(gameId: string, token: string, type: number, count: number) {
+        return GameService.luckChance(gameId, token, type, count);
+    }
 }

@@ -47,6 +47,24 @@ class localgameRPC extends nodesocket_1.RequestRPC {
         let body = {};
         return this.request("request", "itemsOption", Object.assign(query, body), "gameId,token,optionStr".split(","), "gameId");
     }
+    /**
+     *
+机缘事件
+     * @param {string} gameId 玩家id
+     * @param {string} token 令牌
+     * @param {number} type 机缘类型
+     * @param {number} count 机缘次数
+     */
+    luckChance(gameId, token, type, count) {
+        let query = {
+            gameId: gameId,
+            token: token,
+            type: type,
+            count: count
+        };
+        let body = {};
+        return this.request("request", "luckChance", Object.assign(query, body), "gameId,token,type,count".split(","), "gameId");
+    }
 }
 class gameRPC {
     static async rpc_init(srv) {

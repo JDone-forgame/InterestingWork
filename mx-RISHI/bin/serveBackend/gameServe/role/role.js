@@ -215,8 +215,14 @@ class UnitRole {
         let role = await this.getRoleCache(gameId);
         if (role) {
             // 初始赠送道具
-            role.updateItem('i003', 5, role_1.eUType.set);
-            role.updateItem('i101', 3, role_1.eUType.set);
+            role.updateItem('i001', 500, role_1.eUType.set);
+            role.updateItem('i002', 300, role_1.eUType.set);
+            role.updateItem('i003', 300, role_1.eUType.set);
+            role.updateItem('i101', 30, role_1.eUType.set);
+            role.updateItem('i102', 35, role_1.eUType.set);
+            role.updateItem('i103', 30, role_1.eUType.set);
+            role.updateItem('i104', 40, role_1.eUType.set);
+            role.updateItem('i105', 38, role_1.eUType.set);
             // 初始化信息
             let sH = this.randomSHead();
             let baseInfo = {
@@ -252,6 +258,7 @@ class UnitRole {
                 rLevelLayer: 0,
                 rLevel: '',
                 earnSpeed: 0,
+                energy: 150,
             };
             role.dbInfo.set('practice', practice);
             // 初始化功法
@@ -407,7 +414,7 @@ class UnitRole {
         }
         else {
             // 升级功法
-            if (atkMethod.atkLevel >= parseInt(atkInfo.sMaxLevel)) {
+            if (atkMethod.atkLevel >= parseFloat(atkInfo.sMaxLevel)) {
                 // 到达上限
                 return { code: define_1.ErrorCode.ATKMETHOD_LEARN_FAIED, errMsg: 'your atkMethod is max!' };
             }
@@ -415,7 +422,7 @@ class UnitRole {
         }
         // 计算新的修炼效率
         let effect = this.countEEffect(this.checkFiveElemets());
-        practice.handledSpeed = (parseInt(atkInfo.sHandleSpeed) + parseInt(atkInfo.sUpAddSpeed) * atkMethod.atkLevel) * effect;
+        practice.handledSpeed = (parseFloat(atkInfo.sHandleSpeed) + parseFloat(atkInfo.sUpAddSpeed) * atkMethod.atkLevel) * effect;
         this.dbInfo.set('practice', practice);
         this.dbInfo.set('atkMethod', atkMethod);
         return { code: define_1.ErrorCode.OK };

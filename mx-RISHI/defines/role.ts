@@ -63,6 +63,8 @@ export interface ifPractice {
     rLevel:string,
     // 当前每秒所增加的灵气
     earnSpeed:number,
+    // 精力
+    energy:number,
 }
 
 // 功法信息

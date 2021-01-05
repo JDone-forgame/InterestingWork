@@ -44,6 +44,20 @@ let _ = class _ {
     itemsOption(gameId, token, optionStr) {
         return game_1.GameService.itemsOption(gameId, token, optionStr);
     }
+    /**
+     * 机缘事件
+     * @route request luckChance
+     * @group game - 活动管理器
+     * @key gameId
+     * @param {string} gameId.query.required - 玩家id
+     * @param {string} token.query.required - 令牌
+     * @param {number} type.query.required - 机缘类型
+     * @param {number} count.query.required - 机缘次数
+     * @returns {{code: ErrorCode}} 0 - 返回信息
+     */
+    luckChance(gameId, token, type, count) {
+        return game_1.GameService.luckChance(gameId, token, type, count);
+    }
 };
 __decorate([
     mx_rpc_1.RPCHandle.route()
@@ -54,6 +68,9 @@ __decorate([
 __decorate([
     mx_rpc_1.RPCHandle.route()
 ], _.prototype, "itemsOption", null);
+__decorate([
+    mx_rpc_1.RPCHandle.route()
+], _.prototype, "luckChance", null);
 _ = __decorate([
     mx_rpc_1.RPCHandle.class("game", module)
 ], _);
