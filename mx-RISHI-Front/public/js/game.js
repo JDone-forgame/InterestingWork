@@ -24,6 +24,10 @@ $(function () {
 
     const local = 'http:10.0.0.180:19000/game'
 
+
+
+
+
     // 开始游戏
     function startGame() {
         let name = $('#name').val();
@@ -38,10 +42,13 @@ $(function () {
         loadXMLDoc(local + "/local/login", param, function () {
             if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
                 data = JSON.parse(xmlhttp.responseText);
+
                 let role = data.role;
+                sRole = JSON.stringify(role);
 
                 // 保存到 session 中
-                sessionStorage.setItem('role',xmlhttp.responseText)
+                sessionStorage.setItem('loginData', xmlhttp.responseText);
+                sessionStorage.setItem('role', sRole);
 
                 // 展示页面
                 startPage(role)
@@ -70,6 +77,9 @@ $(function () {
         // 页面切换
         $('#KAISHI').hide();
         $('#XIULIAN').show();
+
+        // 欢迎弹窗
+        msgs.push('<p>[' + role.nickName + ']欢迎回来!</p>')
     }
 
 
@@ -97,7 +107,7 @@ $(function () {
     function openPackage() {
         $('#KAISHI').hide();
         $('#XIULIAN').hide();
-        showItems(curPlayerName);
+        showItems();
         $('#ITEMS').show();
         $('.item').click(usePackageItem)
         $('.close').click(() => {
@@ -109,15 +119,74 @@ $(function () {
 
 
     // 展示道具
-    function showItems(name) {
-        let items = BACKGAME.getItems(name)
-        for (let item of items) {
-            if (item.number > 0) {
-                $('#ITEMS').append('<div id="' + item.itemId + '" class="item"><img src="./public/img/items/' + item.imgUrl + '"><span class="' + item.quality + '">' + item.itemName + '*' + item.number + '</span></div>')
+    function showItems() {
+        let role = JSON.parse(sessionStorage.getItem('role'));
+        let items = role.playerItems;
+        for (let key in items) {
+            if (items[key] > 0) {
+                let item = Items.get(key);
+                $('#ITEMS').append('<div id="' + item.sID + '" class="item"><img src="./public/img/items/' + item.sImgUrl + '"><span class="' + item.sQuality + '">' + item.sItemName + '*' + items[key] + '</span></div>')
             }
-
         }
     }
+
+
+    // 使用背包道具
+    function usePackageItem() {
+        let itemId = $(this).attr("id");
+        console.log('查看了' + itemId)
+
+        let info = {
+            funcName: "use",
+            itemId: itemId
+        }
+        showUseMsg(Items.get(itemId).sDescribe, info);
+    }
+
+
+    // 使用道具弹窗
+    function showUseMsg(msgInfo, info) {
+        let sData = JSON.parse(sessionStorage.getItem('loginData'));
+        let role = sData.role;
+
+        $('#msg').append(msgInfo)
+        $('#MSG').show();
+        $('#msgConfim').show();
+        $('.close').click(() => {
+            $('#msg').empty();
+            $('#MSG').hide();
+        });
+        $('.confim').click(() => {
+            let optionStr = info.funcName + '|' + info.itemId + '|' + '1';
+            let param = 'gameId=' + role.gameId + '&token=' + sData.token + '&optionStr=' + optionStr;
+            loadXMLDoc(local + "/local/itemsOption", param, function () {
+                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                    data = JSON.parse(xmlhttp.responseText);
+
+                    if (data.code == 0) {
+                        // 表示使用成功，更新信息
+                        role.playerItems = data.playerItems;
+                        role.practice = data.practice;
+                        role.atkMethod = data.atkMethod;
+                        // 保存到 session 中
+                        sRole = JSON.stringify(role);
+                        sessionStorage.setItem('role', sRole)
+                    }
+
+                    // 更新修炼信息
+                    changePP = true;
+
+                    // 页面操作
+                    $('div').remove(".item");
+                    showItems();
+
+                    $('#msg').empty();
+                    $('#MSG').hide();
+                }
+            });
+        });
+    }
+
 
     // 第一层循环
     function updata() {
@@ -126,18 +195,18 @@ $(function () {
             showErrMsg();
         }
 
-        if(start){
+        if (start) {
             showCycleInfo(changePP);
         }
-        
-        
+
+
     }
+
 
     // 第二层循环
     function showCycleInfo(changePP) {
-        if(changePP){
-            let sData = sessionStorage.getItem('role');
-            let role = JSON.parse(sData).role;
+        if (changePP) {
+            let role = JSON.parse(sessionStorage.getItem('role'));
             let practice = role.practice;
             earnSpeed = practice.earnSpeed;
             lastSave = practice.lastSave;
@@ -150,87 +219,26 @@ $(function () {
         let addReiki = earnTime * earnSpeed;
         reiki += addReiki;
         lastSave = nowTime;
-        $('#reiki').text("灵力" + round(reiki, 2));
+        $('#reiki').text("灵力" + Math.floor(reiki));
     }
 
-    // // 测试按钮
-    // function xbtn1() {
-    //     let info = {
-    //         funcName: "learnAtkDrop",
-    //     }
-    //     showUseMsg('<p>你确定要散功吗？散功会流失你的部分灵力!</p>', curPlayer, info)
-    // }
 
+    // *提示信息
+    function showErrMsg() {
+        for (let msg of msgs) {
+            $('#msg').append(msg);
+        }
+        msgOpen = true;
+        $('#MSG').show();
+        $('#msgConfim').hide();
+        $('.close').click(() => {
+            msgOpen = false;
+            msgs.splice(0, msgs.length);
+            $('#msg').empty();
+            $('#MSG').hide();
+        });
+    }
 
-
-    // // 使用背包道具
-    // function usePackageItem() {
-    //     let itemId = $(this).attr("id");
-    //     console.log('查看' + itemId)
-    //     let aitem;
-
-    //     for (let item of Items) {
-    //         if (item.itemId == itemId) {
-    //             aitem = item;
-    //         }
-    //     }
-
-    //     let info = {
-    //         funcName: "useItem",
-    //         itemId: itemId
-    //     }
-    //     showUseMsg(aitem.descri, curPlayerName, info);
-    // }
-
-    // // *提示信息
-    // function showErrMsg() {
-    //     for (let msg of msgs) {
-    //         $('#msg').append(msg);
-    //     }
-    //     msgOpen = true;
-    //     $('#MSG').show();
-    //     $('#msgConfim').hide();
-    //     $('.close').click(() => {
-    //         msgOpen = false;
-    //         msgs.splice(0, msgs.length);
-    //         $('#msg').empty();
-    //         $('#MSG').hide();
-    //     });
-    // }
-
-    // // 使用道具弹窗
-    // function showUseMsg(msgInfo, name, info) {
-    //     $('#msg').append(msgInfo)
-    //     $('#MSG').show();
-    //     $('#msgConfim').show();
-    //     $('.close').click(() => {
-    //         $('#msg').empty();
-    //         $('#MSG').hide();
-    //     });
-    //     $('.confim').click(() => {
-    //         $('#msg').empty();
-    //         $('#MSG').hide();
-    //         switch (info.funcName) {
-    //             case 'useItem':
-    //                 BACKGAME.useItem(name, info.itemId);
-    //                 break;
-    //             case 'learnAtkDrop':
-    //                 BACKGAME.learnAtkDrop(name);
-    //                 break;
-    //         }
-    //     });
-
-    // }
-
-
-
-
-
-
-
-
-
-    
 
     /**-------------------------------------------------辅助函数------------------------------------------------------------------ */
     // 发送请求实现

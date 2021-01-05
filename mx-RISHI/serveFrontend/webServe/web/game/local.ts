@@ -35,7 +35,7 @@ class local {
      * @group main - 基础信息
      * @param {string} gameId.query.required - 玩家id
      * @param {string} token.query.required - 令牌
-     * @param {string} optionStr.query.required - 操作 eg:add-增 use-用 get-查(get/all add/k1:1,k2:2)
+     * @param {string} optionStr.query.required - 操作 eg:add-增 use-用 get-查(get|all add|k1:1,k2:2)
      * @returns {{code:number}} 0 - 返回成功
      */
     @WebRouteModule.route()
