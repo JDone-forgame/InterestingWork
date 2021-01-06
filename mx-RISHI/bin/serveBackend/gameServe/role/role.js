@@ -33,6 +33,13 @@ class UnitRole {
     set password(v) {
         this.dbInfo.set("password", v);
     }
+    // 上次登录时间
+    get lastLoginTime() {
+        return this.dbInfo.get("lastLoginTime") || 0;
+    }
+    set lastLoginTime(v) {
+        this.dbInfo.set("lastLoginTime", v);
+    }
     // 道具
     get playerItems() {
         return this.dbInfo.get("playerItems");
@@ -283,6 +290,7 @@ class UnitRole {
             luckChance['summer'] = 0;
             luckChance['autumn'] = 0;
             luckChance['winter'] = 0;
+            luckChance['luckday'] = 0;
             luckChance['totalLC'] = 0;
             role.dbInfo.set('luckChance', luckChance);
         }
@@ -292,7 +300,18 @@ class UnitRole {
         // 更新修炼信息
         this.refreshPractice();
         // 初始化信息
-        // 重置
+        // 每日重置
+        let nowTime = Date.now();
+        if (!this.isSameDay(nowTime, this.lastLoginTime)) {
+            // 重置精力
+            let practice = this.practice;
+            practice.energy = UnitRole.DEFAULT_ENERGY;
+            this.dbInfo.set('practice', practice);
+            // 重置每日一缘
+            let luckChance = this.luckChance;
+            luckChance['luckday'] = 0;
+            this.dbInfo.set('luckChance', luckChance);
+        }
     }
     // 更新道具
     updateItem(itemId, newCount, uType) {
@@ -493,7 +512,7 @@ class UnitRole {
         }
         return result;
     }
-    // 刷新灵气，修炼信息
+    // 刷新修炼信息
     refreshPractice() {
         this.countReiki();
         this.checkRlevel();
@@ -670,9 +689,18 @@ class UnitRole {
         }
         return result;
     }
+    // 是否是同一天
+    isSameDay(timeStampA, timeStampB) {
+        let dateA = new Date(timeStampA);
+        let dateB = new Date(timeStampB);
+        return (dateA.setHours(0, 0, 0, 0) == dateB.setHours(0, 0, 0, 0));
+    }
 }
 exports.UnitRole = UnitRole;
-UnitRole.DEFAULT_ELENUM = 10;
+UnitRole.DEFAULT_ELENUM = 10; //TablesService.getModule('Global').getRes('s2');
+UnitRole.DEFAULT_ENERGY = 200; //TablesService.getModule('Global').getRes('s1');
+UnitRole.DEFAULT_LUCKDAY = 3; //TablesService.getModule('Global').getRes('s3');
+UnitRole.DEFAULT_LUCKDAY_LIMIT_TIME = 15;
 /**------------------------------缓存部分----------------------------------------------- */
 // role缓存数据：必须通过封装函数操作缓存数据
 UnitRole.stdTTL = 3 * 60 * 60;

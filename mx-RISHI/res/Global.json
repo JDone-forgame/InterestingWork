@@ -1,1 +1,1 @@
-{"s1":{"sID":"s1","sGlobalSet":"defEnergy","sGlobalValue":"200","sExplain":"每日精力"},"s2":{"sID":"s2","sGlobalSet":"defElement","sGlobalValue":"10","sExplain":"初始角色元素力总和"}}
+{"s1":{"sID":"s1","sGlobalSet":"defEnergy","sGlobalValue":"200","sExplain":"每日精力"},"s2":{"sID":"s2","sGlobalSet":"defElement","sGlobalValue":"10","sExplain":"初始角色元素力总和"},"s3":{"sID":"s3","sGlobalSet":"defLuckDayLimit","sGlobalValue":"3","sExplain":"每日一缘的次数"}}

@@ -11,7 +11,10 @@ export class UnitRole {
         return Promise.resolve();
     }
 
-    static readonly DEFAULT_ELENUM = TablesService.getModule('Global').getRes('s2') || 10;
+    static readonly DEFAULT_ELENUM = 10;//TablesService.getModule('Global').getRes('s2');
+    static readonly DEFAULT_ENERGY = 200;//TablesService.getModule('Global').getRes('s1');
+    static readonly DEFAULT_LUCKDAY = 3;//TablesService.getModule('Global').getRes('s3');
+    static readonly DEFAULT_LUCKDAY_LIMIT_TIME = 15;
 
 
     gameId!: string;
@@ -185,7 +188,6 @@ export class UnitRole {
         return loginInfo;
     }
 
-
     // 获取玩家
     static async getRole(gameId: string, token?: string): Promise<{ code: ErrorCode; role: UnitRole }> {
         let roleCache = UnitRole.getRoleCache(gameId);
@@ -226,7 +228,6 @@ export class UnitRole {
         }
     }
 
-
     // 创建一个对象
     private static async createRole(gameId: string, db: ReHash<{ [key: string]: (string | number | object) }>) {
         let roleCache = UnitRole.getRoleCache(gameId);
@@ -251,7 +252,6 @@ export class UnitRole {
 
         return role;
     }
-
 
     // 玩家注册
     static async registRole(regInfo: ifRegInfo): Promise<{ code: number, role: UnitRole }> {
@@ -291,7 +291,6 @@ export class UnitRole {
             }).catch(reject)
         })
     }
-
 
     // 初始化角色数据
     static async initRoleData(gameId: string) {
@@ -363,6 +362,7 @@ export class UnitRole {
             luckChance['summer'] = 0;
             luckChance['autumn'] = 0;
             luckChance['winter'] = 0;
+            luckChance['luckday'] = 0;
             luckChance['totalLC'] = 0;
             role.dbInfo.set('luckChance', luckChance)
         }
@@ -377,11 +377,16 @@ export class UnitRole {
 
         // 每日重置
         let nowTime = Date.now();
-        if(!this.isSameDay(nowTime,this.lastLoginTime)){
+        if (!this.isSameDay(nowTime, this.lastLoginTime)) {
             // 重置精力
-            let practice:ifPractice = this.practice;
-            practice.energy = TablesService.getModule('Global').getRes('s1') || 200;
-            this.dbInfo.set('practice',practice);
+            let practice: ifPractice = this.practice;
+            practice.energy = UnitRole.DEFAULT_ENERGY;
+            this.dbInfo.set('practice', practice);
+
+            // 重置每日一缘
+            let luckChance = this.luckChance;
+            luckChance['luckday'] = 0;
+            this.dbInfo.set('luckChance', luckChance);
         }
     }
 
@@ -400,7 +405,7 @@ export class UnitRole {
         if (!items[itemId] || items[itemId] == null) {
             items[itemId] = 0;
         }
-        
+
         switch (uType) {
             case eUType.add:
                 items[itemId] += newCount;
@@ -724,7 +729,6 @@ export class UnitRole {
         let nowTime = Date.now();
         let eefect = this.countEEffect(this.checkFiveElemets());
         let practice: ifPractice = this.practice;
-
         if (nowTime > practice.lastSave) {
             let earnTime = (nowTime - practice.lastSave) / 1000;
             let addReiki = earnTime * practice.handledSpeed * eefect;

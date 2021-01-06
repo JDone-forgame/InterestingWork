@@ -58,6 +58,8 @@ class GameService {
     static afterLogin(role) {
         // 刷新修炼信息
         role.refreshPractice();
+        // 更新登录时间
+        role.lastLoginTime = Date.now();
     }
     // 移除缓存(供广播其他服务器使用)
     static removeRole(gameId) {
@@ -115,8 +117,15 @@ class GameService {
         let luckChance = role.luckChance;
         // 所需精力
         let needEnergy = count * 20;
+        // 如果是每日一缘，检查次数
+        if (type == 'luckday') {
+            if (luckChance['luckday'] >= role_2.UnitRole.DEFAULT_LUCKDAY) {
+                return { code: define_1.ErrorCode.GET_LUCKCHANCE_FAILED, errMsg: 'no luckday today!' };
+            }
+            needEnergy = 0;
+        }
+        // 检查精力
         if (practice.energy < needEnergy) {
-            // 精力不够
             return { code: define_1.ErrorCode.ENERGY_NOT_ENOUGH, errMsg: 'energy is not enough!' };
         }
         // 获取对应奖励

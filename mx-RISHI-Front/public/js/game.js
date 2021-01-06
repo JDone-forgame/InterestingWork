@@ -18,6 +18,11 @@ $(function () {
 
     // 是否开始了游戏
     let start = false;
+    // 本次登录的时间
+    let startTime = 0;
+
+    // 每日一缘次数
+    let luckday = 0;
 
     // ajax 请求
     let xmlhttp;
@@ -46,6 +51,10 @@ $(function () {
                 if (data.code == 0) {
                     let role = data.role;
                     sRole = JSON.stringify(role);
+
+                    // 保存本次登录时间
+                    startTime = data.localTime;
+                    luckday = role.luckChance['luckday'];
 
                     // 保存到 session 中
                     sessionStorage.setItem('loginData', xmlhttp.responseText);
@@ -218,6 +227,7 @@ $(function () {
         });
     }
 
+    // 获取机缘
     function getLuckChance() {
         let lcId = $(this).attr("id");
         console.log('选择了' + lcId)
@@ -233,6 +243,14 @@ $(function () {
         } else if (lcId == 'lc_fiveLC') {
             count = 5
         }
+
+        xmlLuckChance(type, count)
+    }
+
+    // 请求机缘
+    function xmlLuckChance(type, count) {
+        let sData = JSON.parse(sessionStorage.getItem('loginData'));
+        let role = sData.role;
 
         let param = 'gameId=' + role.gameId + '&token=' + sData.token + '&type=' + type + '&count=' + count;
         loadXMLDoc(local + "/local/luckChance", param, function () {
@@ -270,7 +288,21 @@ $(function () {
         });
     }
 
-
+    // 每日一缘
+    function getluckday() {
+        if(luckday>=3){
+            return;
+        }
+        let nowTime = Date.now();
+        // 每次获取间隔-分钟
+        let timeLimit = 1;
+        if (((nowTime - startTime) / 1000) > timeLimit * 60) {
+            // 可以获得每日一缘了
+            xmlLuckChance('luckday', 1);
+            startTime = nowTime;
+            luckday += 1;
+        }
+    }
 
 
 
@@ -286,9 +318,9 @@ $(function () {
 
         if (start) {
             showCycleInfo(changePP);
+            // 检测是否可以获得每日一缘
+            getluckday();
         }
-
-
     }
 
 

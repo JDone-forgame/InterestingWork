@@ -139,11 +139,19 @@ export class GameService {
         let role = gData.role;
         let practice: ifPractice = role.practice;
         let luckChance = role.luckChance;
-
         // 所需精力
         let needEnergy = count * 20;
+
+        // 如果是每日一缘，检查次数
+        if (type == 'luckday') {
+            if (luckChance['luckday'] >= UnitRole.DEFAULT_LUCKDAY) {
+                return { code: ErrorCode.GET_LUCKCHANCE_FAILED, errMsg: 'no luckday today!' };
+            }
+            needEnergy = 0;
+        }
+
+        // 检查精力
         if (practice.energy < needEnergy) {
-            // 精力不够
             return { code: ErrorCode.ENERGY_NOT_ENOUGH, errMsg: 'energy is not enough!' }
         }
 
