@@ -32,6 +32,7 @@ export enum ErrorCode {
     ITEM_OPTION_FAILED = 101,
     ITEM_NOT_ENOUGH = 102,
     ITEM_USE_FAILED = 103,
+    ITEM_CAN_NOT_USE = 104,
 
     RLEVEL_NOT_FOUND = 200,
     RLEVEL_ERROR = 201,

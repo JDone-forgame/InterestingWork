@@ -124,7 +124,7 @@ $(function () {
         showItems();
         $('#ITEMS').show();
         $('.item').click(usePackageItem)
-        $('.close').click(() => {
+        $('#it_close').click(() => {
             $('div').remove(".item");
             $('#ITEMS').hide();
             $('#XIULIAN').show();
@@ -152,13 +152,17 @@ $(function () {
 
         let info = {
             funcName: "use",
-            itemId: itemId
+            itemId: itemId,
+            showUse: true,
         }
 
         let item = Items.get(itemId);
         let msgInfo = '<p>' + item.sDescribe + '</p>';
         if (item.sItemType == 2) {
             msgInfo += '<p>注意：你将要使用功法道具，如果你已经修行了别的功法，改学功法可能会损失一定的灵气！</p>';
+        }
+        if(item.sEffect == 'None'){
+            info.showUse = false;
         }
 
         showUseMsg(msgInfo, info);
@@ -172,7 +176,11 @@ $(function () {
 
         $('#msg').append(msgInfo)
         $('#MSG').show();
-        $('#msgConfim').show();
+
+        // 是否展示使用按钮
+        if(info.showUse){
+            $('#msgConfim').show();
+        }
         $('.close').click(() => {
             $('#msg').empty();
             $('#MSG').hide();
@@ -221,7 +229,7 @@ $(function () {
         $('#LUCKCHANCE').show();
         $('#lc_energy').text('[精力]' + role.practice.energy)
         $('.lcImg').click(getLuckChance)
-        $('.close').click(() => {
+        $('#lc_close').click(() => {
             $('#LUCKCHANCE').hide();
             $('#XIULIAN').show();
         });
@@ -273,24 +281,26 @@ $(function () {
 
                     // 更新修炼信息
                     changePP = true;
+
+                    // 页面展示
+                    for (let i = 0; i < resultLC.length; i++) {
+                        let str = resultLC[i];
+                        let lcInfo = str.split('|');
+                        let item = Items.get(lcInfo[0]);
+                        msgs.push('<p><span class="' + item.sQuality + '">' + item.sItemName + '</span>:' + lcInfo[1] + '</p>')
+                    }
                 } else {
                     msgs.push('<p>code:' + data.code + '</p><p>errMsg:' + data.errMsg + '</p>')
                 }
 
-                // 页面展示
-                for (let i = 0; i < resultLC.length; i++) {
-                    let str = resultLC[i];
-                    let lcInfo = str.split('|');
-                    let item = Items.get(lcInfo[0]);
-                    msgs.push('<p><span class="' + item.sQuality + '">' + item.sItemName + '</span>:' + lcInfo[1] + '</p>')
-                }
+
             }
         });
     }
 
     // 每日一缘
     function getluckday() {
-        if(luckday>=3){
+        if (luckday >= 3) {
             return;
         }
         let nowTime = Date.now();
@@ -337,6 +347,7 @@ $(function () {
 
             // 更新展示信息
             showBaseInfo(role);
+            $('#lc_energy').text('[精力]' + role.practice.energy)
             changePP = false;
         }
 

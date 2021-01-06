@@ -444,6 +444,9 @@ export class UnitRole {
 
         // 获取道具信息
         let itemInfo: SeResItems = TablesService.getModule('Items').getRes(itemId);
+        if (itemInfo.sEffect == "None") {
+            return { code: ErrorCode.ITEM_CAN_NOT_USE, errMsg: 'item can not use!' };
+        }
         let effect = itemInfo.sEffect.split('|');
 
         switch (effect[0]) {

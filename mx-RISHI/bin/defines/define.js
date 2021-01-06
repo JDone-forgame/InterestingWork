@@ -29,6 +29,7 @@ var ErrorCode;
     ErrorCode[ErrorCode["ITEM_OPTION_FAILED"] = 101] = "ITEM_OPTION_FAILED";
     ErrorCode[ErrorCode["ITEM_NOT_ENOUGH"] = 102] = "ITEM_NOT_ENOUGH";
     ErrorCode[ErrorCode["ITEM_USE_FAILED"] = 103] = "ITEM_USE_FAILED";
+    ErrorCode[ErrorCode["ITEM_CAN_NOT_USE"] = 104] = "ITEM_CAN_NOT_USE";
     ErrorCode[ErrorCode["RLEVEL_NOT_FOUND"] = 200] = "RLEVEL_NOT_FOUND";
     ErrorCode[ErrorCode["RLEVEL_ERROR"] = 201] = "RLEVEL_ERROR";
     ErrorCode[ErrorCode["ATKMETHOD_LEARN_FAIED"] = 300] = "ATKMETHOD_LEARN_FAIED";
