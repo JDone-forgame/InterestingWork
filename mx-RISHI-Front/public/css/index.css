@@ -135,23 +135,9 @@ input:focus {
     font-weight: bold;
 }
 
-.item {
-    position: relative;
-    float: left;
-    margin: 1rem;
-    width: 5.6rem;
-    height: 11rem;
-    line-height: 2rem;
-    background-size: 100%;
-    font-size: 1rem;
-    overflow: hidden;
-}
-
-.item img {
-    position: relative;
-    width: 5rem;
-    height: 5rem;
-    border: 0.3rem solid white;
+.C {
+    color: #32CD32;
+    font-weight: bold;
 }
 
 /* -------------------------------------MSG---------------------------------------- */
@@ -179,11 +165,11 @@ input:focus {
     height: 20rem;
     border: solid white 0.5rem;
     background: gray;
-    overflow: hidden;
+    overflow: scroll;
 }
 
 #msgClose {
-    top: 35%;
+    top: 40%;
     left: 50%;
 }
 
@@ -287,10 +273,18 @@ input:focus {
     text-align: right;
 }
 
-#items {
-    position: absolute;
+#itemsIcon {
     left: 1rem;
     bottom: 1rem;
+}
+
+#luckChanceIcon {
+    left: 1rem;
+    bottom: 8rem;
+}
+
+.mainIcon {
+    position: absolute;
     width: 5rem;
     height: 5rem;
     color: white;
@@ -301,18 +295,70 @@ input:focus {
     border-radius: 0.5rem;
 }
 
-#items:hover {
+.mainIcon:hover {
     background: #B22222;
 }
-
 /* -------------------------------------ITEMS---------------------------------------- */
+.item {
+    position: relative;
+    float: left;
+    margin: 1rem;
+    width: 5.6rem;
+    height: 11rem;
+    line-height: 2rem;
+    background-size: 100%;
+    font-size: 1rem;
+    overflow: hidden;
+}
 
-#itemsClose {
+.item img {
+    position: relative;
+    width: 5rem;
+    height: 5rem;
+    border: 0.3rem solid white;
+}
+
+#it_close {
     position: absolute;
     top: 95%;
     left: 50%;
 }
 
+/* -------------------------------------LUCKCHANCE----------------------------------- */
+
+#lc_close{
+    position: absolute;
+    top: 95%;
+    left: 50%;
+}
+
+#lc_energy{
+    position: absolute;
+    top: 2%;
+    right: 5%;
+    color: #00BFFF;
+}
+
+#lc_oneLC{
+    top:12rem;
+    left:2rem;
+}
+
+#lc_fiveLC{
+    top:35rem;    
+    left:2rem;
+}
+
+.lcImg{
+    position: absolute;
+    width: 32rem;
+    height: 20rem;
+    border: #bbefff solid 1rem;
+    border-radius: 0.5rem;
+    color:#00BFFF;
+    font-size: 4rem;
+    line-height: 20rem;
+}
 
 
 

@@ -70,6 +70,9 @@ export class GameService {
     private static afterLogin(role: UnitRole) {
         // 刷新修炼信息
         role.refreshPractice();
+
+        // 更新登录时间
+        role.lastLoginTime = Date.now();
     }
 
 

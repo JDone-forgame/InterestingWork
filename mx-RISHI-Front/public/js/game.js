@@ -76,8 +76,8 @@ $(function () {
         $('#head').html('<img src="./public/img/head/' + role.baseInfo.headUrl + '">')
 
         // 按键准备
-        $('#items').click(openPackage)
-        $('#xbtn1').click();
+        $('#itemsIcon').click(openPackage)
+        $('#luckChanceIcon').click(openLuckChance)
 
         // 页面切换
         $('#KAISHI').hide();
@@ -107,7 +107,7 @@ $(function () {
         $('#xinxi').html('<p>' + role.nickName + '</p>' + '<p>' + atkMethod.atkName + atkMethod.atkLevel + '阶' + '</p>' + '<p>' + practice.rLevel + '</p>');
     }
 
-
+    /**----------Items---------------------------------------------------------------------- */
     // 打开背包
     function openPackage() {
         $('#KAISHI').hide();
@@ -147,11 +147,11 @@ $(function () {
         }
 
         let item = Items.get(itemId);
-        let msgInfo = '<p>'+item.sDescribe+'</p>';
-        if(item.sItemType == 2){
+        let msgInfo = '<p>' + item.sDescribe + '</p>';
+        if (item.sItemType == 2) {
             msgInfo += '<p>注意：你将要使用功法道具，如果你已经修行了别的功法，改学功法可能会损失一定的灵气！</p>';
         }
-        
+
         showUseMsg(msgInfo, info);
     }
 
@@ -201,6 +201,80 @@ $(function () {
             });
         });
     }
+
+    /**----------LuckChance---------------------------------------------------------------------- */
+    // 打开机缘页面
+    function openLuckChance() {
+        let sData = JSON.parse(sessionStorage.getItem('loginData'));
+        let role = sData.role;
+
+        $('#XIULIAN').hide();
+        $('#LUCKCHANCE').show();
+        $('#lc_energy').text('[精力]' + role.practice.energy)
+        $('.lcImg').click(getLuckChance)
+        $('.close').click(() => {
+            $('#LUCKCHANCE').hide();
+            $('#XIULIAN').show();
+        });
+    }
+
+    function getLuckChance() {
+        let lcId = $(this).attr("id");
+        console.log('选择了' + lcId)
+
+        let sData = JSON.parse(sessionStorage.getItem('loginData'));
+        let role = sData.role;
+
+        let count = 0;
+        let type = 'normal';
+
+        if (lcId == 'lc_oneLC') {
+            count = 1;
+        } else if (lcId == 'lc_fiveLC') {
+            count = 5
+        }
+
+        let param = 'gameId=' + role.gameId + '&token=' + sData.token + '&type=' + type + '&count=' + count;
+        loadXMLDoc(local + "/local/luckChance", param, function () {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                data = JSON.parse(xmlhttp.responseText);
+
+                let resultLC = [];
+
+                if (data.code == 0) {
+                    // 表示使用成功，更新信息
+                    role.playerItems = data.playerItems;
+                    role.practice = data.practice;
+                    resultLC = data.resultLC;
+
+
+                    // 保存到 session 中
+                    sRole = JSON.stringify(role);
+                    sessionStorage.setItem('role', sRole)
+
+
+                    // 更新修炼信息
+                    changePP = true;
+                } else {
+                    msgs.push('<p>code:' + data.code + '</p><p>errMsg:' + data.errMsg + '</p>')
+                }
+
+                // 页面展示
+                for (let i = 0; i < resultLC.length; i++) {
+                    let str = resultLC[i];
+                    let lcInfo = str.split('|');
+                    let item = Items.get(lcInfo[0]);
+                    msgs.push('<p><span class="' + item.sQuality + '">' + item.sItemName + '</span>:' + lcInfo[1] + '</p>')
+                }
+            }
+        });
+    }
+
+
+
+
+
+
 
 
     // 第一层循环
@@ -306,6 +380,13 @@ $(function () {
         $('#XIULIAN').hide();
         $('#MSG').hide();
         $('#ITEMS').hide();
+        $('#LUCKCHANCE').hide();
+
+        // $('#KAISHI').hide();
+        // $('#XIULIAN').hide();
+        // $('#MSG').hide();
+        // $('#ITEMS').hide();
+        // $('#LUCKCHANCE').show();
 
 
         $('#startGame').click(startGame);

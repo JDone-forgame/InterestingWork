@@ -11,7 +11,7 @@ export class UnitRole {
         return Promise.resolve();
     }
 
-    static readonly DEFAULT_ELENUM = 10;
+    static readonly DEFAULT_ELENUM = TablesService.getModule('Global').getRes('s2') || 10;
 
 
     gameId!: string;
@@ -38,6 +38,15 @@ export class UnitRole {
 
     set password(v: string) {
         this.dbInfo.set("password", v);
+    }
+
+    // 上次登录时间
+    get lastLoginTime(): number {
+        return this.dbInfo.get("lastLoginTime") || 0;
+    }
+
+    set lastLoginTime(v: number) {
+        this.dbInfo.set("lastLoginTime", v);
     }
 
     // 道具
@@ -366,7 +375,14 @@ export class UnitRole {
 
         // 初始化信息
 
-        // 重置
+        // 每日重置
+        let nowTime = Date.now();
+        if(!this.isSameDay(nowTime,this.lastLoginTime)){
+            // 重置精力
+            let practice:ifPractice = this.practice;
+            practice.energy = TablesService.getModule('Global').getRes('s1') || 200;
+            this.dbInfo.set('practice',practice);
+        }
     }
 
     // 更新道具
@@ -400,13 +416,11 @@ export class UnitRole {
         return { code: ErrorCode.OK }
     }
 
-
     // 获取道具数量
     getItemCount(itemId: string): number {
         let playerItems = this.dbInfo.get('playerItems') || {};
         return playerItems[itemId] || 0;
     }
-
 
     // 使用道具
     useItem(itemId: string, itemCount: number) {
@@ -454,7 +468,6 @@ export class UnitRole {
         this.refreshPractice();
         return { code: ErrorCode.OK, playerItems: this.playerItems, practice: this.practice, atkMethod: this.atkMethod }
     }
-
 
     // 学习功法
     learnAtkMethod(atkId: string, count: number) {
@@ -599,7 +612,7 @@ export class UnitRole {
         return result
     }
 
-    // 刷新灵气，修炼信息
+    // 刷新修炼信息
     refreshPractice() {
         this.countReiki();
         this.checkRlevel();
@@ -789,6 +802,13 @@ export class UnitRole {
         }
 
         return result;
+    }
+
+    // 是否是同一天
+    isSameDay(timeStampA: number, timeStampB: number): boolean {
+        let dateA = new Date(timeStampA);
+        let dateB = new Date(timeStampB);
+        return (dateA.setHours(0, 0, 0, 0) == dateB.setHours(0, 0, 0, 0));
     }
 
 
