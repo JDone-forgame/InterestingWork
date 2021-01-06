@@ -52,16 +52,16 @@ class local {
      * @group main - 基础信息
      * @param {string} gameId.query.required - 玩家id
      * @param {string} token.query.required - 令牌
-     * @param {number} type.query.required - 机缘类型
+     * @param {string} type.query.required - 机缘类型
      * @param {number} count.query.required - 机缘次数
      * @returns {{code:number}} 0 - 返回成功
      */
     @WebRouteModule.route()
     @WebRouteModule.paramRequired("gameId", "string", true)
     @WebRouteModule.paramOptional("token", "string", true)
-    @WebRouteModule.paramRequired("type", "number", true)
+    @WebRouteModule.paramRequired("type", "string", true)
     @WebRouteModule.paramRequired("count", "number", true)
-    async luckChance(param: { gameId: string, token: string, type: number, count: number }) {
+    async luckChance(param: { gameId: string, token: string, type: string, count: number }) {
         return await gameRPC.inst.luckChance(param.gameId, param.token, param.type, param.count);
     }
 

@@ -112,6 +112,7 @@ class GameService {
         }
         let role = gData.role;
         let practice = role.practice;
+        let luckChance = role.luckChance;
         // 所需精力
         let needEnergy = count * 20;
         if (practice.energy < needEnergy) {
@@ -121,17 +122,31 @@ class GameService {
         // 获取对应奖励
         let resultLC = [];
         for (let i = 0; i < count; i++) {
-            let rLc = this.getLuckChance(role, type);
+            let rLc;
+            if ((luckChance[type] + i) % 10 == 0) {
+                // 保底
+                rLc = this.getLuckChance(role, type, true);
+            }
+            else {
+                rLc = this.getLuckChance(role, type);
+            }
+            if (rLc == '') {
+                return { code: define_1.ErrorCode.GET_LUCKCHANCE_FAILED, errMsg: 'get luckChance failed!' };
+            }
             resultLC.push(rLc);
         }
         // 扣除精力
         practice.energy -= needEnergy;
         role.dbInfo.set('practice', practice);
+        // 更新机缘次数
+        luckChance['totalLC'] += count;
+        luckChance[type] += count;
+        role.dbInfo.set('luckChance', luckChance);
         role.refreshPractice();
-        return { code: define_1.ErrorCode.OK, practice: role.practice, resultLC: resultLC };
+        return { code: define_1.ErrorCode.OK, practice: role.practice, playerItems: role.playerItems, resultLC: resultLC };
     }
     // 获取一个机缘事件结果
-    static async getLuckChance(role, type) {
+    static getLuckChance(role, type, guarantee = false) {
         // 获取对应池
         let allLuckChance = tables_1.TablesService.getModule('LuckChance').getAllRes();
         let targetLC = [];
@@ -144,15 +159,19 @@ class GameService {
             }
         }
         // 按权重抽出道具
-        let lcDescri;
+        let lcDescri = '';
         let remainDistance = Math.random() * totalWeight;
         for (let i = 0; i < targetLC.length; ++i) {
             let res = targetLC[i];
-            remainDistance -= parseInt(res.sWeight);
+            let weight = parseInt(res.sWeight);
+            if (guarantee && weight <= 50) {
+                weight = weight * 2;
+            }
+            remainDistance -= weight;
             if (remainDistance < 0) {
                 // 更新道具
                 role.updateItem(res.sItemId, 1, role_1.eUType.add);
-                lcDescri = res.sDescri;
+                lcDescri = res.sItemId + '|' + res.sDescri;
                 break;
             }
         }

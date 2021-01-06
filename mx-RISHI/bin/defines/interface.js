@@ -3,9 +3,9 @@
  * auto generate by tableconvert
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SeEnumRlevelsLevelName = exports.SeEnumLuckChancesLType = exports.SeEnumItemssItemType = void 0;
+exports.SeEnumRlevelsLevelName = exports.SeEnumItemssItemType = void 0;
 /**
- * SeEnumItemssItemType generate in[Tue Jan 05 2021 19:00:14 GMT+0800 (GMT+08:00)]
+ * SeEnumItemssItemType generate in[Wed Jan 06 2021 10:31:37 GMT+0800 (GMT+08:00)]
  */
 var SeEnumItemssItemType;
 (function (SeEnumItemssItemType) {
@@ -14,16 +14,7 @@ var SeEnumItemssItemType;
     SeEnumItemssItemType[SeEnumItemssItemType["HuoBi"] = 3] = "HuoBi";
 })(SeEnumItemssItemType = exports.SeEnumItemssItemType || (exports.SeEnumItemssItemType = {}));
 /**
- * SeEnumLuckChancesLType generate in[Tue Jan 05 2021 19:00:14 GMT+0800 (GMT+08:00)]
- */
-var SeEnumLuckChancesLType;
-(function (SeEnumLuckChancesLType) {
-    SeEnumLuckChancesLType[SeEnumLuckChancesLType["ChangGui"] = 1] = "ChangGui";
-    SeEnumLuckChancesLType[SeEnumLuckChancesLType["ChunJi"] = 2] = "ChunJi";
-    SeEnumLuckChancesLType[SeEnumLuckChancesLType["XiaJi"] = 3] = "XiaJi";
-})(SeEnumLuckChancesLType = exports.SeEnumLuckChancesLType || (exports.SeEnumLuckChancesLType = {}));
-/**
- * SeEnumRlevelsLevelName generate in[Tue Jan 05 2021 19:00:14 GMT+0800 (GMT+08:00)]
+ * SeEnumRlevelsLevelName generate in[Wed Jan 06 2021 10:31:37 GMT+0800 (GMT+08:00)]
  */
 var SeEnumRlevelsLevelName;
 (function (SeEnumRlevelsLevelName) {

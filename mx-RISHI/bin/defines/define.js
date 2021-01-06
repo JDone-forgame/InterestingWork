@@ -34,6 +34,7 @@ var ErrorCode;
     ErrorCode[ErrorCode["ATKMETHOD_LEARN_FAIED"] = 300] = "ATKMETHOD_LEARN_FAIED";
     ErrorCode[ErrorCode["ELEMENTS_NOT_ENOUGH"] = 400] = "ELEMENTS_NOT_ENOUGH";
     ErrorCode[ErrorCode["ENERGY_NOT_ENOUGH"] = 500] = "ENERGY_NOT_ENOUGH";
+    ErrorCode[ErrorCode["GET_LUCKCHANCE_FAILED"] = 600] = "GET_LUCKCHANCE_FAILED";
 })(ErrorCode = exports.ErrorCode || (exports.ErrorCode = {}));
 let map = {};
 map[1] = "您在${Month}月${Date}日发起的《${activeName}》活动，获奖者名单及收货信息如下，请在活动结束后7个工作日内邮寄出实物奖励。如您因未及时发放奖励或发送虚假奖励，头号赢家有权封停您的账号。造成重大影响者，将依法交予公安机关处理。";

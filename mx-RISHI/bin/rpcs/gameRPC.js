@@ -52,7 +52,7 @@ class localgameRPC extends nodesocket_1.RequestRPC {
 机缘事件
      * @param {string} gameId 玩家id
      * @param {string} token 令牌
-     * @param {number} type 机缘类型
+     * @param {string} type 机缘类型
      * @param {number} count 机缘次数
      */
     luckChance(gameId, token, type, count) {

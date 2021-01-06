@@ -36,11 +36,11 @@ export enum eElementName {
 }
 
 export interface ifElements {
-    Metal : number,
-    Wood : number,
-    Water : number,
-    Fire : number,
-    Earth : number,
+    Metal: number,
+    Wood: number,
+    Water: number,
+    Fire: number,
+    Earth: number,
 }
 
 // 修行信息
@@ -60,11 +60,11 @@ export interface ifPractice {
     // 修炼阶段层数
     rLevelLayer: number,
     // 修炼总称
-    rLevel:string,
+    rLevel: string,
     // 当前每秒所增加的灵气
-    earnSpeed:number,
+    earnSpeed: number,
     // 精力
-    energy:number,
+    energy: number,
 }
 
 // 功法信息
@@ -84,4 +84,13 @@ export interface ifAtkMethod {
 export interface ifBaseInfo {
     sex: string,
     headUrl: string
+}
+
+export interface ifLuckChance {
+    totalLC: number,
+    normal:number,
+    spring:number,
+    summer:number,
+    autumn:number,
+    winter:number
 }

@@ -75,6 +75,13 @@ class UnitRole {
     set atkMethod(v) {
         this.dbInfo.set("atkMethod", v);
     }
+    // 机缘
+    get luckChance() {
+        return this.dbInfo.get("luckChance");
+    }
+    set luckChance(v) {
+        this.dbInfo.set("luckChance", v);
+    }
     // 数据库存写方法
     get(key) {
         return this.dbInfo.get(key);
@@ -115,6 +122,7 @@ class UnitRole {
             atkMethod: this.atkMethod,
             practice: this.practice,
             fElements: this.fElements,
+            luckChance: this.luckChance,
         };
         return loginInfo;
     }
@@ -268,6 +276,15 @@ class UnitRole {
                 atkLevel: 0,
             };
             role.dbInfo.set('atkMethod', atkMethod);
+            // 初始化机缘
+            let luckChance = new Map();
+            luckChance['normal'] = 0;
+            luckChance['spring'] = 0;
+            luckChance['summer'] = 0;
+            luckChance['autumn'] = 0;
+            luckChance['winter'] = 0;
+            luckChance['totalLC'] = 0;
+            role.dbInfo.set('luckChance', luckChance);
         }
     }
     // 登录前流程处理
@@ -288,6 +305,9 @@ class UnitRole {
         newCount = Math.floor(newCount);
         // 更新道具数据
         let items = this.dbInfo.get('playerItems') || {};
+        if (!items[itemId] || items[itemId] == null) {
+            items[itemId] = 0;
+        }
         switch (uType) {
             case role_1.eUType.add:
                 items[itemId] += newCount;

@@ -45,7 +45,7 @@ let local = class local {
      * @group main - 基础信息
      * @param {string} gameId.query.required - 玩家id
      * @param {string} token.query.required - 令牌
-     * @param {number} type.query.required - 机缘类型
+     * @param {string} type.query.required - 机缘类型
      * @param {number} count.query.required - 机缘次数
      * @returns {{code:number}} 0 - 返回成功
      */
@@ -68,7 +68,7 @@ __decorate([
     mx_webserve_1.WebRouteModule.route(),
     mx_webserve_1.WebRouteModule.paramRequired("gameId", "string", true),
     mx_webserve_1.WebRouteModule.paramOptional("token", "string", true),
-    mx_webserve_1.WebRouteModule.paramRequired("type", "number", true),
+    mx_webserve_1.WebRouteModule.paramRequired("type", "string", true),
     mx_webserve_1.WebRouteModule.paramRequired("count", "number", true)
 ], local.prototype, "luckChance", null);
 local = __decorate([

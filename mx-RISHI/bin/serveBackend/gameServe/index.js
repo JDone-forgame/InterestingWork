@@ -51,7 +51,7 @@ let _ = class _ {
      * @key gameId
      * @param {string} gameId.query.required - 玩家id
      * @param {string} token.query.required - 令牌
-     * @param {number} type.query.required - 机缘类型
+     * @param {string} type.query.required - 机缘类型
      * @param {number} count.query.required - 机缘次数
      * @returns {{code: ErrorCode}} 0 - 返回信息
      */

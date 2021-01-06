@@ -2,7 +2,7 @@ import { MongodbMoudle, ReHash } from "mx-database";
 import NodeCache from "node-cache"
 import { DBDefine, ErrorCode } from "../../../defines/define";
 import { SeEnumRlevelsLevelName, SeResAtkMethods, SeResItems, SeResRlevel } from "../../../defines/interface";
-import { eElementName, eUType, ifAtkMethod, ifBaseInfo, ifElements, ifPractice, ifRegInfo } from "../../../defines/role";
+import { eElementName, eUType, ifAtkMethod, ifBaseInfo, ifElements, ifLuckChance, ifPractice, ifRegInfo } from "../../../defines/role";
 import { TablesService } from "../../../lib/tables";
 
 export class UnitRole {
@@ -94,7 +94,14 @@ export class UnitRole {
         this.dbInfo.set("atkMethod", v);
     }
 
+    // 机缘
+    get luckChance(): { [lcKey: string]: number } {
+        return this.dbInfo.get("luckChance");
+    }
 
+    set luckChance(v: { [lcKey: string]: number }) {
+        this.dbInfo.set("luckChance", v);
+    }
 
 
 
@@ -163,6 +170,7 @@ export class UnitRole {
             atkMethod: this.atkMethod,
             practice: this.practice,
             fElements: this.fElements,
+            luckChance: this.luckChance,
         }
 
         return loginInfo;
@@ -338,6 +346,16 @@ export class UnitRole {
                 atkLevel: 0,
             }
             role.dbInfo.set('atkMethod', atkMethod);
+
+            // 初始化机缘
+            let luckChance = new Map<string, number>();
+            luckChance['normal'] = 0;
+            luckChance['spring'] = 0;
+            luckChance['summer'] = 0;
+            luckChance['autumn'] = 0;
+            luckChance['winter'] = 0;
+            luckChance['totalLC'] = 0;
+            role.dbInfo.set('luckChance', luckChance)
         }
     }
 
@@ -363,6 +381,10 @@ export class UnitRole {
 
         // 更新道具数据
         let items = this.dbInfo.get('playerItems') || {};
+        if (!items[itemId] || items[itemId] == null) {
+            items[itemId] = 0;
+        }
+        
         switch (uType) {
             case eUType.add:
                 items[itemId] += newCount;

@@ -1,7 +1,7 @@
 import { createHash } from "crypto";
 import { ErrorCode } from "../../../defines/define";
-import { SeEnumLuckChancesLType, SeResLuckChance } from "../../../defines/interface";
-import { eUType, ifLoginInfo, ifPractice, ifRegInfo } from "../../../defines/role";
+import { SeResLuckChance } from "../../../defines/interface";
+import { eUType, ifLoginInfo, ifLuckChance, ifPractice, ifRegInfo } from "../../../defines/role";
 import { TablesService } from "../../../lib/tables";
 import { UnitRole } from "../role/role";
 
@@ -127,7 +127,7 @@ export class GameService {
 
 
     // 机缘事件
-    static async luckChance(gameId: string, token: string, type: number, count: number) {
+    static async luckChance(gameId: string, token: string, type: string, count: number) {
         // 获取对象
         let gData = await UnitRole.getRole(gameId, token);
         if (!gData) {
@@ -135,6 +135,7 @@ export class GameService {
         }
         let role = gData.role;
         let practice: ifPractice = role.practice;
+        let luckChance = role.luckChance;
 
         // 所需精力
         let needEnergy = count * 20;
@@ -146,7 +147,18 @@ export class GameService {
         // 获取对应奖励
         let resultLC = [];
         for (let i = 0; i < count; i++) {
-            let rLc = this.getLuckChance(role, type);
+            let rLc;
+            if ((luckChance[type] + i) % 10 == 0) {
+                // 保底
+                rLc = this.getLuckChance(role, type, true);
+            } else {
+                rLc = this.getLuckChance(role, type);
+            }
+
+            if (rLc == '') {
+                return { code: ErrorCode.GET_LUCKCHANCE_FAILED, errMsg: 'get luckChance failed!' }
+            }
+
             resultLC.push(rLc);
         }
 
@@ -154,13 +166,17 @@ export class GameService {
         practice.energy -= needEnergy;
         role.dbInfo.set('practice', practice);
 
+        // 更新机缘次数
+        luckChance['totalLC'] += count;
+        luckChance[type] += count;
+        role.dbInfo.set('luckChance', luckChance);
 
         role.refreshPractice();
-        return { code: ErrorCode.OK, practice: role.practice, resultLC: resultLC }
+        return { code: ErrorCode.OK, practice: role.practice, playerItems: role.playerItems, resultLC: resultLC }
     }
 
     // 获取一个机缘事件结果
-    static async getLuckChance(role: UnitRole, type: number) {
+    static getLuckChance(role: UnitRole, type: string, guarantee: boolean = false) {
         // 获取对应池
         let allLuckChance = TablesService.getModule('LuckChance').getAllRes();
 
@@ -176,15 +192,21 @@ export class GameService {
         }
 
         // 按权重抽出道具
-        let lcDescri: string;
+        let lcDescri: string = '';
         let remainDistance = Math.random() * totalWeight;
         for (let i = 0; i < targetLC.length; ++i) {
             let res: SeResLuckChance = targetLC[i];
-            remainDistance -= parseInt(res.sWeight);
+            let weight = parseInt(res.sWeight);
+
+            if (guarantee && weight <= 50) {
+                weight = weight * 2;
+            }
+
+            remainDistance -= weight;
             if (remainDistance < 0) {
                 // 更新道具
                 role.updateItem(res.sItemId, 1, eUType.add);
-                lcDescri = res.sDescri;
+                lcDescri = res.sItemId + '|' + res.sDescri;
                 break;
             }
         }

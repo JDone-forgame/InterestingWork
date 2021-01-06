@@ -3,7 +3,7 @@
  */
 
 /**
- * SeEnumItemssItemType generate in[Tue Jan 05 2021 19:00:14 GMT+0800 (GMT+08:00)] 
+ * SeEnumItemssItemType generate in[Wed Jan 06 2021 10:31:37 GMT+0800 (GMT+08:00)] 
  */
 export enum SeEnumItemssItemType{ 
       DanYao=1,
@@ -13,17 +13,7 @@ export enum SeEnumItemssItemType{
 
 
 /**
- * SeEnumLuckChancesLType generate in[Tue Jan 05 2021 19:00:14 GMT+0800 (GMT+08:00)] 
- */
-export enum SeEnumLuckChancesLType{ 
-      ChangGui=1,
-      ChunJi=2,
-      XiaJi=3,
-}
-
-
-/**
- * SeEnumRlevelsLevelName generate in[Tue Jan 05 2021 19:00:14 GMT+0800 (GMT+08:00)] 
+ * SeEnumRlevelsLevelName generate in[Wed Jan 06 2021 10:31:37 GMT+0800 (GMT+08:00)] 
  */
 export enum SeEnumRlevelsLevelName{ 
       LianQi=1,
@@ -34,7 +24,7 @@ export enum SeEnumRlevelsLevelName{
 
 
 /**
- * SeResAtkMethods generate in[Tue Jan 05 2021 19:00:14 GMT+0800 (GMT+08:00)] 
+ * SeResAtkMethods generate in[Wed Jan 06 2021 10:31:37 GMT+0800 (GMT+08:00)] 
  */
 export interface SeResAtkMethods{ 
       sID:string;
@@ -48,7 +38,7 @@ export interface SeResAtkMethods{
 
 
 /**
- * SeResItems generate in[Tue Jan 05 2021 19:00:14 GMT+0800 (GMT+08:00)] 
+ * SeResItems generate in[Wed Jan 06 2021 10:31:37 GMT+0800 (GMT+08:00)] 
  */
 export interface SeResItems{ 
       sID:string;
@@ -62,11 +52,11 @@ export interface SeResItems{
 
 
 /**
- * SeResLuckChance generate in[Tue Jan 05 2021 19:00:14 GMT+0800 (GMT+08:00)] 
+ * SeResLuckChance generate in[Wed Jan 06 2021 10:31:37 GMT+0800 (GMT+08:00)] 
  */
 export interface SeResLuckChance{ 
       sID:string;
-      sLType:SeEnumLuckChancesLType;
+      sLType:string;
       sWeight:string;
       sItemId:string;
       sDescri:string;
@@ -74,7 +64,7 @@ export interface SeResLuckChance{
 
 
 /**
- * SeResRlevel generate in[Tue Jan 05 2021 19:00:14 GMT+0800 (GMT+08:00)] 
+ * SeResRlevel generate in[Wed Jan 06 2021 10:31:37 GMT+0800 (GMT+08:00)] 
  */
 export interface SeResRlevel{ 
       sID:string;
