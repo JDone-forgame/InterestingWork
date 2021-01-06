@@ -23,6 +23,7 @@ html {
     user-select: none;
     font-family: xiangsu;
     text-align: center;
+    transition: all 0.3s;
 }
 
 body {
@@ -342,24 +343,29 @@ input:focus {
 #lc_oneLC{
     top:12rem;
     left:2rem;
+    border: #006331 solid 1rem;
+    color:#006331;
 }
 
 #lc_fiveLC{
     top:35rem;    
     left:2rem;
+    border: #7e0077 solid 1rem;
+    color:#7e0077;
 }
 
 .lcImg{
     position: absolute;
     width: 32rem;
     height: 20rem;
-    border: #bbefff solid 1rem;
     border-radius: 0.5rem;
-    color:#00BFFF;
     font-size: 4rem;
     line-height: 20rem;
 }
 
+.lcImg:hover{
+    background-color: rgb(37, 37, 37);
+}
 
 
 

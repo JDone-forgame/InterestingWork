@@ -3,6 +3,7 @@
     指令:npx mx-serve init
 2. 生成启动用的文件
     指令:npx mx-serve app
+    如果不知道使用什么指令,输入 npx mx-serve 会有相关提示
 3. configMgr 在 defines/defalutConfig.ts 中
     在里面配置端口，但还是要 config.json 文件
 4. @param {string} password.query.required

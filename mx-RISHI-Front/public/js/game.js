@@ -329,9 +329,14 @@ $(function () {
         if (changePP) {
             let role = JSON.parse(sessionStorage.getItem('role'));
             let practice = role.practice;
+
+            // 更新修炼信息
             earnSpeed = practice.earnSpeed;
             lastSave = practice.lastSave;
             reiki = practice.reiki;
+
+            // 更新展示信息
+            showBaseInfo(role);
             changePP = false;
         }
 
