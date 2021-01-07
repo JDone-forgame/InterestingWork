@@ -92,5 +92,51 @@ export interface ifLuckChance {
     spring:number,
     summer:number,
     autumn:number,
-    winter:number
+    winter:number,
+    luckday:number,
+}
+
+// 战斗相关
+export interface ifAtkAbout {
+    health:number,
+    defense:ifFightEle,
+    atkEle:ifFightEle,
+    // 通用技能
+    learned:string[],
+    // 功法技能
+    atkSkill:string[], 
+    // 装备技能
+    equipSkill:string[],
+}
+
+// 装备
+export interface ifEquipment {
+    // 头饰
+    helmet:string,
+    // 衣服
+    clothes:string,
+    // 鞋子
+    shoes :string,
+    // 武器
+    weapons :string,
+    // 饰品1
+    ornament1:string,
+    // 饰品2
+    ornament2:string,
+    // 饰品3
+    ornament3:string,
+
+    totalAtk :ifFightEle,
+    totalDef :ifFightEle,
+    totalSpe :number,
+}
+
+// 战斗元素属性
+export interface ifFightEle {
+    Wood:number,
+    Metal:number,
+    Fire:number,
+    Water:number,
+    Earth:number,
+    Physical:number,
 }

@@ -1,8 +1,8 @@
 import { MongodbMoudle, ReHash } from "mx-database";
 import NodeCache from "node-cache"
 import { DBDefine, ErrorCode } from "../../../defines/define";
-import { SeEnumRlevelsLevelName, SeResAtkMethods, SeResItems, SeResRlevel } from "../../../defines/interface";
-import { eElementName, eUType, ifAtkMethod, ifBaseInfo, ifElements, ifLuckChance, ifPractice, ifRegInfo } from "../../../defines/role";
+import { SeEnumRlevelsLevelName, SeResAtkMethods, SeResEquip, SeResItems, SeResRlevel } from "../../../defines/interface";
+import { eElementName, eUType, ifAtkAbout, ifAtkMethod, ifBaseInfo, ifElements, ifEquipment, ifLuckChance, ifPractice, ifRegInfo } from "../../../defines/role";
 import { TablesService } from "../../../lib/tables";
 
 export class UnitRole {
@@ -115,9 +115,21 @@ export class UnitRole {
         this.dbInfo.set("luckChance", v);
     }
 
+    // 战斗
+    get atkAbout(): ifAtkAbout {
+        return this.dbInfo.get("atkAbout");
+    }
+    set atkAbout(v: ifAtkAbout) {
+        this.dbInfo.set("atkAbout", v);
+    }
 
-
-
+    // 装备
+    get equipment(): ifEquipment {
+        return this.dbInfo.get("equipment");
+    }
+    set equipment(v: ifEquipment) {
+        this.dbInfo.set("equipment", v);
+    }
 
 
 
@@ -183,6 +195,8 @@ export class UnitRole {
             practice: this.practice,
             fElements: this.fElements,
             luckChance: this.luckChance,
+            atkAbout: this.atkAbout,
+            equipment: this.equipment,
         }
 
         return loginInfo;
@@ -300,11 +314,15 @@ export class UnitRole {
             role.updateItem('i001', 500, eUType.set);
             role.updateItem('i002', 300, eUType.set);
             role.updateItem('i003', 300, eUType.set);
-            role.updateItem('i101', 30, eUType.set);
-            role.updateItem('i102', 35, eUType.set);
-            role.updateItem('i103', 30, eUType.set);
-            role.updateItem('i104', 40, eUType.set);
-            role.updateItem('i105', 38, eUType.set);
+            role.updateItem('a001', 30, eUType.set);
+            role.updateItem('a002', 35, eUType.set);
+            role.updateItem('a003', 30, eUType.set);
+            role.updateItem('a004', 40, eUType.set);
+            role.updateItem('a005', 38, eUType.set);
+            role.updateItem('eq001', 1, eUType.set);
+            role.updateItem('eq002', 1, eUType.set);
+            role.updateItem('ma001', 100, eUType.set);
+            role.updateItem('ma002', 100, eUType.set);
 
             // 初始化信息
             let sH = this.randomSHead();
@@ -343,7 +361,7 @@ export class UnitRole {
                 rLevelLayer: 0,
                 rLevel: '',
                 earnSpeed: 0,
-                energy: 150,
+                energy: 10000,
             }
             role.dbInfo.set('practice', practice);
 
@@ -365,6 +383,60 @@ export class UnitRole {
             luckChance['luckday'] = 0;
             luckChance['totalLC'] = 0;
             role.dbInfo.set('luckChance', luckChance)
+
+            // 初始化战斗
+            let atkAbout: ifAtkAbout = {
+                health: 0,
+                defense: {
+                    Wood: 0,
+                    Metal: 0,
+                    Fire: 0,
+                    Water: 0,
+                    Earth: 0,
+                    Physical: 0,
+                },
+                atkEle: {
+                    Wood: 0,
+                    Metal: 0,
+                    Fire: 0,
+                    Water: 0,
+                    Earth: 0,
+                    Physical: 0,
+                },
+                learned: [],
+                atkSkill: [],
+                equipSkill: [],
+            }
+            role.dbInfo.set('atkAbout', atkAbout);
+
+            // 初始化装备
+            let equipment: ifEquipment = {
+                helmet: '',
+                clothes: '',
+                shoes: '',
+                weapons: '',
+                ornament1: '',
+                ornament2: '',
+                ornament3: '',
+                totalAtk: {
+                    Wood: 0,
+                    Metal: 0,
+                    Fire: 0,
+                    Water: 0,
+                    Earth: 0,
+                    Physical: 0,
+                },
+                totalDef: {
+                    Wood: 0,
+                    Metal: 0,
+                    Fire: 0,
+                    Water: 0,
+                    Earth: 0,
+                    Physical: 0,
+                },
+                totalSpe: 0,
+            }
+            role.dbInfo.set('equipment', equipment);
         }
     }
 
@@ -466,6 +538,13 @@ export class UnitRole {
                     return { code: lResult.code || ErrorCode.ITEM_USE_FAILED, errMsg: lResult.errMsg || 'learn atkmethod failed!' }
                 }
                 break;
+            // 更换装备
+            case 'changeEquip':
+                let cResult = this.changeEquip(effect[1]);
+                if (cResult.code != ErrorCode.OK) {
+                    return { code: cResult.code || ErrorCode.ITEM_USE_FAILED, errMsg: cResult.errMsg || 'changeEquip failed!' }
+                }
+                break;
             default:
                 break;
         }
@@ -474,7 +553,7 @@ export class UnitRole {
         this.dbInfo.set('playerItems', playerItems)
 
         this.refreshPractice();
-        return { code: ErrorCode.OK, playerItems: this.playerItems, practice: this.practice, atkMethod: this.atkMethod }
+        return { code: ErrorCode.OK, playerItems: this.playerItems, practice: this.practice, atkMethod: this.atkMethod, equipment: this.equipment }
     }
 
     // 学习功法
@@ -565,8 +644,131 @@ export class UnitRole {
         return { code: ErrorCode.OK }
     }
 
+    // 更换装备
+    changeEquip(equipId: string) {
+        let equipInfo: SeResEquip = TablesService.getModule('Equip').getRes(equipId);
+        if (!equipInfo) {
+            return { code: ErrorCode.ITEM_NOT_FOUND, errMsg: 'can not found this equipment!' }
+        }
+        let equipment = this.equipment;
+        let fElements = this.fElements;
+        let practice = this.practice;
+
+        // 修炼等级是否达到
+        let limitRevel = equipInfo.sLimitRlevel.split('|');
+        let needReiki = this.getReikiByRlevel(parseInt(limitRevel[0]), parseInt(limitRevel[1]));
+        if (practice.reiki < needReiki) {
+            return { code: ErrorCode.RLEVEL_NOT_ENOUGH, errMsg: 'your rlevel is not enough!' }
+        }
+
+        // 属性是否达到
+        let limitEle = equipInfo.sLimitEle.split('|');
+        let can = false;
+        if (limitEle[0] == 'any') {
+            for (let key in fElements) {
+                if (fElements[key] >= parseInt(limitEle[1])) {
+                    can = true;
+                }
+            }
+        } else {
+            for (let key in fElements) {
+                if (limitEle[0] == key && fElements[key] >= parseInt(limitEle[1])) {
+                    can = true;
+                }
+            }
+        }
+        if (!can) {
+            return { code: ErrorCode.ELEMENTS_NOT_ENOUGH, errMsg: 'your elements is not enough!' };
+        }
 
 
+        // 重置装备属性
+        equipment.totalAtk = {
+            Wood: 0,
+            Metal: 0,
+            Fire: 0,
+            Water: 0,
+            Earth: 0,
+            Physical: 0,
+        };
+        equipment.totalDef = {
+            Wood: 0,
+            Metal: 0,
+            Fire: 0,
+            Water: 0,
+            Earth: 0,
+            Physical: 0,
+        };
+        equipment.totalSpe = 0;
+
+        for (let key in equipment) {
+            if (key == 'totalAtk' || key == 'totalDef' || key == 'totalSpe' || (equipInfo.sLocation != key && equipment[key] == '')) {
+                continue;
+            }
+
+            // 获取当前位置装备信息
+            let curEquipInfo: SeResEquip = TablesService.getModule('Equip').getRes(equipment[key]);
+
+            if (equipInfo.sLocation == key) {
+                // 判断位置是否已经有装备
+                if (equipment[key] != '') {
+                    this.updateItem(equipment[key], 1, eUType.set);
+
+                    // 如果有加属性的就减掉
+                    if (curEquipInfo.sAddEle != 'None') {
+                        let add = curEquipInfo.sAddEle.split('|');
+                        for (let key in fElements) {
+                            if (key == add[0]) {
+                                fElements[key] -= parseInt(add[1]);
+                            }
+                        }
+                    }
+
+                }
+                equipment[key] = equipId;
+                curEquipInfo = TablesService.getModule('Equip').getRes(equipId);
+            }
+
+            // 重新计算装备相关属性
+            if (curEquipInfo.sAddAtk != 'None') {
+                let add = curEquipInfo.sAddAtk.split('|');
+                for (let key in equipment.totalAtk) {
+                    if (key == add[0]) {
+                        equipment.totalAtk[key] += parseFloat(add[1]);
+                    }
+                }
+            }
+            if (curEquipInfo.sAddDef != 'None') {
+                let add = curEquipInfo.sAddDef.split('|');
+                for (let key in equipment.totalDef) {
+                    if (key == add[0]) {
+                        equipment.totalDef[key] += parseFloat(add[1]);
+                    }
+                }
+            }
+            if (curEquipInfo.sAddSpeed != 'None') {
+                equipment.totalSpe += parseFloat(curEquipInfo.sAddSpeed);
+            }
+            if (curEquipInfo.sAddEle != 'None') {
+                let add = curEquipInfo.sAddEle.split('|');
+                for (let key in fElements) {
+                    if (key == add[0]) {
+                        fElements[key] += parseInt(add[1]);
+                    }
+                }
+            }
+        }
+
+        this.dbInfo.set('fElements', fElements)
+        this.dbInfo.set('equipment', equipment);
+        return { code: ErrorCode.OK };
+    }
+
+    // todo获取战斗相关数据
+    getAtkAbout() {
+        let atkAbout = this.atkAbout;
+
+    }
 
 
     /**------------------------------私有方法----------------------------------------------- */
@@ -724,6 +926,37 @@ export class UnitRole {
                 return this.practice;
             }
 
+        }
+    }
+
+    // 通过修炼等级返推最小灵气
+    getReikiByRlevel(rLevelName: SeEnumRlevelsLevelName, rLevelLayer: number) {
+        // 检查表中是否有该等级
+        let Rlevels = TablesService.getModule('Rlevel')?.getAllRes();
+        if (!Rlevels) {
+            return { code: ErrorCode.RLEVEL_NOT_FOUND, errMsg: 'rlevel not found from table!' }
+        }
+
+        // 逐个检查
+        for (let i in Rlevels) {
+            let rLevel: SeResRlevel = Rlevels[i];
+
+            if (rLevel.sLevelName != rLevelName) {
+                continue;
+            }
+
+            let needReiki = rLevel.sNeedReiki.split('|');
+            if (needReiki.length != 2) {
+                return { code: ErrorCode.RLEVEL_ERROR, errMsg: 'rlevel is wrong!' };
+            }
+
+            // 阶段最低/高灵气
+            let min = parseInt(needReiki[0]);
+
+            // 每阶段所需灵气
+            let eachGroup = parseInt(rLevel.sEachGroup);
+
+            return min + eachGroup * rLevelLayer;
         }
     }
 

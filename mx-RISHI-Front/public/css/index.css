@@ -284,8 +284,14 @@ input:focus {
     bottom: 8rem;
 }
 
+#equipIcon {
+    left: 1rem;
+    bottom: 15rem;
+}
+
 .mainIcon {
     position: absolute;
+    z-index: 2;
     width: 5rem;
     height: 5rem;
     color: white;
@@ -299,7 +305,9 @@ input:focus {
 .mainIcon:hover {
     background: #B22222;
 }
+
 /* -------------------------------------ITEMS---------------------------------------- */
+
 .item {
     position: relative;
     float: left;
@@ -325,36 +333,62 @@ input:focus {
     left: 50%;
 }
 
+#it_chooseList {
+    position: absolute;
+    top: 55rem;
+    left: -0.5rem;
+    width: 100%;
+    height: 4rem;
+    border: white solid 0.5rem;
+}
+
+.cho {
+    position: relative;
+    float: left;
+    height: 100%;
+    width: 6.6rem;
+    border-left: solid white 0.5rem;
+    border-right: solid white 0.5rem;
+    font-size: 1.5rem;
+    color: white;
+    line-height: 4rem;
+    background-color: black;
+}
+
+.cho:hover {
+    background-color: teal;
+}
+
 /* -------------------------------------LUCKCHANCE----------------------------------- */
 
-#lc_close{
+#lc_close {
     position: absolute;
     top: 95%;
     left: 50%;
 }
 
-#lc_energy{
+#lc_energy {
     position: absolute;
     top: 2%;
     right: 5%;
     color: #00BFFF;
 }
 
-#lc_oneLC{
-    top:12rem;
-    left:2rem;
+#lc_oneLC {
+    top: 12rem;
+    left: 2rem;
     border: #006331 solid 1rem;
-    color:#006331;
+    color: #006331;
 }
 
-#lc_fiveLC{
-    top:35rem;    
-    left:2rem;
+#lc_fiveLC {
+    top: 35rem;
+    left: 2rem;
     border: #7e0077 solid 1rem;
-    color:#7e0077;
+    color: #7e0077;
 }
 
-.lcImg{
+.lcImg {
     position: absolute;
     width: 32rem;
     height: 20rem;
@@ -363,15 +397,86 @@ input:focus {
     line-height: 20rem;
 }
 
-.lcImg:hover{
+.lcImg:hover {
     background-color: rgb(37, 37, 37);
 }
 
+/* -------------------------------------EQUIP----------------------------------- */
 
+#eq_close {
+    position: absolute;
+    top: 95%;
+    left: 50%;
+}
 
+#eq_helmet {
+    top: 6rem;
+    left: 2rem;
+}
 
+#eq_clothes {
+    top: 16rem;
+    left: 2rem;
+}
 
-#testInfo{
+#eq_shoes {
+    top: 26rem;
+    left: 2rem;
+}
+
+#eq_weapons {
+    top: 36rem;
+    left: 2rem;
+}
+
+#eq_ornament1 {
+    top: 6rem;
+    right: 2rem;
+}
+
+#eq_ornament2 {
+    top: 16rem;
+    right: 2rem;
+}
+
+#eq_ornament3 {
+    top: 26rem;
+    right: 2rem;
+}
+
+#eq_eqInfo {
+    position: absolute;
+    top: 36rem;
+    right: 2rem;
+    height: 20rem;
+    width: 22rem;
+    border: solid rgb(255, 255, 255) 0.5rem;
+    background-color: wheat;
+    color: rgb(0, 0, 0);
+    background-size: 100% 100%;
+    text-align: left;
+    overflow: scroll;
+    font-size: 1rem;
+}
+
+.eqBlock {
+    position: absolute;
+    height: 5rem;
+    width: 5rem;
+    border: solid rgb(59, 59, 59) 1rem;
+    background-color: wheat;
+    color: black;
+    background-size: 100% 100%;
+    border-radius: 0.5rem;
+}
+
+.eqBlock span {
+    position: relative;
+    top: 110%;
+    font-size: 1.2rem;
+}
+
+#testInfo {
     position: absolute;
     width: 20rem;
     height: 40rem;

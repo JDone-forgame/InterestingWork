@@ -36,6 +36,7 @@ export enum ErrorCode {
 
     RLEVEL_NOT_FOUND = 200,
     RLEVEL_ERROR = 201,
+    RLEVEL_NOT_ENOUGH = 202,
 
     ATKMETHOD_LEARN_FAIED = 300,
 
