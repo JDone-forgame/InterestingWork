@@ -126,9 +126,12 @@ export interface ifEquipment {
     // 饰品3
     ornament3:string,
 
+    totalCri :number;
+    totalCsd :number;
     totalAtk :ifFightEle,
     totalDef :ifFightEle,
     totalSpe :number,
+    totalHea :number,
 }
 
 // 战斗元素属性

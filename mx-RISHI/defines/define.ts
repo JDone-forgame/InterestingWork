@@ -45,6 +45,8 @@ export enum ErrorCode {
     ENERGY_NOT_ENOUGH = 500,
 
     GET_LUCKCHANCE_FAILED = 600,
+
+    EQUIP_CHANGE_ERROR = 700,
 }
 
 let map: { [code: number]: string } = {};

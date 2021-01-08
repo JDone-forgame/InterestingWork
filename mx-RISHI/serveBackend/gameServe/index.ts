@@ -1,4 +1,5 @@
 import { RPCHandle } from "mx-rpc";
+import { ErrorCode } from "../../defines/define";
 import { ifLoginInfo } from "../../defines/role";
 import { GameService } from "./game/game";
 
@@ -60,5 +61,20 @@ class _ {
     @RPCHandle.route()
     luckChance(gameId: string, token: string, type: string, count: number) {
         return GameService.luckChance(gameId, token, type, count);
+    }
+
+    /**
+     * 脱下装备
+     * @route request takeOffEquip
+     * @group game - 活动管理器
+     * @key gameId
+     * @param {string} gameId.query.required - 玩家id
+     * @param {string} token.query.required - 令牌
+     * @param {string} location.query.required - 装备位置
+     * @returns {{code: ErrorCode}} 0 - 返回信息
+     */
+    @RPCHandle.route()
+    takeOffEquip(gameId: string, token: string, location: string) {
+        return GameService.takeOffEquip(gameId, token, location);
     }
 }

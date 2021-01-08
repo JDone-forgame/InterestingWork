@@ -65,4 +65,20 @@ class local {
         return await gameRPC.inst.luckChance(param.gameId, param.token, param.type, param.count);
     }
 
+    /**
+     * 脱下装备
+     * @route post /game/local/takeOffEquip
+     * @group main - 基础信息
+     * @param {string} gameId.query.required - 玩家id
+     * @param {string} token.query.required - 令牌
+     * @param {string} location.query.required - 装备位置
+     * @returns {{code:number}} 0 - 返回成功
+     */
+    @WebRouteModule.route()
+    @WebRouteModule.paramRequired("gameId", "string", true)
+    @WebRouteModule.paramOptional("token", "string", true)
+    @WebRouteModule.paramRequired("location", "string", true)
+    async takeOffEquip(param: { gameId: string, token: string, location: string }) {
+        return await gameRPC.inst.takeOffEquip(param.gameId, param.token, param.location);
+    }
 }

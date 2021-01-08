@@ -254,8 +254,8 @@ class UnitRole {
             role.updateItem('a003', 30, role_1.eUType.set);
             role.updateItem('a004', 40, role_1.eUType.set);
             role.updateItem('a005', 38, role_1.eUType.set);
-            role.updateItem('eq001', 1, role_1.eUType.set);
-            role.updateItem('eq002', 1, role_1.eUType.set);
+            role.updateItem('eq001', 10, role_1.eUType.set);
+            role.updateItem('eq002', 10, role_1.eUType.set);
             role.updateItem('ma001', 100, role_1.eUType.set);
             role.updateItem('ma002', 100, role_1.eUType.set);
             // 初始化信息
@@ -338,34 +338,41 @@ class UnitRole {
             };
             role.dbInfo.set('atkAbout', atkAbout);
             // 初始化装备
-            let equipment = {
-                helmet: '',
-                clothes: '',
-                shoes: '',
-                weapons: '',
-                ornament1: '',
-                ornament2: '',
-                ornament3: '',
-                totalAtk: {
-                    Wood: 0,
-                    Metal: 0,
-                    Fire: 0,
-                    Water: 0,
-                    Earth: 0,
-                    Physical: 0,
-                },
-                totalDef: {
-                    Wood: 0,
-                    Metal: 0,
-                    Fire: 0,
-                    Water: 0,
-                    Earth: 0,
-                    Physical: 0,
-                },
-                totalSpe: 0,
-            };
-            role.dbInfo.set('equipment', equipment);
+            role.initEquipment();
         }
+    }
+    // 初始化装备
+    initEquipment() {
+        let equipment = {
+            helmet: '',
+            clothes: '',
+            shoes: '',
+            weapons: '',
+            ornament1: '',
+            ornament2: '',
+            ornament3: '',
+            totalAtk: {
+                Wood: 0,
+                Metal: 0,
+                Fire: 0,
+                Water: 0,
+                Earth: 0,
+                Physical: 0,
+            },
+            totalDef: {
+                Wood: 0,
+                Metal: 0,
+                Fire: 0,
+                Water: 0,
+                Earth: 0,
+                Physical: 0,
+            },
+            totalSpe: 0,
+            totalCri: 0,
+            totalCsd: 0,
+            totalHea: 0,
+        };
+        this.dbInfo.set('equipment', equipment);
     }
     // 登录前流程处理
     beforeLogin() {
@@ -378,10 +385,12 @@ class UnitRole {
             // 重置精力
             let practice = this.practice;
             practice.energy = UnitRole.DEFAULT_ENERGY;
+            console.log('已重置精力！');
             this.dbInfo.set('practice', practice);
             // 重置每日一缘
             let luckChance = this.luckChance;
             luckChance['luckday'] = 0;
+            console.log('已重置每日一缘！');
             this.dbInfo.set('luckChance', luckChance);
         }
     }
@@ -549,41 +558,58 @@ class UnitRole {
         return { code: define_1.ErrorCode.OK };
     }
     // 更换装备
-    changeEquip(equipId) {
-        let equipInfo = tables_1.TablesService.getModule('Equip').getRes(equipId);
-        if (!equipInfo) {
-            return { code: define_1.ErrorCode.ITEM_NOT_FOUND, errMsg: 'can not found this equipment!' };
-        }
+    changeEquip(equipId, location) {
         let equipment = this.equipment;
         let fElements = this.fElements;
         let practice = this.practice;
-        // 修炼等级是否达到
-        let limitRevel = equipInfo.sLimitRlevel.split('|');
-        let needReiki = this.getReikiByRlevel(parseInt(limitRevel[0]), parseInt(limitRevel[1]));
-        if (practice.reiki < needReiki) {
-            return { code: define_1.ErrorCode.RLEVEL_NOT_ENOUGH, errMsg: 'your rlevel is not enough!' };
-        }
-        // 属性是否达到
-        let limitEle = equipInfo.sLimitEle.split('|');
-        let can = false;
-        if (limitEle[0] == 'any') {
-            for (let key in fElements) {
-                if (fElements[key] >= parseInt(limitEle[1])) {
-                    can = true;
-                }
+        // 是否是脱下装备
+        let takeOff = false;
+        let equipInfo;
+        // 要操作的装备的位置
+        let equipLocation = '';
+        if (equipId == '') {
+            // 表示脱下该部位装备
+            if (!location) {
+                return { code: define_1.ErrorCode.EQUIP_CHANGE_ERROR, errMsg: 'take off without location!' };
             }
+            takeOff = true;
+            equipLocation = location;
         }
         else {
-            for (let key in fElements) {
-                if (limitEle[0] == key && fElements[key] >= parseInt(limitEle[1])) {
-                    can = true;
+            // 表示更换装备
+            equipInfo = tables_1.TablesService.getModule('Equip').getRes(equipId);
+            equipLocation = equipInfo.sLocation;
+            if (!equipInfo) {
+                return { code: define_1.ErrorCode.ITEM_NOT_FOUND, errMsg: 'can not found this equipment!' };
+            }
+            // 修炼等级是否达到
+            let limitRevel = equipInfo.sLimitRlevel.split('|');
+            let needReiki = this.getReikiByRlevel(parseInt(limitRevel[0]), parseInt(limitRevel[1]));
+            if (practice.reiki < needReiki) {
+                return { code: define_1.ErrorCode.RLEVEL_NOT_ENOUGH, errMsg: 'your rlevel is not enough!' };
+            }
+            // 属性是否达到
+            let limitEle = equipInfo.sLimitEle.split('|');
+            let can = false;
+            if (limitEle[0] == 'any') {
+                for (let key in fElements) {
+                    if (fElements[key] >= parseInt(limitEle[1])) {
+                        can = true;
+                    }
                 }
             }
+            else {
+                for (let key in fElements) {
+                    if (limitEle[0] == key && fElements[key] >= parseInt(limitEle[1])) {
+                        can = true;
+                    }
+                }
+            }
+            if (!can) {
+                return { code: define_1.ErrorCode.ELEMENTS_NOT_ENOUGH, errMsg: 'your elements is not enough!' };
+            }
         }
-        if (!can) {
-            return { code: define_1.ErrorCode.ELEMENTS_NOT_ENOUGH, errMsg: 'your elements is not enough!' };
-        }
-        // 重置装备属性
+        // 初始化装备总体属性
         equipment.totalAtk = {
             Wood: 0,
             Metal: 0,
@@ -601,18 +627,24 @@ class UnitRole {
             Physical: 0,
         };
         equipment.totalSpe = 0;
+        equipment.totalCri = 0;
+        equipment.totalCsd = 0;
+        equipment.totalHea = 0;
+        // 逐个装备判断
         for (let key in equipment) {
-            if (key == 'totalAtk' || key == 'totalDef' || key == 'totalSpe' || (equipInfo.sLocation != key && equipment[key] == '')) {
+            if (key == 'totalAtk' || key == 'totalDef' || key == 'totalSpe' || key == 'totalCri' || key == 'totalCsd' || key == 'totalHea' || (equipLocation != key && equipment[key] == '')) {
                 continue;
             }
             // 获取当前位置装备信息
-            let curEquipInfo = tables_1.TablesService.getModule('Equip').getRes(equipment[key]);
-            if (equipInfo.sLocation == key) {
+            let curEquipInfo = null;
+            if (equipLocation == key) {
                 // 判断位置是否已经有装备
                 if (equipment[key] != '') {
+                    curEquipInfo = tables_1.TablesService.getModule('Equip').getRes(equipment[key]);
+                    // 返回装备道具
                     this.updateItem(equipment[key], 1, role_1.eUType.set);
                     // 如果有加属性的就减掉
-                    if (curEquipInfo.sAddEle != 'None') {
+                    if (curEquipInfo != null && curEquipInfo.sAddEle != 'None') {
                         let add = curEquipInfo.sAddEle.split('|');
                         for (let key in fElements) {
                             if (key == add[0]) {
@@ -622,40 +654,54 @@ class UnitRole {
                     }
                 }
                 equipment[key] = equipId;
-                curEquipInfo = tables_1.TablesService.getModule('Equip').getRes(equipId);
-            }
-            // 重新计算装备相关属性
-            if (curEquipInfo.sAddAtk != 'None') {
-                let add = curEquipInfo.sAddAtk.split('|');
-                for (let key in equipment.totalAtk) {
-                    if (key == add[0]) {
-                        equipment.totalAtk[key] += parseFloat(add[1]);
-                    }
+                if (!takeOff) {
+                    curEquipInfo = tables_1.TablesService.getModule('Equip').getRes(equipId);
                 }
             }
-            if (curEquipInfo.sAddDef != 'None') {
-                let add = curEquipInfo.sAddDef.split('|');
-                for (let key in equipment.totalDef) {
-                    if (key == add[0]) {
-                        equipment.totalDef[key] += parseFloat(add[1]);
+            // 如果当前装备不为空，计算属性
+            if (curEquipInfo != null) {
+                // 重新计算装备相关属性
+                if (curEquipInfo.sAddAtk != 'None') {
+                    let add = curEquipInfo.sAddAtk.split('|');
+                    for (let key in equipment.totalAtk) {
+                        if (key == add[0]) {
+                            equipment.totalAtk[key] += parseFloat(add[1]);
+                        }
                     }
                 }
-            }
-            if (curEquipInfo.sAddSpeed != 'None') {
-                equipment.totalSpe += parseFloat(curEquipInfo.sAddSpeed);
-            }
-            if (curEquipInfo.sAddEle != 'None') {
-                let add = curEquipInfo.sAddEle.split('|');
-                for (let key in fElements) {
-                    if (key == add[0]) {
-                        fElements[key] += parseInt(add[1]);
+                if (curEquipInfo.sAddDef != 'None') {
+                    let add = curEquipInfo.sAddDef.split('|');
+                    for (let key in equipment.totalDef) {
+                        if (key == add[0]) {
+                            equipment.totalDef[key] += parseFloat(add[1]);
+                        }
                     }
+                }
+                if (curEquipInfo.sAddSpeed != 'None') {
+                    equipment.totalSpe += parseFloat(curEquipInfo.sAddSpeed);
+                }
+                if (curEquipInfo.sAddEle != 'None') {
+                    let add = curEquipInfo.sAddEle.split('|');
+                    for (let key in fElements) {
+                        if (key == add[0]) {
+                            fElements[key] += parseInt(add[1]);
+                        }
+                    }
+                }
+                if (curEquipInfo.sAddCri != 'None') {
+                    equipment.totalCri += parseInt(curEquipInfo.sAddCri);
+                }
+                if (curEquipInfo.sAddCsd != 'None') {
+                    equipment.totalCsd += parseInt(curEquipInfo.sAddCsd);
+                }
+                if (curEquipInfo.sAddHealth != 'None') {
+                    equipment.totalHea += parseInt(curEquipInfo.sAddHealth);
                 }
             }
         }
         this.dbInfo.set('fElements', fElements);
         this.dbInfo.set('equipment', equipment);
-        return { code: define_1.ErrorCode.OK };
+        return { code: define_1.ErrorCode.OK, equipment: this.equipment, playerItems: this.playerItems, fElements: this.fElements };
     }
     // todo获取战斗相关数据
     getAtkAbout() {

@@ -52,6 +52,18 @@ let local = class local {
     async luckChance(param) {
         return await gameRPC_1.gameRPC.inst.luckChance(param.gameId, param.token, param.type, param.count);
     }
+    /**
+     * 脱下装备
+     * @route post /game/local/takeOffEquip
+     * @group main - 基础信息
+     * @param {string} gameId.query.required - 玩家id
+     * @param {string} token.query.required - 令牌
+     * @param {string} location.query.required - 装备位置
+     * @returns {{code:number}} 0 - 返回成功
+     */
+    async takeOffEquip(param) {
+        return await gameRPC_1.gameRPC.inst.takeOffEquip(param.gameId, param.token, param.location);
+    }
 };
 __decorate([
     mx_webserve_1.WebRouteModule.route(),
@@ -71,6 +83,12 @@ __decorate([
     mx_webserve_1.WebRouteModule.paramRequired("type", "string", true),
     mx_webserve_1.WebRouteModule.paramRequired("count", "number", true)
 ], local.prototype, "luckChance", null);
+__decorate([
+    mx_webserve_1.WebRouteModule.route(),
+    mx_webserve_1.WebRouteModule.paramRequired("gameId", "string", true),
+    mx_webserve_1.WebRouteModule.paramOptional("token", "string", true),
+    mx_webserve_1.WebRouteModule.paramRequired("location", "string", true)
+], local.prototype, "takeOffEquip", null);
 local = __decorate([
     mx_webserve_1.WebRouteModule.class(module)
 ], local);

@@ -58,6 +58,19 @@ let _ = class _ {
     luckChance(gameId, token, type, count) {
         return game_1.GameService.luckChance(gameId, token, type, count);
     }
+    /**
+     * 脱下装备
+     * @route request takeOffEquip
+     * @group game - 活动管理器
+     * @key gameId
+     * @param {string} gameId.query.required - 玩家id
+     * @param {string} token.query.required - 令牌
+     * @param {string} location.query.required - 装备位置
+     * @returns {{code: ErrorCode}} 0 - 返回信息
+     */
+    takeOffEquip(gameId, token, location) {
+        return game_1.GameService.takeOffEquip(gameId, token, location);
+    }
 };
 __decorate([
     mx_rpc_1.RPCHandle.route()
@@ -71,6 +84,9 @@ __decorate([
 __decorate([
     mx_rpc_1.RPCHandle.route()
 ], _.prototype, "luckChance", null);
+__decorate([
+    mx_rpc_1.RPCHandle.route()
+], _.prototype, "takeOffEquip", null);
 _ = __decorate([
     mx_rpc_1.RPCHandle.class("game", module)
 ], _);

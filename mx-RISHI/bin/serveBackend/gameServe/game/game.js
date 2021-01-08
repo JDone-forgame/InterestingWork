@@ -122,6 +122,7 @@ class GameService {
             if (luckChance['luckday'] >= role_2.UnitRole.DEFAULT_LUCKDAY) {
                 return { code: define_1.ErrorCode.GET_LUCKCHANCE_FAILED, errMsg: 'no luckday today!' };
             }
+            count = 1;
             needEnergy = 0;
         }
         // 检查精力
@@ -132,9 +133,10 @@ class GameService {
         let resultLC = [];
         for (let i = 0; i < count; i++) {
             let rLc;
-            if ((luckChance[type] + i) % 10 == 0) {
+            if ((luckChance[type] + i) % 9 == 0) {
                 // 保底
                 rLc = this.getLuckChance(role, type, true);
+                console.log('保底了！' + rLc + 'luckChaceType:' + luckChance[type] + ';i=' + i);
             }
             else {
                 rLc = this.getLuckChance(role, type);
@@ -148,14 +150,17 @@ class GameService {
         practice.energy -= needEnergy;
         role.dbInfo.set('practice', practice);
         // 更新机缘次数
-        luckChance['totalLC'] += count;
+        if (type != 'luckday') {
+            luckChance['totalLC'] += count;
+        }
         luckChance[type] += count;
         role.dbInfo.set('luckChance', luckChance);
         role.refreshPractice();
-        return { code: define_1.ErrorCode.OK, practice: role.practice, playerItems: role.playerItems, resultLC: resultLC };
+        return { code: define_1.ErrorCode.OK, practice: role.practice, playerItems: role.playerItems, resultLC: resultLC, luckChance: role.luckChance };
     }
     // 获取一个机缘事件结果
-    static getLuckChance(role, type, guarantee = false) {
+    static getLuckChance(role, type, guarantee) {
+        guarantee = guarantee ? guarantee : false;
         // 获取对应池
         let allLuckChance = tables_1.TablesService.getModule('LuckChance').getAllRes();
         let targetLC = [];
@@ -173,8 +178,9 @@ class GameService {
         for (let i = 0; i < targetLC.length; ++i) {
             let res = targetLC[i];
             let weight = parseInt(res.sWeight);
+            // 保底，高概率出稀有以上
             if (guarantee && weight <= 50) {
-                weight = weight * 2;
+                weight = weight * 10;
             }
             remainDistance -= weight;
             if (remainDistance < 0) {
@@ -185,6 +191,16 @@ class GameService {
             }
         }
         return lcDescri;
+    }
+    // 脱下装备
+    static async takeOffEquip(gameId, token, location) {
+        // 获取对象
+        let gData = await role_2.UnitRole.getRole(gameId, token);
+        if (!gData) {
+            return { code: define_1.ErrorCode.NO_ROLE, errMsg: 'can not find player!' };
+        }
+        let role = gData.role;
+        return role.changeEquip('', location);
     }
 }
 exports.GameService = GameService;
