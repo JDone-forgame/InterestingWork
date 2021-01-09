@@ -91,6 +91,7 @@ class UnitRole {
     }
     // 战斗
     get atkAbout() {
+        this.getAtkAbout();
         return this.dbInfo.get("atkAbout");
     }
     set atkAbout(v) {
@@ -314,29 +315,7 @@ class UnitRole {
             luckChance['totalLC'] = 0;
             role.dbInfo.set('luckChance', luckChance);
             // 初始化战斗
-            let atkAbout = {
-                health: 0,
-                defense: {
-                    Wood: 0,
-                    Metal: 0,
-                    Fire: 0,
-                    Water: 0,
-                    Earth: 0,
-                    Physical: 0,
-                },
-                atkEle: {
-                    Wood: 0,
-                    Metal: 0,
-                    Fire: 0,
-                    Water: 0,
-                    Earth: 0,
-                    Physical: 0,
-                },
-                learned: [],
-                atkSkill: [],
-                equipSkill: [],
-            };
-            role.dbInfo.set('atkAbout', atkAbout);
+            role.dbInfo.set('atkAbout', role.initAtkAbout());
             // 初始化装备
             role.initEquipment();
         }
@@ -374,6 +353,34 @@ class UnitRole {
         };
         this.dbInfo.set('equipment', equipment);
     }
+    // 初始化战斗信息
+    initAtkAbout() {
+        let atkAbout = {
+            health: 0,
+            defense: {
+                Wood: 0,
+                Metal: 0,
+                Fire: 0,
+                Water: 0,
+                Earth: 0,
+                Physical: 0,
+            },
+            atkEle: {
+                Wood: 0,
+                Metal: 0,
+                Fire: 0,
+                Water: 0,
+                Earth: 0,
+                Physical: 0,
+            },
+            learned: [],
+            atkSkill: [],
+            equipSkill: [],
+            cri: 5,
+            csd: 50,
+        };
+        return atkAbout;
+    }
     // 登录前流程处理
     beforeLogin() {
         // 更新修炼信息
@@ -385,13 +392,15 @@ class UnitRole {
             // 重置精力
             let practice = this.practice;
             practice.energy = UnitRole.DEFAULT_ENERGY;
-            console.log('已重置精力！');
             this.dbInfo.set('practice', practice);
+            // TODO 测试输出，后续删除
+            console.log('已重置精力！');
             // 重置每日一缘
             let luckChance = this.luckChance;
             luckChance['luckday'] = 0;
-            console.log('已重置每日一缘！');
             this.dbInfo.set('luckChance', luckChance);
+            // TODO 测试输出，后续删除
+            console.log('已重置每日一缘！');
         }
     }
     // 更新道具
@@ -475,7 +484,7 @@ class UnitRole {
         playerItems[itemId] -= itemCount;
         this.dbInfo.set('playerItems', playerItems);
         this.refreshPractice();
-        return { code: define_1.ErrorCode.OK, playerItems: this.playerItems, practice: this.practice, atkMethod: this.atkMethod, equipment: this.equipment };
+        return { code: define_1.ErrorCode.OK, playerItems: this.playerItems, practice: this.practice, atkMethod: this.atkMethod, equipment: this.equipment, atkAbout: this.atkAbout };
     }
     // 学习功法
     learnAtkMethod(atkId, count) {
@@ -562,8 +571,6 @@ class UnitRole {
         let equipment = this.equipment;
         let fElements = this.fElements;
         let practice = this.practice;
-        // 是否是脱下装备
-        let takeOff = false;
         let equipInfo;
         // 要操作的装备的位置
         let equipLocation = '';
@@ -572,7 +579,6 @@ class UnitRole {
             if (!location) {
                 return { code: define_1.ErrorCode.EQUIP_CHANGE_ERROR, errMsg: 'take off without location!' };
             }
-            takeOff = true;
             equipLocation = location;
         }
         else {
@@ -642,7 +648,7 @@ class UnitRole {
                 if (equipment[key] != '') {
                     curEquipInfo = tables_1.TablesService.getModule('Equip').getRes(equipment[key]);
                     // 返回装备道具
-                    this.updateItem(equipment[key], 1, role_1.eUType.set);
+                    this.updateItem(equipment[key], 1, role_1.eUType.add);
                     // 如果有加属性的就减掉
                     if (curEquipInfo != null && curEquipInfo.sAddEle != 'None') {
                         let add = curEquipInfo.sAddEle.split('|');
@@ -699,11 +705,70 @@ class UnitRole {
         }
         this.dbInfo.set('fElements', fElements);
         this.dbInfo.set('equipment', equipment);
-        return { code: define_1.ErrorCode.OK, equipment: this.equipment, playerItems: this.playerItems, fElements: this.fElements };
+        return { code: define_1.ErrorCode.OK, equipment: this.equipment, playerItems: this.playerItems, fElements: this.fElements, atkAbout: this.atkAbout };
     }
     // todo获取战斗相关数据
     getAtkAbout() {
-        let atkAbout = this.atkAbout;
+        let atkAbout = this.initAtkAbout();
+        let equipment = this.equipment;
+        let practice = this.practice;
+        let atkMethod = this.atkMethod;
+        let fElements = this.fElements;
+        let gp = parseInt((practice.reiki * 0.01).toString());
+        // 血量
+        let health = 100;
+        if (practice.reiki > 100) {
+            health += parseInt((practice.reiki * 0.01).toString()) + equipment.totalHea;
+        }
+        else {
+            health += equipment.totalHea;
+        }
+        atkAbout.health = health;
+        // 攻击属性
+        let atkEle = {
+            Fire: equipment.totalAtk.Fire + fElements['Fire'] * gp,
+            Water: equipment.totalAtk.Water + fElements['Water'] * gp,
+            Metal: equipment.totalAtk.Metal + fElements['Metal'] * gp,
+            Earth: equipment.totalAtk.Earth + fElements['Earth'] * gp,
+            Wood: equipment.totalAtk.Wood + fElements['Wood'] * gp,
+            Physical: equipment.totalAtk.Physical + 1 * gp,
+        };
+        atkAbout.atkEle = atkEle;
+        // 防御属性
+        let defense = {
+            Fire: equipment.totalDef.Fire + fElements['Fire'] * gp,
+            Water: equipment.totalDef.Water + fElements['Water'] * gp,
+            Metal: equipment.totalDef.Metal + fElements['Metal'] * gp,
+            Earth: equipment.totalDef.Earth + fElements['Earth'] * gp,
+            Wood: equipment.totalDef.Wood + fElements['Wood'] * gp,
+            Physical: equipment.totalDef.Physical + 1 * gp,
+        };
+        atkAbout.defense = defense;
+        // 暴击率 暴击伤害属性
+        atkAbout.cri += equipment.totalCri;
+        atkAbout.csd += equipment.totalCsd;
+        // 功法技能
+        let atkMethodInfo = tables_1.TablesService.getModule('AtkMethods').getRes(atkMethod.atkId);
+        if (atkMethodInfo.sAtkSkills != 'None') {
+            let skills = atkMethodInfo.sAtkSkills.split("|");
+            for (let i = 0; i < skills.length; i++) {
+                atkAbout.atkSkill.push(skills[i]);
+            }
+        }
+        // 装备技能
+        for (let key in equipment) {
+            if (key == 'totalAtk' || key == 'totalDef' || key == 'totalSpe' || key == 'totalCri' || key == 'totalCsd' || key == 'totalHea' || equipment[key] == '') {
+                continue;
+            }
+            let equipInfo = tables_1.TablesService.getModule('Equip').getRes(equipment[key]);
+            if (equipInfo.sEffect != 'None') {
+                atkAbout.equipSkill.push(equipInfo.sEffect);
+            }
+        }
+        // TODO 通用技能
+        // 后续再加
+        atkAbout.learned = [];
+        this.dbInfo.set('atkAbout', atkAbout);
     }
     /**------------------------------私有方法----------------------------------------------- */
     // 随机五属性

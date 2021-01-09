@@ -107,6 +107,8 @@ export interface ifAtkAbout {
     atkSkill:string[], 
     // 装备技能
     equipSkill:string[],
+    cri:number;
+    csd:number;
 }
 
 // 装备
