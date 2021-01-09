@@ -868,7 +868,10 @@ export class UnitRole {
             }
             let equipInfo: SeResEquip = TablesService.getModule('Equip').getRes(equipment[key])
             if (equipInfo.sEffect != 'None') {
-                atkAbout.equipSkill.push(equipInfo.sEffect);
+                let skills = equipInfo.sEffect.split("|");
+                for (let i = 0; i < skills.length; i++) {
+                    atkAbout.equipSkill.push(skills[i]);
+                } 
             }
 
         }
