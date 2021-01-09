@@ -654,12 +654,10 @@ class UnitRole {
                     }
                 }
                 equipment[key] = equipId;
-                if (!takeOff) {
-                    curEquipInfo = tables_1.TablesService.getModule('Equip').getRes(equipId);
-                }
             }
+            curEquipInfo = tables_1.TablesService.getModule('Equip').getRes(equipment[key]);
             // 如果当前装备不为空，计算属性
-            if (curEquipInfo != null) {
+            if (curEquipInfo) {
                 // 重新计算装备相关属性
                 if (curEquipInfo.sAddAtk != 'None') {
                     let add = curEquipInfo.sAddAtk.split('|');

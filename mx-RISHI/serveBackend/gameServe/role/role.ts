@@ -744,7 +744,7 @@ export class UnitRole {
                 if (equipment[key] != '') {
                     curEquipInfo = TablesService.getModule('Equip').getRes(equipment[key]);
                     // 返回装备道具
-                    this.updateItem(equipment[key], 1, eUType.set);
+                    this.updateItem(equipment[key], 1, eUType.add);
 
                     // 如果有加属性的就减掉
                     if (curEquipInfo != null && curEquipInfo.sAddEle != 'None') {
@@ -758,14 +758,12 @@ export class UnitRole {
                 }
 
                 equipment[key] = equipId;
-
-                if (!takeOff) {
-                    curEquipInfo = TablesService.getModule('Equip').getRes(equipId);
-                }
             }
 
+            
+            curEquipInfo = TablesService.getModule('Equip').getRes(equipment[key]);
             // 如果当前装备不为空，计算属性
-            if (curEquipInfo != null) {
+            if (curEquipInfo) {
                 // 重新计算装备相关属性
                 if (curEquipInfo.sAddAtk != 'None') {
                     let add = curEquipInfo.sAddAtk.split('|');
