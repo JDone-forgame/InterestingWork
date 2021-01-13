@@ -77,4 +77,21 @@ class _ {
     takeOffEquip(gameId: string, token: string, location: string) {
         return GameService.takeOffEquip(gameId, token, location);
     }
+
+    /**
+     * 进入副本
+     * @route request enterFightRoom
+     * @group game - 活动管理器
+     * @key gameId
+     * @param {string} gameId.query.required - 玩家id
+     * @param {string} token.query.required - 令牌
+     * @param {string} roomId.query.required - 副本id
+     * @param {string} attitude.query.required - 玩家态度
+     * @returns {{code: ErrorCode}} 0 - 返回信息
+     */
+    @RPCHandle.route()
+    enterFightRoom(gameId: string, token: string, roomId: string, attitude: string) {
+        return GameService.enterFightRoom(gameId, token, roomId, attitude);
+    }
+
 }

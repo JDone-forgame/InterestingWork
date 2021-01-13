@@ -202,6 +202,94 @@ class GameService {
         let role = gData.role;
         return role.changeEquip('', location);
     }
+    // 进入副本
+    static async enterFightRoom(gameId, token, roomId, attitude) {
+        // 获取对象
+        let gData = await role_2.UnitRole.getRole(gameId, token);
+        if (!gData) {
+            return { code: define_1.ErrorCode.NO_ROLE, errMsg: 'can not find player!' };
+        }
+        let role = gData.role;
+        let atkAbout = role.atkAbout;
+        let practice = role.practice;
+        // 敌人信息
+        let enemyInfo = [];
+        // 事件信息
+        let eventInfo = [];
+        // NPC信息
+        let npcInfo = [];
+        // 先刷新一下
+        role.refreshPractice();
+        // 获取副本信息
+        let fRoom = tables_1.TablesService.getModule('FightRoom').getRes(roomId);
+        if (!fRoom) {
+            return { code: define_1.ErrorCode.ROOM_NOT_FOUND, errMsg: 'room not found from table!' };
+        }
+        // 创建房间信息
+        let roomInfo = {
+            roomLength: fRoom.sRoomLength,
+        };
+        // 创建敌人信息
+        if (fRoom.sEnemyType && fRoom.sEnemyType != 'None') {
+            let fRoomEnemyInfo = fRoom.sEnemyType.split('|');
+            for (let fRoomEnemyConfig of fRoomEnemyInfo) {
+                let enemyConfig = fRoomEnemyConfig.split(':');
+                enemyInfo.push.apply(enemyInfo, this.createEnemys(enemyConfig[0], parseInt(enemyConfig[1]), parseInt(fRoom.sRoomLength)));
+            }
+        }
+        // 创建NPC信息
+        if (fRoom.sNpcType && fRoom.sNpcType != 'None') {
+        }
+        // 创建事件信息
+        if (fRoom.sEventType && fRoom.sEventType != 'None') {
+        }
+        // todo 计算房间效果
+        // 创建玩家信息
+        let playerInfo = {
+            name: role.nickName,
+            spirit: practice.spirit,
+            attitude: attitude,
+            moveForward: 'right',
+            moveSpeed: Math.floor(atkAbout.speed / 10) > 0 ? Math.floor(atkAbout.speed / 10) : 1,
+            location: 0,
+        };
+        return { enemyInfo: enemyInfo, eventInfo: eventInfo, npcInfo: npcInfo, playerInfo: playerInfo, roomInfo: roomInfo };
+    }
+    // 生成敌人
+    static createEnemys(enemyType, count, roomLength) {
+        let enemyRes = tables_1.TablesService.getModule('Enemy').getAllRes();
+        if (!enemyRes) {
+            return { code: define_1.ErrorCode.ENEMY_NOT_FOUND, errMsg: 'enemy not found from table!' };
+        }
+        let resultEnemys = [];
+        let needEnemys = [];
+        for (let i in enemyRes) {
+            let enemy = enemyRes[i];
+            if (enemy.sEnemyType == enemyType) {
+                needEnemys.push(enemy);
+            }
+        }
+        for (let i = 0; i < count; i++) {
+            let index = this.getRandom(0, needEnemys.length - 1);
+            let enemy = needEnemys[index];
+            let roomEnemyInfo = {
+                eId: enemy.sID,
+                eQuality: enemy.sEnemyQuality,
+                eName: enemy.sEnemyName,
+                eSpirit: parseFloat(enemy.sEnemySpirit),
+                eLocation: this.getRandom(10, roomLength - 5),
+                eMoveSpeed: parseFloat(enemy.sEnemyMoveSpeed),
+                eMoveRange: parseFloat(enemy.sEnemyMoveRange),
+                eAttitude: enemy.sEnemyAttitude,
+            };
+            resultEnemys.push(roomEnemyInfo);
+        }
+        return resultEnemys;
+    }
+    // 随机从[min,max]区间取值
+    static getRandom(min, max) {
+        return min + Math.floor(Math.random() * (max - min + 1));
+    }
 }
 exports.GameService = GameService;
 //# sourceMappingURL=game.js.map

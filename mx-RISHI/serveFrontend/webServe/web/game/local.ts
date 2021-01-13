@@ -81,4 +81,23 @@ class local {
     async takeOffEquip(param: { gameId: string, token: string, location: string }) {
         return await gameRPC.inst.takeOffEquip(param.gameId, param.token, param.location);
     }
+
+    /**
+     * 进入副本
+     * @route post /game/local/enterFightRoom
+     * @group main - 基础信息
+     * @param {string} gameId.query.required - 玩家id
+     * @param {string} token.query.required - 令牌
+     * @param {string} roomId.query.required - 副本id
+     * @param {string} attitude.query.required - 玩家态度
+     * @returns {{code:number}} 0 - 返回成功
+     */
+    @WebRouteModule.route()
+    @WebRouteModule.paramRequired("gameId", "string", true)
+    @WebRouteModule.paramOptional("token", "string", true)
+    @WebRouteModule.paramRequired("roomId", "string", true)
+    @WebRouteModule.paramRequired("attitude", "string", true)
+    async enterFightRoom(param: { gameId: string, token: string, roomId: string, attitude: string }) {
+        return await gameRPC.inst.enterFightRoom(param.gameId, param.token, param.roomId, param.attitude);
+    }
 }

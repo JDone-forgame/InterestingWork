@@ -3,9 +3,8 @@
  * 这是一个自动生成的文件,最好不要直接改动这个文件
  */
 
-import { ErrorCode } from "../defines/define"
 import { RequestRPC } from "./nodesocket"
-
+import {ErrorCode} from "../defines/define"
 
 
 class localgameRPC extends RequestRPC {
@@ -102,6 +101,28 @@ class localgameRPC extends RequestRPC {
 	    }
 	
 	    return this.request<any>("request", "takeOffEquip", Object.assign(query, body),"gameId,token,location".split(","),"gameId")
+	}
+	/**
+	 * 
+进入副本
+	 * @param {string} gameId 玩家id
+	 * @param {string} token 令牌
+	 * @param {string} roomId 副本id
+	 * @param {string} attitude 玩家态度
+	 */
+	enterFightRoom(gameId: string, token: string, roomId: string, attitude: string):Promise<{code: ErrorCode}> {
+	    let query = {
+			gameId: gameId,
+			token: token,
+			roomId: roomId,
+			attitude: attitude
+	    }
+	
+	    let body = {
+	
+	    }
+	
+	    return this.request<any>("request", "enterFightRoom", Object.assign(query, body),"gameId,token,roomId,attitude".split(","),"gameId")
 	}
 }
 

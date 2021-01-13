@@ -71,6 +71,20 @@ let _ = class _ {
     takeOffEquip(gameId, token, location) {
         return game_1.GameService.takeOffEquip(gameId, token, location);
     }
+    /**
+     * 进入副本
+     * @route request enterFightRoom
+     * @group game - 活动管理器
+     * @key gameId
+     * @param {string} gameId.query.required - 玩家id
+     * @param {string} token.query.required - 令牌
+     * @param {string} roomId.query.required - 副本id
+     * @param {string} attitude.query.required - 玩家态度
+     * @returns {{code: ErrorCode}} 0 - 返回信息
+     */
+    enterFightRoom(gameId, token, roomId, attitude) {
+        return game_1.GameService.enterFightRoom(gameId, token, roomId, attitude);
+    }
 };
 __decorate([
     mx_rpc_1.RPCHandle.route()
@@ -87,6 +101,9 @@ __decorate([
 __decorate([
     mx_rpc_1.RPCHandle.route()
 ], _.prototype, "takeOffEquip", null);
+__decorate([
+    mx_rpc_1.RPCHandle.route()
+], _.prototype, "enterFightRoom", null);
 _ = __decorate([
     mx_rpc_1.RPCHandle.class("game", module)
 ], _);

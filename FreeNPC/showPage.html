@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="./jquery.min.js"></script>
+    <script type="text/javascript" src="./rule.js"></script>
+    <title>Document</title>
+</head>
+
+<style>
+    /* 隐藏滚动条 */
+
+    ::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* 控制整体rem标准 */
+
+    html {
+        font-size: 10px;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        user-select: none;
+        font-family: xiangsu;
+        text-align: center;
+        transition: all 0.3s;
+    }
+
+    body {
+        background: black;
+        overflow: hidden;
+    }
+
+    .ground {
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translate(-50%);
+        width: 200rem;
+        height: 10%;
+        background-color: gray;
+        color: white;
+        text-align: center;
+        font-size: large;
+    }
+
+    .npc {
+        position: absolute;
+        width: 4rem;
+        height: 7rem;
+        background-color: green;
+        color: white;
+        text-align: center;
+        font-size: small;
+        line-height: 7rem;
+        bottom: 10rem;
+        transition: all 0.5s;
+    }
+
+    #activeRange {
+        position: absolute;
+        height: 90%;
+        width: 100%;
+        background-color: royalblue;
+    }
+</style>
+
+<body>
+    <div id="activeRange">
+        <div id="npc_heya" class="npc">NPC</div>
+    </div>
+
+    <div id="ground" class="ground">This is ground</div>
+</body>
+
+</html>

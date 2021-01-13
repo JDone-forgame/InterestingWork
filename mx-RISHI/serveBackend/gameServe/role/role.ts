@@ -352,7 +352,8 @@ export class UnitRole {
                 rLevelLayer: 0,
                 rLevel: '',
                 earnSpeed: 0,
-                energy: 10000,
+                energy: 0,
+                spirit: 0,
             }
             role.dbInfo.set('practice', practice);
 
@@ -442,6 +443,7 @@ export class UnitRole {
             equipSkill: [],
             cri: 5,
             csd: 50,
+            speed:0,
         }
         return atkAbout;
     }
@@ -854,7 +856,7 @@ export class UnitRole {
 
         // 功法技能
         let atkMethodInfo: SeResAtkMethods = TablesService.getModule('AtkMethods').getRes(atkMethod.atkId);
-        if (atkMethodInfo.sAtkSkills != 'None') {
+        if (atkMethodInfo && atkMethodInfo.sAtkSkills != 'None') {
             let skills = atkMethodInfo.sAtkSkills.split("|");
             for (let i = 0; i < skills.length; i++) {
                 atkAbout.atkSkill.push(skills[i]);
@@ -867,14 +869,17 @@ export class UnitRole {
                 continue;
             }
             let equipInfo: SeResEquip = TablesService.getModule('Equip').getRes(equipment[key])
-            if (equipInfo.sEffect != 'None') {
+            if (equipInfo && equipInfo.sEffect != 'None') {
                 let skills = equipInfo.sEffect.split("|");
                 for (let i = 0; i < skills.length; i++) {
                     atkAbout.equipSkill.push(skills[i]);
-                } 
+                }
             }
 
         }
+
+        // 速度
+        atkAbout.speed = equipment.totalSpe;
 
         // TODO 通用技能
         // 后续再加
@@ -1078,14 +1083,22 @@ export class UnitRole {
         let nowTime = Date.now();
         let eefect = this.countEEffect(this.checkFiveElemets());
         let practice: ifPractice = this.practice;
+
         if (nowTime > practice.lastSave) {
+
             let earnTime = (nowTime - practice.lastSave) / 1000;
             let addReiki = earnTime * practice.handledSpeed * eefect;
+
             practice.reiki += addReiki;
             practice.lastSave = nowTime;
             practice.earnSpeed = practice.handledSpeed * eefect;
+
+            // todo 计算神识
+            practice.spirit = 10;
+
             this.dbInfo.set('practice', practice);
         }
+
     }
 
     // 检查有几种属性

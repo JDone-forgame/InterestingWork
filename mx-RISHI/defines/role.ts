@@ -65,6 +65,8 @@ export interface ifPractice {
     earnSpeed: number,
     // 精力
     energy: number,
+    // 神识
+    spirit: number,
 }
 
 // 功法信息
@@ -88,60 +90,61 @@ export interface ifBaseInfo {
 
 export interface ifLuckChance {
     totalLC: number,
-    normal:number,
-    spring:number,
-    summer:number,
-    autumn:number,
-    winter:number,
-    luckday:number,
+    normal: number,
+    spring: number,
+    summer: number,
+    autumn: number,
+    winter: number,
+    luckday: number,
 }
 
 // 战斗相关
 export interface ifAtkAbout {
-    health:number,
-    defense:ifFightEle,
-    atkEle:ifFightEle,
+    health: number,
+    defense: ifFightEle,
+    atkEle: ifFightEle,
     // 通用技能
-    learned:string[],
+    learned: string[],
     // 功法技能
-    atkSkill:string[], 
+    atkSkill: string[],
     // 装备技能
-    equipSkill:string[],
-    cri:number;
-    csd:number;
+    equipSkill: string[],
+    cri: number,
+    csd: number,
+    speed: number,
 }
 
 // 装备
 export interface ifEquipment {
     // 头饰
-    helmet:string,
+    helmet: string,
     // 衣服
-    clothes:string,
+    clothes: string,
     // 鞋子
-    shoes :string,
+    shoes: string,
     // 武器
-    weapons :string,
+    weapons: string,
     // 饰品1
-    ornament1:string,
+    ornament1: string,
     // 饰品2
-    ornament2:string,
+    ornament2: string,
     // 饰品3
-    ornament3:string,
+    ornament3: string,
 
-    totalCri :number;
-    totalCsd :number;
-    totalAtk :ifFightEle,
-    totalDef :ifFightEle,
-    totalSpe :number,
-    totalHea :number,
+    totalCri: number;
+    totalCsd: number;
+    totalAtk: ifFightEle,
+    totalDef: ifFightEle,
+    totalSpe: number,
+    totalHea: number,
 }
 
 // 战斗元素属性
 export interface ifFightEle {
-    Wood:number,
-    Metal:number,
-    Fire:number,
-    Water:number,
-    Earth:number,
-    Physical:number,
+    Wood: number,
+    Metal: number,
+    Fire: number,
+    Water: number,
+    Earth: number,
+    Physical: number,
 }

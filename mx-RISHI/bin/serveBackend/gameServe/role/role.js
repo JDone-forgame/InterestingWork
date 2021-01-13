@@ -294,7 +294,8 @@ class UnitRole {
                 rLevelLayer: 0,
                 rLevel: '',
                 earnSpeed: 0,
-                energy: 10000,
+                energy: 0,
+                spirit: 0,
             };
             role.dbInfo.set('practice', practice);
             // 初始化功法
@@ -378,6 +379,7 @@ class UnitRole {
             equipSkill: [],
             cri: 5,
             csd: 50,
+            speed: 0,
         };
         return atkAbout;
     }
@@ -749,7 +751,7 @@ class UnitRole {
         atkAbout.csd += equipment.totalCsd;
         // 功法技能
         let atkMethodInfo = tables_1.TablesService.getModule('AtkMethods').getRes(atkMethod.atkId);
-        if (atkMethodInfo.sAtkSkills != 'None') {
+        if (atkMethodInfo && atkMethodInfo.sAtkSkills != 'None') {
             let skills = atkMethodInfo.sAtkSkills.split("|");
             for (let i = 0; i < skills.length; i++) {
                 atkAbout.atkSkill.push(skills[i]);
@@ -761,10 +763,15 @@ class UnitRole {
                 continue;
             }
             let equipInfo = tables_1.TablesService.getModule('Equip').getRes(equipment[key]);
-            if (equipInfo.sEffect != 'None') {
-                atkAbout.equipSkill.push(equipInfo.sEffect);
+            if (equipInfo && equipInfo.sEffect != 'None') {
+                let skills = equipInfo.sEffect.split("|");
+                for (let i = 0; i < skills.length; i++) {
+                    atkAbout.equipSkill.push(skills[i]);
+                }
             }
         }
+        // 速度
+        atkAbout.speed = equipment.totalSpe;
         // TODO 通用技能
         // 后续再加
         atkAbout.learned = [];
@@ -950,6 +957,8 @@ class UnitRole {
             practice.reiki += addReiki;
             practice.lastSave = nowTime;
             practice.earnSpeed = practice.handledSpeed * eefect;
+            // todo 计算神识
+            practice.spirit = 10;
             this.dbInfo.set('practice', practice);
         }
     }

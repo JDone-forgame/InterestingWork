@@ -47,6 +47,10 @@ export enum ErrorCode {
     GET_LUCKCHANCE_FAILED = 600,
 
     EQUIP_CHANGE_ERROR = 700,
+
+    ENEMY_NOT_FOUND = 800,
+
+    ROOM_NOT_FOUND = 900,
 }
 
 let map: { [code: number]: string } = {};

@@ -64,6 +64,19 @@ let local = class local {
     async takeOffEquip(param) {
         return await gameRPC_1.gameRPC.inst.takeOffEquip(param.gameId, param.token, param.location);
     }
+    /**
+     * 进入副本
+     * @route post /game/local/enterFightRoom
+     * @group main - 基础信息
+     * @param {string} gameId.query.required - 玩家id
+     * @param {string} token.query.required - 令牌
+     * @param {string} roomId.query.required - 副本id
+     * @param {string} attitude.query.required - 玩家态度
+     * @returns {{code:number}} 0 - 返回成功
+     */
+    async enterFightRoom(param) {
+        return await gameRPC_1.gameRPC.inst.enterFightRoom(param.gameId, param.token, param.roomId, param.attitude);
+    }
 };
 __decorate([
     mx_webserve_1.WebRouteModule.route(),
@@ -89,6 +102,13 @@ __decorate([
     mx_webserve_1.WebRouteModule.paramOptional("token", "string", true),
     mx_webserve_1.WebRouteModule.paramRequired("location", "string", true)
 ], local.prototype, "takeOffEquip", null);
+__decorate([
+    mx_webserve_1.WebRouteModule.route(),
+    mx_webserve_1.WebRouteModule.paramRequired("gameId", "string", true),
+    mx_webserve_1.WebRouteModule.paramOptional("token", "string", true),
+    mx_webserve_1.WebRouteModule.paramRequired("roomId", "string", true),
+    mx_webserve_1.WebRouteModule.paramRequired("attitude", "string", true)
+], local.prototype, "enterFightRoom", null);
 local = __decorate([
     mx_webserve_1.WebRouteModule.class(module)
 ], local);
