@@ -3,7 +3,7 @@
  */
 
 /**
- * SeEnumItemssItemType generate in[Wed Jan 13 2021 15:22:04 GMT+0800 (GMT+08:00)] 
+ * SeEnumItemssItemType generate in[Mon Jan 18 2021 09:24:26 GMT+0800 (GMT+08:00)] 
  */
 export enum SeEnumItemssItemType{ 
       DanYao=1,
@@ -14,7 +14,7 @@ export enum SeEnumItemssItemType{
 
 
 /**
- * SeEnumRlevelsLevelName generate in[Wed Jan 13 2021 15:22:04 GMT+0800 (GMT+08:00)] 
+ * SeEnumRlevelsLevelName generate in[Mon Jan 18 2021 09:24:26 GMT+0800 (GMT+08:00)] 
  */
 export enum SeEnumRlevelsLevelName{ 
       LianQi=1,
@@ -25,7 +25,7 @@ export enum SeEnumRlevelsLevelName{
 
 
 /**
- * SeResAtkFight generate in[Wed Jan 13 2021 15:22:04 GMT+0800 (GMT+08:00)] 
+ * SeResAtkFight generate in[Mon Jan 18 2021 09:24:26 GMT+0800 (GMT+08:00)] 
  */
 export interface SeResAtkFight{ 
       sID:string;
@@ -43,7 +43,7 @@ export interface SeResAtkFight{
 
 
 /**
- * SeResAtkMethods generate in[Wed Jan 13 2021 15:22:04 GMT+0800 (GMT+08:00)] 
+ * SeResAtkMethods generate in[Mon Jan 18 2021 09:24:26 GMT+0800 (GMT+08:00)] 
  */
 export interface SeResAtkMethods{ 
       sID:string;
@@ -58,7 +58,7 @@ export interface SeResAtkMethods{
 
 
 /**
- * SeResEnemy generate in[Wed Jan 13 2021 15:22:04 GMT+0800 (GMT+08:00)] 
+ * SeResEnemy generate in[Mon Jan 18 2021 09:24:26 GMT+0800 (GMT+08:00)] 
  */
 export interface SeResEnemy{ 
       sID:string;
@@ -80,7 +80,7 @@ export interface SeResEnemy{
 
 
 /**
- * SeResEquip generate in[Wed Jan 13 2021 15:22:04 GMT+0800 (GMT+08:00)] 
+ * SeResEquip generate in[Mon Jan 18 2021 09:24:26 GMT+0800 (GMT+08:00)] 
  */
 export interface SeResEquip{ 
       sID:string;
@@ -100,7 +100,7 @@ export interface SeResEquip{
 
 
 /**
- * SeResFightRoom generate in[Wed Jan 13 2021 15:22:04 GMT+0800 (GMT+08:00)] 
+ * SeResFightRoom generate in[Mon Jan 18 2021 09:24:26 GMT+0800 (GMT+08:00)] 
  */
 export interface SeResFightRoom{ 
       sID:string;
@@ -115,7 +115,7 @@ export interface SeResFightRoom{
 
 
 /**
- * SeResGlobal generate in[Wed Jan 13 2021 15:22:04 GMT+0800 (GMT+08:00)] 
+ * SeResGlobal generate in[Mon Jan 18 2021 09:24:26 GMT+0800 (GMT+08:00)] 
  */
 export interface SeResGlobal{ 
       sID:string;
@@ -126,7 +126,7 @@ export interface SeResGlobal{
 
 
 /**
- * SeResItems generate in[Wed Jan 13 2021 15:22:04 GMT+0800 (GMT+08:00)] 
+ * SeResItems generate in[Mon Jan 18 2021 09:24:26 GMT+0800 (GMT+08:00)] 
  */
 export interface SeResItems{ 
       sID:string;
@@ -140,7 +140,7 @@ export interface SeResItems{
 
 
 /**
- * SeResLuckChance generate in[Wed Jan 13 2021 15:22:04 GMT+0800 (GMT+08:00)] 
+ * SeResLuckChance generate in[Mon Jan 18 2021 09:24:26 GMT+0800 (GMT+08:00)] 
  */
 export interface SeResLuckChance{ 
       sID:string;
@@ -152,7 +152,7 @@ export interface SeResLuckChance{
 
 
 /**
- * SeResRlevel generate in[Wed Jan 13 2021 15:22:04 GMT+0800 (GMT+08:00)] 
+ * SeResRlevel generate in[Mon Jan 18 2021 09:24:26 GMT+0800 (GMT+08:00)] 
  */
 export interface SeResRlevel{ 
       sID:string;

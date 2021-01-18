@@ -2,12 +2,22 @@ $(function () {
     // 大循环
     setInterval(() => {
         updata();
-    }, 500);
+    }, 100);
 
-    // 信息弹窗是否已经打开
-    let msgOpen = false;
-    // 信息板
-    let msgs = [];
+
+    // 清理 session
+    sessionStorage.removeItem('role');
+    sessionStorage.removeItem('token');
+
+    // 信息弹窗模块
+    let msgc = {
+        // 信息弹窗是否已经打开
+        msgOpening: false,
+        // 信息板
+        msgs: [],
+        // 信息弹窗是否需要刷新内容
+        msgNeedRload: false,
+    }
 
     // 是否需要更新修炼参数
     let changePP = true;
@@ -16,143 +26,145 @@ $(function () {
     let lastSave = 0;
     let reiki = 0;
 
-    // 是否开始了游戏
-    let start = false;
     // 本次登录的时间
     let startTime = 0;
-    // 令牌
-    let token = '';
-
-    // 每日一缘次数
-    let luckday = 0;
 
     // 交互中
     let isGettingData = false;
 
-    // ajax 请求
+    // 请求
     let xmlhttp;
 
-    const qualityColor = new Map()
-    qualityColor['S'] = '#FFD700';
-    qualityColor['A'] = '#9400D3';
-    qualityColor['B'] = '#87CEFA';
-    qualityColor['C'] = '#32CD32';
+    /**-------------------------------------------------流程函数------------------------------------------------------------------ */
 
-
-    const local = 'http:10.0.0.180:19000/game'
-
-
-
-
-
-    // 开始游戏
-    function startGame() {
+    // 登录
+    function login() {
         let name = $('#name').val();
         let password = $('#password').val();
+
         if (name == null || name == '') {
-            msgs.push('请输入您的名称!')
+            msgc.msgs.push('请输入您的名称!')
             return;
         }
 
-        let param = "name=" + name + "&password=" + password;
+        let param = {
+            name: name,
+            password: password,
+        }
 
-        loadXMLDoc(local + "/local/login", param, function () {
-            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                data = JSON.parse(xmlhttp.responseText);
+        if (!isGettingData) {
+            isGettingData = true;
 
-                if (data.code == 0) {
-                    let role = data.role;
-                    sRole = JSON.stringify(role);
+            let data = Net.jqAjax(reqUrls.loginUrl, param)
+            if (data.code == 0) {
+                let role = data.role;
+                let roleJson = JSON.stringify(role);
 
-                    // 保存本次登录时间
-                    startTime = data.localTime;
-                    luckday = role.luckChance['luckday'];
+                // 初始化登录参数
+                startTime = data.localTime;
 
-                    // 保存到 session 中
-                    sessionStorage.setItem('token', data.token);
-                    sessionStorage.setItem('role', sRole);
+                // 保存到 session 中
+                sessionStorage.setItem('token', data.token);
+                sessionStorage.setItem('role', roleJson);
 
-                    // 展示页面
-                    startPage(role)
-                } else {
-                    msgs.push('<p>code:' + data.code + '</p><p>errMsg:' + data.errMsg + '</p>')
-                }
+                // 展示页面
+                startPage()
 
+                isGettingData = false;
+            } else {
+                msgc.msgs.push('<p>code:' + data.code + '</p><p>errMsg:' + data.errMsg + '</p>')
             }
-        });
+
+
+            // Net.loadXMLDoc(reqUrls.loginUrl, param, () => {
+            //     if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            //         data = JSON.parse(xmlhttp.responseText);
+
+            //         if (data.code == 0) {
+            //             let role = data.role;
+            //             let roleJson = JSON.stringify(role);
+
+            //             // 初始化登录参数
+            //             startTime = data.localTime;
+
+            //             // 保存到 session 中
+            //             sessionStorage.setItem('token', data.token);
+            //             sessionStorage.setItem('role', roleJson);
+
+            //             // 展示页面
+            //             startPage()
+
+            //             isGettingData = false;
+            //         } else {
+            //             msgc.msgs.push('<p>code:' + data.code + '</p><p>errMsg:' + data.errMsg + '</p>')
+            //         }
+            //     }
+            // })
+        }
     }
 
-
     // 开始页面
-    function startPage(role) {
-        start = true;
-
-        // 元素展示
-        showFel(role);
+    function startPage() {
+        let role = JSON.parse(sessionStorage.getItem('role'))
 
         // 显示个人信息
-        showBaseInfo(role);
-
-        // 头像展示
-        $('#head').html('<img src="./public/img/head/' + role.baseInfo.headUrl + '">')
-
-        // 按键准备
-        $('#itemsIcon').click(openPackage)
-        $('#luckChanceIcon').click(openLuckChance)
-        $('#equipIcon').click(openEquipInfo)
+        showBaseInfo();
 
         // 页面切换
         $('#KAISHI').hide();
-        // todo随机或者指定背景
-        let bgIndex = getRandom(1, 50);
-        $('#XIULIAN').css('background-image', "url('./public/img/bg/" + bgIndex + ".png')");
         $('#XIULIAN').show();
 
-        // 欢迎弹窗
-        msgs.push('<p>[' + role.nickName + ']欢迎回来!</p>')
+        // TODO:随机或者指定背景
+        let bgIndex = getRandom(1, 50);
+        $('#XIULIAN').css('background-image', "url('./public/img/bg/" + bgIndex + ".png')");
+
+        // TODO:弹窗
+        msgc.msgs.push('<p>登录者--[' + role.nickName + ']!</p>')
     }
 
-
-    // 显示元素
-    function showFel(role) {
+    // 显示个人信息
+    function showBaseInfo() {
+        let role = JSON.parse(sessionStorage.getItem('role'));
         let fel = role.fElements;
+        let atkMethod = role.atkMethod;
+        let practice = role.practice;
+
+
+        // 头像信息
+        $('#head').html('<img src="./public/img/head/' + role.baseInfo.headUrl + '">')
+
+        // 元素信息
+        $('#fel').empty();
         for (let i in fel) {
             if (fel[i] > 0) {
                 let felName = changeElement(i);
                 $('#fel').append('<p>' + felName + fel[i] + '</p>')
             }
         }
-    }
-
-
-    // 显示个人信息
-    function showBaseInfo(role) {
-        let atkMethod = role.atkMethod;
-        let practice = role.practice;
         $('#xinxi').html('<p>' + role.nickName + '</p>' + '<p>' + atkMethod.atkName + atkMethod.atkLevel + '阶' + '</p>' + '<p>' + practice.rLevel + '</p>');
+
+        // 精力信息
+        $('#lc_energy').text('[精力]' + role.practice.energy)
     }
 
-    /**----------Items---------------------------------------------------------------------- */
     // 打开背包
     function openPackage() {
-        $('#KAISHI').hide();
         $('#XIULIAN').hide();
-        showItems('all');
         $('#ITEMS').show();
-        $('.cho').click(changeItemList);
-        $('.item').click(usePackageItem);
-        $('#it_close').click(() => {
-            $('div').remove(".item");
-            $('#ITEMS').hide();
-            $('#XIULIAN').show();
-        });
+
+        showItems('all');
     }
 
     // 点击道具导航
-    function changeItemList() {
+    function clickItemList() {
         let choList = $(this).attr("id");
         console.log('点击了' + choList)
 
+        changeItemList(choList)
+    }
+
+    // 改变道具展示
+    function changeItemList(choList) {
         let allList = ['cho_all', 'cho_danyao', 'cho_gongfa', 'cho_chailiao', 'cho_zhuangbei'];
         for (let i = 0; i < allList.length; i++) {
             let curL = allList[i];
@@ -162,8 +174,6 @@ $(function () {
         }
         $('#' + choList).css('background-color', 'teal');
 
-
-        $('div').remove(".item");
         switch (choList) {
             case 'cho_all':
                 showItems('all');
@@ -181,14 +191,6 @@ $(function () {
                 showItems('4');
                 break;
         }
-
-        $('.cho').click(changeItemList);
-        $('.item').click(usePackageItem);
-        $('#it_close').click(() => {
-            $('div').remove(".item");
-            $('#ITEMS').hide();
-            $('#XIULIAN').show();
-        });
     }
 
     // 打开装备页面
@@ -204,6 +206,7 @@ $(function () {
 
     // 展示道具
     function showItems(itemType) {
+        $('div').remove(".item");
         let role = JSON.parse(sessionStorage.getItem('role'));
         let items = role.playerItems;
         for (let key in items) {
@@ -214,6 +217,7 @@ $(function () {
                 }
             }
         }
+        $('.item').click(usePackageItem);
     }
 
     // 展示装备
@@ -256,7 +260,6 @@ $(function () {
     // 使用背包道具
     function usePackageItem() {
         let itemId = $(this).attr("id");
-        console.log('查看了' + itemId)
 
         let info = {
             funcName: "use",
@@ -273,9 +276,9 @@ $(function () {
             info.showUse = false;
         }
 
+        console.log('查看了' + item.sItemName + ',itemId:' + info.itemId)
         showUseMsg(msgInfo, info);
     }
-
 
     // 使用道具弹窗
     function showUseMsg(msgInfo, info) {
@@ -289,16 +292,17 @@ $(function () {
         if (info.showUse) {
             $('#msgConfim').show();
         }
-        $('.close').click(() => {
-            $('#msg').empty();
-            $('#MSG').hide();
-        });
-        $('.confim').click(() => {
+
+        $('#msgConfim').click(() => {
             if (!isGettingData) {
                 isGettingData = true;
-                let optionStr = info.funcName + '|' + info.itemId + '|' + '1';
-                let param = 'gameId=' + role.gameId + '&token=' + token + '&optionStr=' + optionStr;
-                loadXMLDoc(local + "/local/itemsOption", param, function () {
+
+                let param = {
+                    gameId: role.gameId,
+                    token: token,
+                    optionStr: info.funcName + '|' + info.itemId + '|' + '1'
+                }
+                Net.loadXMLDoc(reqUrls.itemsOptionUrl, param, () => {
                     if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
                         data = JSON.parse(xmlhttp.responseText);
 
@@ -307,37 +311,28 @@ $(function () {
                             role.playerItems = data.playerItems;
                             role.practice = data.practice;
                             role.atkMethod = data.atkMethod;
+
                             // 保存到 session 中
-                            sRole = JSON.stringify(role);
-                            sessionStorage.setItem('role', sRole)
+                            sessionStorage.setItem('role', JSON.stringify(role))
+
                             // 更新修炼信息
                             changePP = true;
 
                             // 页面操作
-                            $('div').remove(".item");
-                            showItems('all');
-
-                            $('.cho').click(changeItemList);
-                            $('.item').click(usePackageItem);
-                            $('#it_close').click(() => {
-                                $('div').remove(".item");
-                                $('#ITEMS').hide();
-                                $('#XIULIAN').show();
-                            });
+                            changeItemList('cho_all');
 
                             $('#msg').empty();
                             $('#MSG').hide();
                             isGettingData = false;
                         } else {
-                            msgs.push('<p>code:' + data.code + '</p><p>errMsg:' + data.errMsg + '</p>')
+                            msgc.msgs.push('<p>code:' + data.code + '</p><p>errMsg:' + data.errMsg + '</p>')
                         }
                     }
-                });
+                })
             }
-        });
+        })
     }
 
-    /**----------LuckChance---------------------------------------------------------------------- */
     // 打开机缘页面
     function openLuckChance() {
         let role = JSON.parse(sessionStorage.getItem('role'));
@@ -406,12 +401,12 @@ $(function () {
                             let str = resultLC[i];
                             let lcInfo = str.split('|');
                             let item = Items.get(lcInfo[0]);
-                            msgs.push('<p><span class="' + item.sQuality + '">' + item.sItemName + '</span>:' + lcInfo[1] + '</p>')
+                            msgc.msgs.push('<p><span class="' + item.sQuality + '">' + item.sItemName + '</span>:' + lcInfo[1] + '</p>')
                         }
 
                         isGettingData = false;
                     } else {
-                        msgs.push('<p>code:' + data.code + '</p><p>errMsg:' + data.errMsg + '</p>')
+                        msgc.msgs.push('<p>code:' + data.code + '</p><p>errMsg:' + data.errMsg + '</p>')
                     }
 
 
@@ -422,9 +417,11 @@ $(function () {
 
     // 每日一缘
     function getluckday() {
-        if (luckday >= 3) {
+        let role = JSON.parse(sessionStorage.getItem('role'));
+        if (role.luckChance.luckday >= 3) {
             return;
         }
+        console.log('每日一缘次数：' + role.luckChance.luckday);
         let nowTime = Date.now();
         // 每次获取间隔-分钟
         let timeLimit = 1;
@@ -436,85 +433,109 @@ $(function () {
         }
     }
 
-
-
-
-
-
-    // 第一层循环
-    function updata() {
-        // 检测消息板
-        if (!msgOpen && msgs.length > 0) {
-            showErrMsg();
-        }
-
-        if (start) {
-            showCycleInfo(changePP);
-            // 检测是否可以获得每日一缘
-            getluckday();
-        }
-    }
-
-
-    // 第二层循环
-    function showCycleInfo(changePP) {
-        if (changePP) {
-            let role = JSON.parse(sessionStorage.getItem('role'));
-            let practice = role.practice;
-
-            // 更新修炼信息
-            earnSpeed = practice.earnSpeed;
-            lastSave = practice.lastSave;
-            reiki = practice.reiki;
-
-            // 更新展示信息
-            showBaseInfo(role);
-            $('#lc_energy').text('[精力]' + role.practice.energy)
-            changePP = false;
-        }
-
-        let nowTime = Date.now();
-        let earnTime = (nowTime - lastSave) / 1000;
-        let addReiki = earnTime * earnSpeed;
-        reiki += addReiki;
-        lastSave = nowTime;
-        $('#reiki').text("灵力" + Math.floor(reiki));
-    }
-
-
-    // *提示信息
-    function showErrMsg() {
-        for (let msg of msgs) {
-            $('#msg').append(msg);
-        }
-        msgOpen = true;
-        isGettingData = false;
-        $('#MSG').show();
-        $('#msgConfim').hide();
-        $('.close').click(() => {
-            msgOpen = false;
-            msgs.splice(0, msgs.length);
-            $('#msg').empty();
-            $('#MSG').hide();
+    // 进入副本选择页面
+    function openFightRoom() {
+        $('#XIULIAN').hide();
+        $('#FIGHTROOM').show();
+        $('#fr_close').click(() => {
+            $('#FIGHTROOM').hide();
+            $('#XIULIAN').show();
         });
     }
 
 
-    /**-------------------------------------------------辅助函数------------------------------------------------------------------ */
-    // 发送请求实现
-    function loadXMLDoc(url, param, cfunc) {
-        if (window.XMLHttpRequest) {
-            // code for IE7+, Firefox, Chrome, Opera, Safari
-            xmlhttp = new XMLHttpRequest();
-        }
-        else {// code for IE6, IE5
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
 
-        xmlhttp.onreadystatechange = cfunc;
-        xmlhttp.open("POST", url, true);
-        xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xmlhttp.send(param);
+
+
+
+
+
+    /**-------------------------------------------------辅助函数------------------------------------------------------------------ */
+    // 发送请求模块
+    let Net = {
+        post: (reqUrl, param) => {
+            // let xmlhttp;
+            if (window.XMLHttpRequest) {
+                xmlhttp = new XMLHttpRequest();
+            }
+            else {
+                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+
+            xmlhttp.onreadystatechange = function () {
+                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                    data = JSON.parse(xmlhttp.responseText);
+                    return data;
+                }
+            }
+
+            xmlhttp.open("POST", reqUrl, true);
+            xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xmlhttp.send(param);
+        },
+        get: (url, params, cfunc) => {
+            // let xmlhttp;
+            if (window.XMLHttpRequest) {
+                xmlhttp = new XMLHttpRequest();
+            }
+            else {
+                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+            // 处理参数
+            let param = '';
+            for (let key in params) {
+                param += "&" + key + "=" + params[key];
+            }
+            param = param.slice(1, param.length);
+            xmlhttp.onreadystatechange = cfunc
+            xmlhttp.open("GET", url + '?' + param, true);
+            xmlhttp.send();
+            // 测试用
+            console.log(url + '?' + param);
+        },
+        loadXMLDoc: (url, params, cfunc) => {
+            console.log('url:' + url + ',params:')
+            console.log(params)
+            if (window.XMLHttpRequest) {
+                xmlhttp = new XMLHttpRequest();
+            }
+            else {
+                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+
+            // 处理参数
+            let param = '';
+            for (let key in params) {
+                param += "&" + key + "=" + params[key];
+            }
+            param = param.slice(1, param.length);
+
+            xmlhttp.onreadystatechange = cfunc;
+            xmlhttp.open("POST", url, true);
+            xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xmlhttp.send(param);
+
+            // 测试用
+            console.log(url + '?' + param);
+        },
+        jqAjax: (url, params, cfunc) => {
+            $.ajax({
+                type: "GET",
+                url: url,
+                data: params,
+                async: false,
+                cache: false,
+                complete(XHR, TS) {
+                    if (TS == 'success') {
+                        let data = XHR.responseJSON;
+                        console.log(data);
+                        return data;
+                    } else {
+                        console.log('failed over!')
+                    }
+                }
+            });
+        }
     }
 
     // 元素转文字
@@ -553,22 +574,87 @@ $(function () {
     // 初始化
     function init() {
         $('#KAISHI').show();
-        $('#XIULIAN').hide();
-        $('#MSG').hide();
-        $('#ITEMS').hide();
-        $('#LUCKCHANCE').hide();
-        $('#EQUIP').hide();
+        $('#startGame').click(login);
 
+        // 弹窗页面
+        $('#msgConfim').hide();
+        $('#msgClose').click(() => {
+            msgc.msgOpening = false;
+            msgc.msgs.splice(0, msgc.msgs.length);
+            $('#msg').empty();
+            $('#MSG').hide();
+        });
 
-        // $('#KAISHI').hide();
-        // $('#XIULIAN').hide();
-        // $('#MSG').hide();
-        // $('#ITEMS').show();
-        // $('#LUCKCHANCE').hide();
-        // $('#EQUIP').hide();
+        // 修炼页面
+        $('#itemsIcon').click(openPackage)
+        $('#luckChanceIcon').click(openLuckChance)
+        $('#equipIcon').click(openEquipInfo)
+        $('#fightRoomIcon').click(openFightRoom)
 
+        // 背包页面
+        $('.cho').click(clickItemList);
+        $('#it_close').click(() => {
+            $('#ITEMS').hide();
+            $('#XIULIAN').show();
+        });
 
-        $('#startGame').click(startGame);
+    }
+
+    // 第一层循环
+    function updata() {
+        // 检测消息板
+        if ((!msgc.msgOpening && msgc.msgs.length > 0) || (msgc.msgOpening && msgc.msgNeedRload)) {
+            showErrMsg();
+        }
+
+        // 只有登录后才开始执行
+        if (sessionStorage.getItem('role')) {
+            showCycleInfo();
+            // 检测是否可以获得每日一缘
+            getluckday();
+        }
+    }
+
+    // 第二层循环
+    function showCycleInfo() {
+        if (changePP) {
+            let role = JSON.parse(sessionStorage.getItem('role'));
+            let practice = role.practice;
+
+            // 更新修炼信息
+            earnSpeed = practice.earnSpeed;
+            lastSave = practice.lastSave;
+            reiki = practice.reiki;
+
+            // 更新展示信息
+            showBaseInfo();
+
+            changePP = false;
+        }
+
+        let nowTime = Date.now();
+        let earnTime = (nowTime - lastSave) / 1000;
+        let addReiki = earnTime * earnSpeed;
+        reiki += addReiki;
+        lastSave = nowTime;
+        $('#reiki').text("灵力" + Math.floor(reiki));
+    }
+
+    // *提示信息
+    function showErrMsg() {
+        for (let msg of msgc.msgs) {
+            $('#msg').append(msg);
+        }
+        msgc.msgOpening = true;
+        isGettingData = false;
+        $('#MSG').show();
+        // $('#msgConfim').hide();
+        // $('#msgClose').click(() => {
+        //     msgc.msgOpening = false;
+        //     msgc.msgs.splice(0, msgc.msgs.length);
+        //     $('#msg').empty();
+        //     $('#MSG').hide();
+        // });
     }
 
     init();

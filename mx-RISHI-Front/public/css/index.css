@@ -86,6 +86,7 @@ input:focus {
     overflow: hidden;
     color: white;
     font-size: 2rem;
+    display: none;
 }
 
 .text {
@@ -141,6 +142,12 @@ input:focus {
     font-weight: bold;
 }
 
+.close {
+    position: absolute;
+    top: 95%;
+    left: 50%;
+}
+
 /* -------------------------------------MSG---------------------------------------- */
 
 #MSG {
@@ -155,6 +162,7 @@ input:focus {
     background: rgba(0, 0, 0, 0.747);
     font-size: 2rem;
     color: white;
+    display: none;
 }
 
 #msg {
@@ -289,6 +297,11 @@ input:focus {
     bottom: 15rem;
 }
 
+#fightRoomIcon{
+    left: 1rem;
+    bottom: 22rem;
+}
+
 .mainIcon {
     position: absolute;
     z-index: 2;
@@ -327,11 +340,11 @@ input:focus {
     border: 0.3rem solid white;
 }
 
-#it_close {
+/* #it_close {
     position: absolute;
     top: 95%;
     left: 50%;
-}
+} */
 
 #it_chooseList {
     position: absolute;
@@ -361,11 +374,11 @@ input:focus {
 
 /* -------------------------------------LUCKCHANCE----------------------------------- */
 
-#lc_close {
+/* #lc_close {
     position: absolute;
     top: 95%;
     left: 50%;
-}
+} */
 
 #lc_energy {
     position: absolute;
@@ -403,11 +416,11 @@ input:focus {
 
 /* -------------------------------------EQUIP----------------------------------- */
 
-#eq_close {
+/* #eq_close {
     position: absolute;
     top: 95%;
     left: 50%;
-}
+} */
 
 #eq_helmet {
     top: 6rem;

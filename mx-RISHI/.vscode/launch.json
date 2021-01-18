@@ -22,7 +22,7 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "TS编译",
+            "name": "启动项目",
             "console": "integratedTerminal",
             "runtimeArgs": [
                 "--nolazy",

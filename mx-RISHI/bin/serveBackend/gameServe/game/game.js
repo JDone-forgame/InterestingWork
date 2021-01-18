@@ -250,7 +250,7 @@ class GameService {
             spirit: practice.spirit,
             attitude: attitude,
             moveForward: 'right',
-            moveSpeed: Math.floor(atkAbout.speed / 10) > 0 ? Math.floor(atkAbout.speed / 10) : 1,
+            moveSpeed: atkAbout.speed > 0 ? atkAbout.speed : 1,
             location: 0,
         };
         return { enemyInfo: enemyInfo, eventInfo: eventInfo, npcInfo: npcInfo, playerInfo: playerInfo, roomInfo: roomInfo };
