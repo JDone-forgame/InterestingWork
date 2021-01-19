@@ -443,7 +443,7 @@ export class UnitRole {
             equipSkill: [],
             cri: 5,
             csd: 50,
-            speed:0,
+            speed: 0,
         }
         return atkAbout;
     }
@@ -561,11 +561,13 @@ export class UnitRole {
                 break;
         }
 
+        // 这里需要更新一下道具数量
+        playerItems = this.playerItems;
         playerItems[itemId] -= itemCount;
         this.dbInfo.set('playerItems', playerItems)
 
         this.refreshPractice();
-        return { code: ErrorCode.OK, playerItems: this.playerItems, practice: this.practice, atkMethod: this.atkMethod, equipment: this.equipment, atkAbout: this.atkAbout }
+        return { code: ErrorCode.OK, role: this.toClient() }
     }
 
     // 学习功法
@@ -648,7 +650,7 @@ export class UnitRole {
 
         // 计算新的修炼效率
         let effect = this.countEEffect(this.checkFiveElemets());
-        practice.handledSpeed = (parseFloat(atkInfo.sHandleSpeed) + parseFloat(atkInfo.sUpAddSpeed) * atkMethod.atkLevel) * effect;
+        practice.handledSpeed = ((parseFloat(atkInfo.sHandleSpeed) + parseFloat(atkInfo.sUpAddSpeed) * atkMethod.atkLevel) * effect) / 100;
 
         this.dbInfo.set('practice', practice);
         this.dbInfo.set('atkMethod', atkMethod)
@@ -666,13 +668,13 @@ export class UnitRole {
         let equipLocation = '';
 
         if (equipId == '') {
-            // 表示脱下该部位装备
+            // 表示该部位没有装备
             if (!location) {
                 return { code: ErrorCode.EQUIP_CHANGE_ERROR, errMsg: 'take off without location!' };
             }
             equipLocation = location;
         } else {
-            // 表示更换装备
+            // 表示该部位有装备，需要对已有装备进行处理
             equipInfo = TablesService.getModule('Equip').getRes(equipId);
             equipLocation = equipInfo.sLocation;
             if (!equipInfo) {
@@ -806,7 +808,7 @@ export class UnitRole {
 
         this.dbInfo.set('fElements', fElements)
         this.dbInfo.set('equipment', equipment);
-        return { code: ErrorCode.OK, equipment: this.equipment, playerItems: this.playerItems, fElements: this.fElements, atkAbout: this.atkAbout };
+        return { code: ErrorCode.OK, role: this.toClient()};
     }
 
     // todo获取战斗相关数据
@@ -1085,13 +1087,14 @@ export class UnitRole {
         let practice: ifPractice = this.practice;
 
         if (nowTime > practice.lastSave) {
+            let earnSpeed = Math.sqrt(practice.handledSpeed * eefect);
 
             let earnTime = (nowTime - practice.lastSave) / 1000;
-            let addReiki = earnTime * practice.handledSpeed * eefect;
+            let addReiki = Math.sqrt(earnTime * earnSpeed);
 
             practice.reiki += addReiki;
             practice.lastSave = nowTime;
-            practice.earnSpeed = practice.handledSpeed * eefect;
+            practice.earnSpeed = earnSpeed;
 
             // todo 计算神识
             practice.spirit = 10;

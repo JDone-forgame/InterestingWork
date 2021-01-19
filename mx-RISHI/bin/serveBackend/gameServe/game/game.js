@@ -156,7 +156,7 @@ class GameService {
         luckChance[type] += count;
         role.dbInfo.set('luckChance', luckChance);
         role.refreshPractice();
-        return { code: define_1.ErrorCode.OK, practice: role.practice, playerItems: role.playerItems, resultLC: resultLC, luckChance: role.luckChance };
+        return { code: define_1.ErrorCode.OK, role: role.toClient(), resultLC: resultLC };
     }
     // 获取一个机缘事件结果
     static getLuckChance(role, type, guarantee) {

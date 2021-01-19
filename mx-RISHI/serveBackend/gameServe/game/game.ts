@@ -187,7 +187,7 @@ export class GameService {
         role.dbInfo.set('luckChance', luckChance);
 
         role.refreshPractice();
-        return { code: ErrorCode.OK, practice: role.practice, playerItems: role.playerItems, resultLC: resultLC, luckChance: role.luckChance }
+        return { code: ErrorCode.OK, role: role.toClient(), resultLC: resultLC }
     }
 
 

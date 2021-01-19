@@ -2,7 +2,7 @@ $(function () {
     // 大循环
     setInterval(() => {
         updata();
-    }, 100);
+    }, 1000);
 
 
     // 清理 session
@@ -29,12 +29,6 @@ $(function () {
     // 本次登录的时间
     let startTime = 0;
 
-    // 交互中
-    let isGettingData = false;
-
-    // 请求
-    let xmlhttp;
-
     /**-------------------------------------------------流程函数------------------------------------------------------------------ */
 
     // 登录
@@ -52,55 +46,39 @@ $(function () {
             password: password,
         }
 
-        if (!isGettingData) {
-            isGettingData = true;
+        $.ajax({
+            type: "GET",
+            url: reqUrls.loginUrl,
+            data: param,
+            async: true,
+            cache: false,
+            complete(XHR, TS) {
+                if (TS == 'success') {
+                    let data = XHR.responseJSON;
+                    if (data.code == 0) {
+                        let role = data.role;
+                        let roleJson = JSON.stringify(role);
 
-            let data = Net.jqAjax(reqUrls.loginUrl, param)
-            if (data.code == 0) {
-                let role = data.role;
-                let roleJson = JSON.stringify(role);
+                        // 初始化登录参数
+                        startTime = data.localTime;
 
-                // 初始化登录参数
-                startTime = data.localTime;
+                        // 保存到 session 中
+                        sessionStorage.setItem('token', data.token);
+                        sessionStorage.setItem('role', roleJson);
 
-                // 保存到 session 中
-                sessionStorage.setItem('token', data.token);
-                sessionStorage.setItem('role', roleJson);
+                        // 展示页面
+                        startPage()
 
-                // 展示页面
-                startPage()
+                        isGettingData = false;
+                    } else {
+                        msgc.msgs.push('<p>code:' + data.code + '</p><p>errMsg:' + data.errMsg + '</p>')
+                    }
 
-                isGettingData = false;
-            } else {
-                msgc.msgs.push('<p>code:' + data.code + '</p><p>errMsg:' + data.errMsg + '</p>')
+                } else {
+                    console.log('failed over!')
+                }
             }
-
-
-            // Net.loadXMLDoc(reqUrls.loginUrl, param, () => {
-            //     if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-            //         data = JSON.parse(xmlhttp.responseText);
-
-            //         if (data.code == 0) {
-            //             let role = data.role;
-            //             let roleJson = JSON.stringify(role);
-
-            //             // 初始化登录参数
-            //             startTime = data.localTime;
-
-            //             // 保存到 session 中
-            //             sessionStorage.setItem('token', data.token);
-            //             sessionStorage.setItem('role', roleJson);
-
-            //             // 展示页面
-            //             startPage()
-
-            //             isGettingData = false;
-            //         } else {
-            //             msgc.msgs.push('<p>code:' + data.code + '</p><p>errMsg:' + data.errMsg + '</p>')
-            //         }
-            //     }
-            // })
-        }
+        });
     }
 
     // 开始页面
@@ -198,10 +176,6 @@ $(function () {
         $('#XIULIAN').hide();
         $('#EQUIP').show();
         showEquip();
-        $('#eq_close').click(() => {
-            $('#EQUIP').hide();
-            $('#XIULIAN').show();
-        });
     }
 
     // 展示道具
@@ -226,7 +200,7 @@ $(function () {
         let equipment = role.equipment;
 
         for (let key in equipment) {
-            if (key == 'totalAtk' || key == 'totalDef' || key == 'totalSpe') {
+            if (key == 'totalAtk' || key == 'totalDef' || key == 'totalSpe' || key == 'totalCri' || key == 'totalCsd' || key == 'totalHea') {
                 continue;
             }
             let curEquip = equipment[key];
@@ -238,23 +212,60 @@ $(function () {
             }
         }
 
-        let showInfo = "<p>总攻击:</p>";
-        showInfo += "<p>火伤:" + equipment.totalAtk.Fire + "</p>";
-        showInfo += "<p>水伤:" + equipment.totalAtk.Water + "</p>";
-        showInfo += "<p>金伤:" + equipment.totalAtk.Metal + "</p>";
-        showInfo += "<p>木伤:" + equipment.totalAtk.Wood + "</p>";
-        showInfo += "<p>土伤:" + equipment.totalAtk.Earth + "</p>";
-        showInfo += "<p>物伤:" + equipment.totalAtk.Physical + "</p>";
-        showInfo += "<p>总防御:</p>";
-        showInfo += "<p>火抗:" + equipment.totalDef.Fire + "</p>";
-        showInfo += "<p>水抗:" + equipment.totalDef.Water + "</p>";
-        showInfo += "<p>金抗:" + equipment.totalDef.Metal + "</p>";
-        showInfo += "<p>木抗:" + equipment.totalDef.Wood + "</p>";
-        showInfo += "<p>土抗:" + equipment.totalDef.Earth + "</p>";
-        showInfo += "<p>物抗:" + equipment.totalDef.Physical + "</p>";
+        let atk = equipment.totalAtk;
+        let def = equipment.totalDef;
+
+        let showInfo = "<p>总攻击:&emsp;<span class='fire'>" + atk.Fire + "</span>&emsp;<span class='water'>" + atk.Water + "</span>&emsp;<span class='metal'>" + atk.Metal + "</span>&emsp;<span class='wood'>" + atk.Wood + "</span>&emsp; <span class='earth'>" + atk.Earth + "</span>&emsp;<span class='physical'>" + atk.Physical + "</span></p>";
+        showInfo += "<p>总防御:&emsp;<span class='fire'>" + def.Fire + "</span>&emsp;<span class='water'>" + def.Water + "</span>&emsp;<span class='metal'>" + def.Metal + "</span>&emsp;<span class='wood'>" + def.Wood + "</span> &emsp;<span class='earth'>" + def.Earth + "</span>&emsp;<span class='physical'>" + def.Physical + "</span></p>";
         showInfo += "<p>总速度:" + equipment.totalSpe + "</p>";
+        showInfo += "<p>暴击率:" + equipment.totalCri + "%</p>";
+        showInfo += "<p>暴击伤害:" + equipment.totalCsd + "%</p>";
+        showInfo += "<p>血量:" + equipment.totalHea + "</p>";
 
         $('#eq_eqInfo').html(showInfo)
+    }
+
+    // 脱下装备
+    function takeOffEquip() {
+        let choList = $(this).attr("id");
+        console.log('点击了' + choList)
+
+        let role = JSON.parse(sessionStorage.getItem('role'));
+        let token = sessionStorage.getItem('token');
+
+        let location = choList.slice(3, choList.length)
+        let param = {
+            gameId: role.gameId,
+            token: token,
+            location: location,
+        }
+
+        $.ajax({
+            type: "POST",
+            url: reqUrls.takeOffEquip,
+            data: param,
+            async: true,
+            cache: false,
+            complete(XHR, TS) {
+                if (TS == 'success') {
+                    let data = XHR.responseJSON;
+
+                    if (data.code == 0) {
+                        role = data.role;
+
+                        sessionStorage.setItem('role', JSON.stringify(role));
+
+                        $('#' + choList).css('background-image', "");
+                        $('#' + choList).css('border', "solid rgb(59, 59, 59) 1rem");
+                        $('#' + choList).html('');
+                        showEquip();
+                    }
+
+                } else {
+                    console.log('failed over!')
+                }
+            }
+        });
     }
 
     // 使用背包道具
@@ -265,6 +276,7 @@ $(function () {
             funcName: "use",
             itemId: itemId,
             showUse: true,
+            itemName: '',
         }
 
         let item = Items.get(itemId);
@@ -273,64 +285,74 @@ $(function () {
             msgInfo += '<p>注意：你将要使用功法道具，如果你已经修行了别的功法，改学功法可能会损失一定的灵气！</p>';
         }
         if (item.sEffect == 'None') {
+            $('#msgConfim').hide();
             info.showUse = false;
         }
 
-        console.log('查看了' + item.sItemName + ',itemId:' + info.itemId)
+        info.itemName = item.sItemName;
+        console.log('查看了' + item.sItemName + ',itemId:' + info.itemId + ',itemEffect:' + item.sEffect)
         showUseMsg(msgInfo, info);
     }
 
     // 使用道具弹窗
     function showUseMsg(msgInfo, info) {
-        let token = sessionStorage.getItem('token');
-        let role = JSON.parse(sessionStorage.getItem('role'));
-
         $('#msg').append(msgInfo)
         $('#MSG').show();
 
         // 是否展示使用按钮
         if (info.showUse) {
             $('#msgConfim').show();
+            $('#msgConfim').text('使用' + info.itemName);
+            $('#msgClose').text('取消')
         }
 
-        $('#msgConfim').click(() => {
-            if (!isGettingData) {
-                isGettingData = true;
-
-                let param = {
-                    gameId: role.gameId,
-                    token: token,
-                    optionStr: info.funcName + '|' + info.itemId + '|' + '1'
-                }
-                Net.loadXMLDoc(reqUrls.itemsOptionUrl, param, () => {
-                    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                        data = JSON.parse(xmlhttp.responseText);
-
-                        if (data.code == 0) {
-                            // 表示使用成功，更新信息
-                            role.playerItems = data.playerItems;
-                            role.practice = data.practice;
-                            role.atkMethod = data.atkMethod;
-
-                            // 保存到 session 中
-                            sessionStorage.setItem('role', JSON.stringify(role))
-
-                            // 更新修炼信息
-                            changePP = true;
-
-                            // 页面操作
-                            changeItemList('cho_all');
-
-                            $('#msg').empty();
-                            $('#MSG').hide();
-                            isGettingData = false;
-                        } else {
-                            msgc.msgs.push('<p>code:' + data.code + '</p><p>errMsg:' + data.errMsg + '</p>')
-                        }
-                    }
-                })
-            }
+        $("#msgConfim").bind("click", () => {
+            optionsItem(info.funcName, info.itemId, 1)
         })
+
+    }
+
+    // 操作道具
+    function optionsItem(option, itemId, count) {
+        let token = sessionStorage.getItem('token');
+        let role = JSON.parse(sessionStorage.getItem('role'));
+
+        let param = {
+            gameId: role.gameId,
+            token: token,
+            optionStr: option + '|' + itemId + '|' + count
+        }
+
+        console.log(param.optionStr)
+        $.ajax({
+            type: "POST",
+            url: reqUrls.itemsOptionUrl,
+            data: param,
+            async: true,
+            cache: false,
+            complete(XHR, TS) {
+                if (TS == 'success') {
+                    let data = XHR.responseJSON;
+                    if (data.code == 0) {
+                        // 表示使用成功，更新信息
+                        role = data.role;
+
+                        // 保存到 session 中
+                        sessionStorage.setItem('role', JSON.stringify(role))
+
+                        // 更新修炼信息
+                        changePP = true;
+
+                        // 页面操作
+                        changeItemList('cho_all');
+                    } else {
+                        msgc.msgs.push('<p>code:' + data.code + '</p><p>errMsg:' + data.errMsg + '</p>')
+                    }
+                } else {
+                    console.log('failed over!')
+                }
+            }
+        });
     }
 
     // 打开机缘页面
@@ -352,9 +374,6 @@ $(function () {
         let lcId = $(this).attr("id");
         console.log('选择了' + lcId)
 
-        let sData = JSON.parse(sessionStorage.getItem('loginData'));
-        let role = sData.role;
-
         let count = 0;
         let type = 'normal';
 
@@ -372,20 +391,33 @@ $(function () {
         let token = sessionStorage.getItem('token');
         let role = JSON.parse(sessionStorage.getItem('role'));
 
-        if (!isGettingData) {
-            isGettingData = true;
-            let param = 'gameId=' + role.gameId + '&token=' + token + '&type=' + type + '&count=' + count;
-            loadXMLDoc(local + "/local/luckChance", param, function () {
-                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                    data = JSON.parse(xmlhttp.responseText);
-
+        let param = {
+            gameId: role.gameId,
+            token: token,
+            type: type,
+            count: count,
+        }
+        $.ajax({
+            type: "POST",
+            url: reqUrls.luckChance,
+            data: param,
+            async: true,
+            cache: false,
+            complete(XHR, TS) {
+                if (TS == 'success') {
+                    let data = XHR.responseJSON;
                     let resultLC = [];
 
                     if (data.code == 0) {
                         // 表示使用成功，更新信息
-                        role.playerItems = data.playerItems;
-                        role.practice = data.practice;
+                        role = data.role;
                         resultLC = data.resultLC;
+                        let luckChance = role.luckChance;
+                        for (let key in luckChance) {
+                            if (key == type) {
+                                luckChance[key] += count;
+                            }
+                        }
 
 
                         // 保存到 session 中
@@ -402,17 +434,17 @@ $(function () {
                             let lcInfo = str.split('|');
                             let item = Items.get(lcInfo[0]);
                             msgc.msgs.push('<p><span class="' + item.sQuality + '">' + item.sItemName + '</span>:' + lcInfo[1] + '</p>')
+                            msgc.msgNeedRload = true;
                         }
 
-                        isGettingData = false;
                     } else {
                         msgc.msgs.push('<p>code:' + data.code + '</p><p>errMsg:' + data.errMsg + '</p>')
                     }
-
-
+                } else {
+                    console.log('failed over!')
                 }
-            });
-        }
+            }
+        });
     }
 
     // 每日一缘
@@ -421,15 +453,13 @@ $(function () {
         if (role.luckChance.luckday >= 3) {
             return;
         }
-        console.log('每日一缘次数：' + role.luckChance.luckday);
         let nowTime = Date.now();
         // 每次获取间隔-分钟
-        let timeLimit = 1;
+        let timeLimit = 0.5;
         if (((nowTime - startTime) / 1000) > timeLimit * 60) {
             // 可以获得每日一缘了
             xmlLuckChance('luckday', 1);
             startTime = nowTime;
-            luckday += 1;
         }
     }
 
@@ -451,93 +481,6 @@ $(function () {
 
 
     /**-------------------------------------------------辅助函数------------------------------------------------------------------ */
-    // 发送请求模块
-    let Net = {
-        post: (reqUrl, param) => {
-            // let xmlhttp;
-            if (window.XMLHttpRequest) {
-                xmlhttp = new XMLHttpRequest();
-            }
-            else {
-                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-            }
-
-            xmlhttp.onreadystatechange = function () {
-                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                    data = JSON.parse(xmlhttp.responseText);
-                    return data;
-                }
-            }
-
-            xmlhttp.open("POST", reqUrl, true);
-            xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-            xmlhttp.send(param);
-        },
-        get: (url, params, cfunc) => {
-            // let xmlhttp;
-            if (window.XMLHttpRequest) {
-                xmlhttp = new XMLHttpRequest();
-            }
-            else {
-                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-            }
-            // 处理参数
-            let param = '';
-            for (let key in params) {
-                param += "&" + key + "=" + params[key];
-            }
-            param = param.slice(1, param.length);
-            xmlhttp.onreadystatechange = cfunc
-            xmlhttp.open("GET", url + '?' + param, true);
-            xmlhttp.send();
-            // 测试用
-            console.log(url + '?' + param);
-        },
-        loadXMLDoc: (url, params, cfunc) => {
-            console.log('url:' + url + ',params:')
-            console.log(params)
-            if (window.XMLHttpRequest) {
-                xmlhttp = new XMLHttpRequest();
-            }
-            else {
-                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-            }
-
-            // 处理参数
-            let param = '';
-            for (let key in params) {
-                param += "&" + key + "=" + params[key];
-            }
-            param = param.slice(1, param.length);
-
-            xmlhttp.onreadystatechange = cfunc;
-            xmlhttp.open("POST", url, true);
-            xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-            xmlhttp.send(param);
-
-            // 测试用
-            console.log(url + '?' + param);
-        },
-        jqAjax: (url, params, cfunc) => {
-            $.ajax({
-                type: "GET",
-                url: url,
-                data: params,
-                async: false,
-                cache: false,
-                complete(XHR, TS) {
-                    if (TS == 'success') {
-                        let data = XHR.responseJSON;
-                        console.log(data);
-                        return data;
-                    } else {
-                        console.log('failed over!')
-                    }
-                }
-            });
-        }
-    }
-
     // 元素转文字
     function changeElement(elementName) {
         let result = '';
@@ -581,6 +524,9 @@ $(function () {
         $('#msgClose').click(() => {
             msgc.msgOpening = false;
             msgc.msgs.splice(0, msgc.msgs.length);
+            $('#msgConfim').unbind();
+            $('#msgConfim').hide();
+            $('#msgClose').text('已阅');
             $('#msg').empty();
             $('#MSG').hide();
         });
@@ -595,6 +541,13 @@ $(function () {
         $('.cho').click(clickItemList);
         $('#it_close').click(() => {
             $('#ITEMS').hide();
+            $('#XIULIAN').show();
+        });
+
+        // 装备页面
+        $('.eqBlock').click(takeOffEquip)
+        $('#eq_close').click(() => {
+            $('#EQUIP').hide();
             $('#XIULIAN').show();
         });
 
@@ -634,7 +587,7 @@ $(function () {
 
         let nowTime = Date.now();
         let earnTime = (nowTime - lastSave) / 1000;
-        let addReiki = earnTime * earnSpeed;
+        let addReiki = Math.sqrt(earnTime * earnSpeed);
         reiki += addReiki;
         lastSave = nowTime;
         $('#reiki').text("灵力" + Math.floor(reiki));
@@ -642,19 +595,15 @@ $(function () {
 
     // *提示信息
     function showErrMsg() {
+        if(msgc.msgOpening && msgc.msgNeedRload){
+            // 如果是在打开中更新
+            $('#msg').empty();
+        }
         for (let msg of msgc.msgs) {
             $('#msg').append(msg);
         }
         msgc.msgOpening = true;
-        isGettingData = false;
         $('#MSG').show();
-        // $('#msgConfim').hide();
-        // $('#msgClose').click(() => {
-        //     msgc.msgOpening = false;
-        //     msgc.msgs.splice(0, msgc.msgs.length);
-        //     $('#msg').empty();
-        //     $('#MSG').hide();
-        // });
     }
 
     init();

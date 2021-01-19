@@ -122,6 +122,11 @@ input:focus {
     font-weight: bold;
 }
 
+.physical {
+    color: #F0FFFF;
+    font-weight: bold;
+}
+
 .S {
     color: #FFD700;
     font-weight: bold;
@@ -297,7 +302,7 @@ input:focus {
     bottom: 15rem;
 }
 
-#fightRoomIcon{
+#fightRoomIcon {
     left: 1rem;
     bottom: 22rem;
 }
@@ -461,15 +466,19 @@ input:focus {
     position: absolute;
     top: 36rem;
     right: 2rem;
-    height: 20rem;
+    height: 22rem;
     width: 22rem;
     border: solid rgb(255, 255, 255) 0.5rem;
-    background-color: wheat;
+    background-color: rgb(99, 99, 99);
     color: rgb(0, 0, 0);
     background-size: 100% 100%;
     text-align: left;
     overflow: scroll;
-    font-size: 1rem;
+    font-size: 2rem;
+}
+
+#eq_eqInfo p {
+    text-align: left;
 }
 
 .eqBlock {

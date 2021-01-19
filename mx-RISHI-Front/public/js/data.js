@@ -13,8 +13,16 @@ qualityColor['C'] = '#32CD32';
 // 请求地址
 const local = 'http:127.0.0.1:19000/game';
 const reqUrls = {
+    // 登录
     loginUrl: local + '/local/login',
+    // 道具操作
     itemsOptionUrl: local + '/local/itemsOption',
+    // 机缘
+    luckChance: local + '/local/luckChance',
+    // 脱下装备
+    takeOffEquip: local + '/local/takeOffEquip',
+    // 进入副本
+    enterFightRoom: local + '/local/enterFightRoom',
 }
 
 // 表格数据初始化
@@ -26,3 +34,22 @@ function tableDataInit() {
 }
 
 tableDataInit();
+
+
+
+// $.ajax({
+//     type: "GET",
+//     url: url,
+//     data: params,
+//     async: false,
+//     cache: false,
+//     complete(XHR, TS) {
+//         if (TS == 'success') {
+//             let data = XHR.responseJSON;
+//             console.log(data);
+//             return data;
+//         } else {
+//             console.log('failed over!')
+//         }
+//     }
+// });
