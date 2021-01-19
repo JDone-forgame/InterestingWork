@@ -483,6 +483,7 @@ class UnitRole {
             default:
                 break;
         }
+        // 这里需要更新一下道具数量
         playerItems = this.playerItems;
         playerItems[itemId] -= itemCount;
         this.dbInfo.set('playerItems', playerItems);

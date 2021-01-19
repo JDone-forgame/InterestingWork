@@ -379,12 +379,6 @@ input:focus {
 
 /* -------------------------------------LUCKCHANCE----------------------------------- */
 
-/* #lc_close {
-    position: absolute;
-    top: 95%;
-    left: 50%;
-} */
-
 #lc_energy {
     position: absolute;
     top: 2%;
@@ -420,12 +414,6 @@ input:focus {
 }
 
 /* -------------------------------------EQUIP----------------------------------- */
-
-/* #eq_close {
-    position: absolute;
-    top: 95%;
-    left: 50%;
-} */
 
 #eq_helmet {
     top: 6rem;
@@ -498,15 +486,265 @@ input:focus {
     font-size: 1.2rem;
 }
 
-#testInfo {
+/* -------------------------------------FIGHTROOM----------------------------------- */
+
+#attitude {
     position: absolute;
-    width: 20rem;
-    height: 40rem;
-    border: white solid 0.5rem;
-    border-radius: 0.5rem;
-    right: 0%;
-    bottom: 0%;
+    top: 0;
+    left: 1rem;
+    height: 4rem;
+    width: 4rem;
+    border: solid white 0.5rem;
+    border-radius: 0.2rem;
+    line-height: 4rem;
+    color: #7FFF00;
+    background: rgb(20, 20, 20);
+}
+
+#fr_choose {
+    position: absolute;
+    top: 5rem;
+    height: 53rem;
+    width: 38rem;
+    background-color: green;
+    border-top: solid white 0.5rem;
+    border-bottom: solid white 0.5rem;
+    overflow: scroll;
+}
+
+#fr_scene {
+    position: absolute;
+    top: 5rem;
+    height: 53rem;
+    width: 38rem;
+    background-image: url('../img/bg/18.png');
+    /* background-color: rgb(0, 34, 0); */
+    border-top: solid white 0.5rem;
+    border-bottom: solid white 0.5rem;
+    z-index: 2;
+    font-size: 1rem;
+    display: none;
+}
+
+.froom {
+    position: relative;
+    margin-bottom: 1rem;
+    float: left;
+    width: 35rem;
+    height: 12rem;
+    background: teal;
+    border: solid white 0.5rem;
+    left: 1rem;
+    line-height: 12rem;
+    z-index: 2;
+}
+
+#ground {
+    position: absolute;
+    bottom: 0;
+    width: 38rem;
+    height: 20rem;
+    background-color: rgb(163, 163, 163);
+    border-top: gray solid 0.5rem;
+}
+
+#pInfo {
+    left: 0;
+}
+
+#pHead {
+    top: 0.1rem;
+    left: 0.1rem;
+}
+
+#eHead {
+    top: 0.1rem;
+    right: 0.1rem;
+}
+
+.frHead {
+    position: absolute;
+    width: 5rem;
+    height: 5rem;
+    border: rgb(66, 66, 66) solid 0.5rem;
+    border-radius: 0.8rem;
+    background: url("../img/head/toudi.png");
+    background-size: 100% 100%;
     overflow: hidden;
-    color: white;
-    font-size: 2rem;
+}
+
+#pNickName {
+    top: 6.5rem;
+    left: 0.1rem;
+}
+
+#eNickName {
+    top: 6.5rem;
+    right: 0.1rem;
+}
+
+.frName {
+    position: absolute;
+    width: 5rem;
+    font-weight: bold;
+    border-left: solid 0.5rem white;
+    border-right: solid 0.5rem white;
+    overflow: hidden;
+}
+
+.frHead img {
+    width: 5rem;
+    height: 5rem;
+    position: relative;
+}
+
+#pHealth {
+    top: 0.5rem;
+    left: 6.5rem;
+}
+
+#eHealth {
+    top: 0.5rem;
+    right: 6.5rem;
+}
+
+.frHealth {
+    position: absolute;
+    height: 1rem;
+    width: 8rem;
+    line-height: 1rem;
+    border: solid black 0.1rem;
+}
+
+#pHealthValue {
+    top: 0.5rem;
+    left: 6.5rem;
+}
+
+#eHealthValue {
+    top: 0.5rem;
+    right: 6.5rem;
+}
+
+.frHealthValue {
+    position: absolute;
+    height: 1rem;
+    width: 7.7rem;
+    line-height: 1rem;
+}
+
+progress::-webkit-progress-bar {
+    background-color: #c7c7c7;
+}
+
+progress::-webkit-progress-value {
+    background-color: #FF0000;
+}
+
+#pSpirit {
+    left: 6.5rem;
+    top: 1.8rem;
+}
+
+#eSpirit {
+    right: 6.5rem;
+    top: 1.8rem;
+}
+
+#pSpeed {
+    left: 6.5rem;
+    top: 3.2rem;
+}
+
+#eSpeed {
+    right: 6.5rem;
+    top: 3.2rem;
+}
+
+#pLocation {
+    left: 6.5rem;
+    top: 4.7rem;
+}
+
+#eLocation {
+    right: 6.5rem;
+    top: 4.7rem;
+}
+
+.frSpan {
+    position: absolute;
+    height: 1rem;
+    width: 8rem;
+    line-height: 1rem;
+    text-align: left;
+    color: #ffffff;
+}
+
+#eInfo {
+    right: 0;
+}
+
+.baseInfo {
+    position: absolute;
+    /* background: indigo; */
+    top: 0;
+    width: 16rem;
+    height: 10rem;
+    overflow: hidden;
+}
+
+#pRole {
+    left: 2rem;
+}
+
+#eRole {
+    right: 2rem;
+}
+
+.roleDiv {
+    position: absolute;
+    bottom: 20.5rem;
+    width: 8rem;
+    height: 18rem;
+    background: lightcoral;
+}
+
+.pOption {
+    position: relative;
+    background: lightgrey;
+    border: solid red 0.5rem;
+    float: left;
+    margin-left: 0.5rem;
+    width: 9rem;
+    height: 19rem;
+}
+
+#pPowerLine {
+    right: 0.5rem;
+}
+
+#pSpeedLine {
+    right: 3.5rem;
+}
+
+.countLine {
+    position: absolute;
+    bottom: 0;
+    width: 1rem;
+    height: 19rem;
+    border: solid white 0.5rem;
+    background: turquoise;
+}
+
+#groundMsg {
+    position: absolute;
+    width: 38rem;
+    height: 20rem;
+    background: yellowgreen;
+    z-index: 3;
+    display: none;
+}
+
+.froom :hover {
+    background: #228B22;
 }

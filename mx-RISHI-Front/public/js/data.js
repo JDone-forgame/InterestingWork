@@ -25,6 +25,13 @@ const reqUrls = {
     enterFightRoom: local + '/local/enterFightRoom',
 }
 
+// 态度
+const attitudes = {
+    friendly: '友善',
+    bellicose: '敌视',
+    careful: '谨慎',
+}
+
 // 表格数据初始化
 function tableDataInit() {
     for (let key in pItems) {
@@ -41,8 +48,8 @@ tableDataInit();
 //     type: "GET",
 //     url: url,
 //     data: params,
-//     async: false,
-//     cache: false,
+//     data: param,
+// async: true,
 //     complete(XHR, TS) {
 //         if (TS == 'success') {
 //             let data = XHR.responseJSON;

@@ -6,8 +6,7 @@ $(function () {
 
 
     // 清理 session
-    sessionStorage.removeItem('role');
-    sessionStorage.removeItem('token');
+    sessionStorage.clear();
 
     // 信息弹窗模块
     let msgc = {
@@ -93,7 +92,7 @@ $(function () {
         $('#XIULIAN').show();
 
         // TODO:随机或者指定背景
-        let bgIndex = getRandom(1, 50);
+        let bgIndex = getRandom(1, 47);
         $('#XIULIAN').css('background-image', "url('./public/img/bg/" + bgIndex + ".png')");
 
         // TODO:弹窗
@@ -383,11 +382,11 @@ $(function () {
             count = 5
         }
 
-        xmlLuckChance(type, count)
+        getLuckChance(type, count)
     }
 
-    // 请求机缘
-    function xmlLuckChance(type, count) {
+    // 请求进入副本数据
+    function getLuckChance(type, count) {
         let token = sessionStorage.getItem('token');
         let role = JSON.parse(sessionStorage.getItem('role'));
 
@@ -458,7 +457,7 @@ $(function () {
         let timeLimit = 0.5;
         if (((nowTime - startTime) / 1000) > timeLimit * 60) {
             // 可以获得每日一缘了
-            xmlLuckChance('luckday', 1);
+            getLuckChance('luckday', 1);
             startTime = nowTime;
         }
     }
@@ -467,10 +466,113 @@ $(function () {
     function openFightRoom() {
         $('#XIULIAN').hide();
         $('#FIGHTROOM').show();
-        $('#fr_close').click(() => {
-            $('#FIGHTROOM').hide();
-            $('#XIULIAN').show();
+
+        $('#fr_choose').show();
+        $('#fr_scene').hide();
+    }
+
+    // 改变态度
+    function changeAttitude() {
+        let attitude = $("#attitude").text();
+        console.log("attitude:" + attitude);
+
+        switch (attitude) {
+            case attitudes.friendly:
+                $('#attitude').text(attitudes.bellicose);
+                $('#attitude').css("color", "#FF0000");
+                break;
+            case attitudes.bellicose:
+                $('#attitude').text(attitudes.careful);
+                $('#attitude').css("color", "#1E90FF");
+                break;
+            case attitudes.careful:
+                $('#attitude').text(attitudes.friendly);
+                $('#attitude').css("color", "#7FFF00");
+                break;
+        }
+    }
+
+    // 请求进入副本数据
+    function enterRoom() {
+        let rId = $(this).attr("id");
+
+        let attitude = 'friendly';
+        let attitudeText = $("#attitude").text()
+        if (attitudeText == attitudes.bellicose) {
+            attitude = "bellicose";
+        } else if (attitudeText == attitudes.careful) {
+            attitude = "careful";
+        }
+
+        let token = sessionStorage.getItem('token');
+        let role = JSON.parse(sessionStorage.getItem('role'));
+
+        let param = {
+            gameId: role.gameId,
+            token: token,
+            roomId: rId,
+            attitude: attitude,
+        }
+
+        console.log('选择了' + rId + ',attitude:' + attitude);
+
+        $.ajax({
+            type: "POST",
+            url: reqUrls.enterFightRoom,
+            data: param,
+            async: true,
+            cache: false,
+            complete(XHR, TS) {
+                if (TS == 'success') {
+                    let data = XHR.responseJSON;
+
+                    if (data.code == 0) {
+                        let frInfo = {
+                            enemyInfo: data.enemyInfo,
+                            eventInfo: data.eventInfo,
+                            npcInfo: data.npcInfo,
+                            playerInfo: data.playerInfo,
+                            roomInfo: data.roomInfo,
+                        }
+
+                        // 保存副本信息
+                        sessionStorage.setItem('frInfo', JSON.stringify(frInfo));
+
+                        initFRoom();
+                    } else {
+                        msgc.msgs.push('<p>code:' + data.code + '</p><p>errMsg:' + data.errMsg + '</p>')
+                    }
+
+                } else {
+                    console.log('failed over!')
+                }
+            }
         });
+    }
+
+    // 初始化副本页面数据
+    function initFRoom() {
+        $('#fr_scene').show();
+        $('#fr_choose').hide();
+
+        let frInfo = JSON.parse(sessionStorage.getItem('frInfo'));
+        let role = JSON.parse(sessionStorage.getItem('role'));
+
+        console.log(frInfo)
+
+        let enemyInfo = frInfo.enemyInfo;
+        let eventInfo = frInfo.eventInfo;
+        let npcInfo = frInfo.npcInfo;
+        let playerInfo = frInfo.playerInfo;
+        let roomInfo = frInfo.roomInfo;
+
+        $('#pInfo').html(`<div id='pHead' class="frHead"><img src="./public/img/head/` + role.baseInfo.headUrl + `"></div>
+        <span id='pNickName' class="frName">`+ role.nickName + `</span>
+        <progress id='pHealth' class="frHealth" value="`+ role.atkAbout.health + `" max="` + role.atkAbout.health + `"></progress>
+        <span id='pHealthValue' class="frHealthValue">`+ role.atkAbout.health + `/` + role.atkAbout.health + `</span>
+        <span id='pSpirit' class="frSpan">神识:`+ playerInfo.spirit + `丈</span>
+        <span id='pSpeed' class="frSpan">速度:`+ playerInfo.moveSpeed + `丈/秒</span>
+        <span id='pLocation' class="frSpan">行程:`+ playerInfo.location + `丈</span>`)
     }
 
 
@@ -551,6 +653,14 @@ $(function () {
             $('#XIULIAN').show();
         });
 
+        // 副本页面
+        $('#attitude').click(changeAttitude)
+        $('.froom').click(enterRoom);
+        // $('#FIGHTROOM').show()
+        $('#fr_close').click(() => {
+            $('#FIGHTROOM').hide();
+            $('#XIULIAN').show();
+        });
     }
 
     // 第一层循环
@@ -595,7 +705,7 @@ $(function () {
 
     // *提示信息
     function showErrMsg() {
-        if(msgc.msgOpening && msgc.msgNeedRload){
+        if (msgc.msgOpening && msgc.msgNeedRload) {
             // 如果是在打开中更新
             $('#msg').empty();
         }

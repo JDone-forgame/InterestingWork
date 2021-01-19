@@ -253,7 +253,7 @@ class GameService {
             moveSpeed: atkAbout.speed > 0 ? atkAbout.speed : 1,
             location: 0,
         };
-        return { enemyInfo: enemyInfo, eventInfo: eventInfo, npcInfo: npcInfo, playerInfo: playerInfo, roomInfo: roomInfo };
+        return { code: define_1.ErrorCode.OK, enemyInfo: enemyInfo, eventInfo: eventInfo, npcInfo: npcInfo, playerInfo: playerInfo, roomInfo: roomInfo };
     }
     // 生成敌人
     static createEnemys(enemyType, count, roomLength) {

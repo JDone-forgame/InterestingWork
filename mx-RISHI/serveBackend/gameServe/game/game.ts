@@ -311,7 +311,7 @@ export class GameService {
         };
 
 
-        return { enemyInfo: enemyInfo, eventInfo: eventInfo, npcInfo: npcInfo, playerInfo: playerInfo, roomInfo: roomInfo }
+        return { code: ErrorCode.OK, enemyInfo: enemyInfo, eventInfo: eventInfo, npcInfo: npcInfo, playerInfo: playerInfo, roomInfo: roomInfo }
     }
 
 
