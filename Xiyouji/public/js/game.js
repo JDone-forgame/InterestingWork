@@ -1,5 +1,19 @@
 $(function () {
 
+    //判断是否宽屏
+    var winWide = window.screen.width;
+    // alert(winWide);
+    var wideScreen = false;
+    if (winWide <= 1024) {//1024及以下分辨率
+        $("#css").attr("href", "./public/css/index2.css");
+        // alert('小屏');
+    } else {
+        $("#css").attr("href", "./public/css/index.css");
+        // alert('大屏');
+        wideScreen = true; //是宽屏
+    }
+
+
     let everyTypeMax = 4;
     let playerNum = 3;
     let cups = [0, 0, 0];
@@ -18,7 +32,10 @@ $(function () {
             let cards = toSecret(sendResult[i]);
             let showCards = '';
             for (let j = 0; j < cards.length; j++) {
-                let mLeft = -2
+                let mLeft = -2;
+                if (!wideScreen) {
+                    mLeft = -0.1;
+                }
                 if (j == 0) {
                     mLeft = 0;
                 }
@@ -168,7 +185,7 @@ $(function () {
     function showHandCards(arr) {
         for (let i = 0; i < arr.length; i++) {
             let curCardZH = getZH(arr[i]);
-            let mLeft = -2
+            let mLeft = -2;
             let str = `<div class="handCard" style="margin-left: ` + mLeft + `%;">` + curCardZH + `</div>`
             $('#playerTable').append(str);
         }
@@ -206,7 +223,7 @@ $(function () {
         if (curCard == 0 || found) {
             // console.log('click at ' + clickCard)
             $(this).hide();
-            updateMsg('click at ' + getZH(clickCard));
+            updateMsg('you send ' + getZH(clickCard));
             deleteCard(0, clickCard, sendResult);
         }
 
@@ -243,7 +260,7 @@ $(function () {
     function updateMsg(text) {
         let msg = $('#msg').html();
         let str = text + '<br>';
-        $('#msg').html(msg + str)
+        $('#msg').html(str + msg)
     }
 
     function robotTurn(robotCards, playerSendCard) {
@@ -323,11 +340,18 @@ $(function () {
             $('#other' + i).empty();
 
             let cards = toSecret(curCards);
+            // let cardsNum = cards.length;
+            // if (cards.length == 0) {
+            //     cardsNum = 1;
+            // }
+            // let width = Math.floor(parseInt($('#other' + i).css('width').split('px')[0]) / cardsNum);
+            // console.log(width)
             for (let j = 0; j < cards.length - 1; j++) {
                 let mLeft = -2
                 if (j == 0) {
                     mLeft = 0;
                 }
+
                 $('#other' + i).append(`<div class="otherHandCard" style="margin-left: ` + mLeft + `%;">*</div>`)
             }
         }
