@@ -661,39 +661,55 @@ $(function () {
             console.log(playerInfo.location, enemy.eLocation)
 
             if (isInRange(playerInfo, enemy)) {
-                console.log('有人进入对方神识了！')
                 // 双方都进入了己方神识观察内
                 if (playerInfo.spirit >= distance && enemy.eSpirit >= distance) {
                     console.log('双方都进入了己方神识观察内！')
                     let judge = judgeOccurEvent(playerInfo, enemy);
-                    if (judge.state == 'fight') {
-                        // 进入战斗！
-                        frc.fighting = true;
-                    }
-                    if (judge.state == 'stop' || judge.state == 'getLuckChance' || judge.state == 'break') {
-                        if (distance > 2) {
-                            $('#groundMsg').append('<p>双方都表示友好，互相靠近中！</p>')
-                        } else {
-                            $('#groundMsg').append('<p>双方靠近了，开始交流！</p>')
-                            playerInfo.moveForward = 'none'
-                            enemy.eMoveSpeed = 0;
-                            setTimeout(() => {
-                                let str = '双方交流很愉快！'
-                                if (judge.state == 'getLuckChance') {
-                                    // 执行机缘操作
-                                    str += '通过交流' + '[机缘的描述]。'
+                    console.log(judge)
+                    switch (judge.state) {
+                        case 'fight':
+                            // 进入战斗！
+                            frc.fighting = true;
+                            break;
+                        case 'getLuckChance':
+                        case 'break':
+                        case 'stop':
+                            if (distance > 2) {
+                                $('#groundMsg').append('<p>双方都表示友好，互相靠近中！</p>')
+                            } else {
+                                $('#groundMsg').append('<p>双方靠近了，开始交流！</p>')
+                                playerInfo.moveForward = 'none'
+                                enemy.eMoveSpeed = 0;
+                                setTimeout(() => {
+                                    let str = '双方交流很愉快！'
+                                    if (judge.state == 'getLuckChance') {
+                                        // 执行机缘操作
+                                        str += '通过交流' + '[机缘的描述]。'
+                                    }
+                                    else if (judge.state == 'break') {
+                                        // 执行突破操作  
+                                        str += '通过交流，突破了！'
+                                    }
+                                    playerInfo.moveForword = 'right'
+                                }, judge.time * 1000)
+                            }
+                            break;
+                        case 'retreat':
+                            for (let i = 0; i < enemyInfo.length; i++) {
+                                let enemy = enemyInfo[i];
+                                if (enemy.eState != 'death') {
+                                    enemy.eState = 'death';
+                                    break;
                                 }
-                                else if (judge.state == 'break') {
-                                    // 执行突破操作  
-                                    str += '通过交流，突破了！'
-                                }
-                                playerInfo.moveForword = 'right'
-                            }, judge.time * 1000)
-                        }
+                            }
+                            sessionStorage.setItem('frInfo', JSON.stringify(frInfo));
+                            $('#groundMsg').append("<p>"+judge.msg+"</p>");
+                            break;
                     }
                 } else {
                     console.log('一方进入另一方神识了！')
                     // 一方进入另一方神识了
+                    console.log(enemy)
                     option(enemy);
                 }
             }
@@ -770,6 +786,9 @@ $(function () {
                         // 如果a等于或低于b阶段则发生战斗
                         if ((playerInfo.rlevel[0] < enemy.eRlevel[0]) || (playerInfo.rlevel[0] == enemy.eRlevel[0] && playerInfo.rlevel[1] <= enemy.eRlevel[1])) {
                             result.state = 'fight';
+                        } else {
+                            result.state = 'retreat';
+                            result.msg = '敌人觉得你等级太高，不愿意招惹你。'
                         }
                         break;
                     case 'careful':
@@ -787,7 +806,7 @@ $(function () {
                             result.state = 'fight';
                         }
                         else {
-                            result.state = 'msg';
+                            result.state = 'wait';
                             result.msg = '敌人等级太高，是否要战斗？'
                         }
                         break;
@@ -902,6 +921,7 @@ $(function () {
 
         if (startFightTime == 0) {
             startFightTime = Date.now();
+            goNext = true;
         }
 
 
@@ -913,18 +933,20 @@ $(function () {
 
             for (let i = 0; i < enemyInfo.length; i++) {
                 let enemy = enemyInfo[i];
-                if (enemy.eState == 'death') {
-                    continue;
-                } else {
+                if (enemy.eState != 'death') {
                     enemy.eState = 'death';
                     break;
                 }
             }
 
-            startFightTime = Date.now();
+            startFightTime = 0;
             $('#groundMsg').append(str);
+
+            sessionStorage.setItem('frInfo', JSON.stringify(frInfo));
+        } else {
+            return;
         }
-        sessionStorage.setItem('frInfo', JSON.stringify(frInfo));
+
 
 
     }
