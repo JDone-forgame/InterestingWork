@@ -517,13 +517,22 @@ input:focus {
     top: 5rem;
     height: 53rem;
     width: 38rem;
-    background-image: url('../img/bg/18.png');
-    /* background-color: rgb(0, 34, 0); */
     border-top: solid white 0.5rem;
     border-bottom: solid white 0.5rem;
     z-index: 2;
     font-size: 1rem;
-    display: none;
+    overflow: hidden;
+    /* display: none; */
+}
+
+#frBg {
+    position: absolute;
+    left: 0rem;
+    height: 35rem;
+    width: 38rem;
+    background-image: url('../img/bg/18.png');
+    background-repeat: repeat-x;
+    transition: all 1s linear;
 }
 
 .froom {
@@ -544,7 +553,7 @@ input:focus {
     bottom: 0;
     width: 38rem;
     height: 20rem;
-    background-color: rgb(163, 163, 163);
+    background-color: rgba(163, 163, 163, 0.274);
     border-top: gray solid 0.5rem;
 }
 
@@ -699,6 +708,7 @@ progress::-webkit-progress-value {
 
 #eRole {
     right: 2rem;
+    display: none;
 }
 
 .roleDiv {
@@ -706,43 +716,98 @@ progress::-webkit-progress-value {
     bottom: 20.5rem;
     width: 8rem;
     height: 18rem;
-    background: lightcoral;
+    background: rgb(50, 5, 212);
+}
+
+#pOption2, #pOption3 {
+    display: none;
 }
 
 .pOption {
     position: relative;
-    background: lightgrey;
-    border: solid red 0.5rem;
+    background: rgba(211, 211, 211, 0.267);
+    border: solid rgba(255, 0, 0, 0) 0.5rem;
+    border-left: solid white 0.5rem;
+    border-right: solid white 0.5rem;
     float: left;
     margin-left: 0.5rem;
     width: 9rem;
     height: 19rem;
 }
 
+.frSkills {
+    position: relative;
+    /* background: #006331; */
+    float: left;
+    margin-bottom: 0.5rem;
+    width: 9rem;
+    height: 3rem;
+    line-height: 3rem;
+    background-size: 100% 100%;
+}
+
+.learned {
+    background-image: url('../img/skillBtn/learned.png');
+}
+
+.equipSkill {
+    background-image: url('../img/skillBtn/equipSkill.png');
+}
+
+.atkSkill {
+    background-image: url('../img/skillBtn/atkSkill.png');
+}
+
+.near {
+    background-image: url('../img/skillBtn/near.png');
+}
+
+.far {
+    background-image: url('../img/skillBtn/far.png');
+}
+
+.tarE {
+    background-image: url('../img/skillBtn/tarE.png');
+}
+
+.tarS {
+    background-image: url('../img/skillBtn/tarS.png');
+}
+
 #pPowerLine {
     right: 0.5rem;
+    background: #B22222;
 }
 
 #pSpeedLine {
     right: 3.5rem;
+    background: #D2691E;
 }
 
 .countLine {
     position: absolute;
     bottom: 0;
     width: 1rem;
-    height: 19rem;
-    border: solid white 0.5rem;
-    background: turquoise;
+    height: 19.6rem;
+    border: solid rgba(255, 255, 255, 0.144) 0.2rem;
+    border-left: solid rgba(255, 255, 255, 0.692) 0.2rem;
+    border-right: solid rgba(255, 255, 255, 0.692) 0.2rem;
+    /* background: turquoise; */
 }
 
 #groundMsg {
     position: absolute;
     width: 38rem;
     height: 20rem;
-    background: yellowgreen;
+    background: url('../img/bg/bg.png');
     z-index: 3;
     display: none;
+    padding: 1rem;
+    overflow-y: scroll;
+}
+
+#groundMsg p {
+    text-align: left;
 }
 
 .froom :hover {

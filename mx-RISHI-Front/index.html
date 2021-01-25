@@ -97,16 +97,9 @@
         </div>
         <!-- 副本场景 -->
         <div id='fr_scene'>
+            <div id="frBg"></div>
             <!-- 玩家信息区域 -->
-            <div id='pInfo' class="baseInfo">
-                <!-- <div id='pHead' class="frHead"><img src="./public/img/head/nv/1.png"></div>
-                <span id='pNickName' class="frName">名字名字</span>
-                <progress id='pHealth' class="frHealth" value="50" max="100"></progress>
-                <span id='pHealthValue' class="frHealthValue">50/100</span>
-                <span id='pSpirit' class="frSpan">神识:20丈</span>
-                <span id='pSpeed' class="frSpan">速度:0.5丈/秒</span>
-                <span id='pLocation' class="frSpan">行程:50丈</span> -->
-            </div>
+            <div id='pInfo' class="baseInfo"></div>
             <!-- 敌人信息区域 -->
             <div id='eInfo' class="baseInfo">
                 <!-- <div id='eHead' class="frHead"><img src="./public/img/head/nv/1.png"></div>
@@ -123,16 +116,24 @@
             <div id='eRole' class="roleDiv">敌人形象</div>
             <div id='ground'>
                 <!-- 技能操作 -->
-                <div id='pOption1' class="pOption"></div>
-                <div id='pOption2' class="pOption"></div>
-                <div id='pOption3' class="pOption"></div>
+                <div id='pOption1' class="pOption">
+                </div>
+                <div id='pOption2' class="pOption">
+                    <div id='near' class="frSkills near">近距离</div>
+                    <div id='far' class="frSkills far">远距离</div>
+                </div>   
+                <div id='pOption3' class="pOption">
+                    <div id='tarE' class="frSkills tarE">敌人</div>
+                    <div id='tarS' class="frSkills tarS">自己</div>
+                </div>
 
                 <!-- 能量条 -->
                 <div id='pPowerLine' class="countLine"></div>
                 <div id='pSpeedLine' class="countLine"></div>
 
                 <!-- 非战斗显示信息 -->
-                <div id='groundMsg'></div>
+                <div id='groundMsg'>
+                </div>
             </div>
         </div>
 

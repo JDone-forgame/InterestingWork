@@ -948,6 +948,31 @@ class UnitRole {
             return min + eachGroup * rLevelLayer;
         }
     }
+    // 通过灵气返回修炼阶段值
+    static getRlevelByReiki(reiki) {
+        var _a;
+        // 检查表中是否有该等级
+        let Rlevels = (_a = tables_1.TablesService.getModule('Rlevel')) === null || _a === void 0 ? void 0 : _a.getAllRes();
+        // 逐个检查
+        for (let i in Rlevels) {
+            let rLevel = Rlevels[i];
+            let needReiki = rLevel.sNeedReiki.split('|');
+            // 阶段最低/高灵气
+            let min = parseInt(needReiki[0]);
+            let max = parseInt(needReiki[1]);
+            if (reiki >= min && reiki <= max) {
+                // 每阶段所需灵气
+                let eachGroup = parseInt(rLevel.sEachGroup);
+                // 本阶段最大层数
+                let maxLayer = rLevel.sLevelName == interface_1.SeEnumRlevelsLevelName.LianQi ? 15 : 3;
+                for (maxLayer; maxLayer >= 0; maxLayer--) {
+                    if (reiki > (min + maxLayer * eachGroup)) {
+                        return [rLevel.sLevelName, maxLayer];
+                    }
+                }
+            }
+        }
+    }
     // 计算灵气
     countReiki() {
         let nowTime = Date.now();

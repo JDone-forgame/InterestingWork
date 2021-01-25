@@ -278,12 +278,24 @@ export class GameService {
             roomLength: fRoom.sRoomLength,
         }
 
+        // 创建玩家信息
+        let playerInfo = {
+            name: role.nickName,
+            spirit: practice.spirit,
+            attitude: attitude,
+            moveForward: 'right',
+            moveSpeed: atkAbout.speed > 0 ? atkAbout.speed : 1,
+            location: 0,
+            rlevel: UnitRole.getRlevelByReiki(role.practice.reiki),
+        };
+
         // 创建敌人信息
+        let minLocation = playerInfo.spirit + 10;
         if (fRoom.sEnemyType && fRoom.sEnemyType != 'None') {
             let fRoomEnemyInfo = fRoom.sEnemyType.split('|')
             for (let fRoomEnemyConfig of fRoomEnemyInfo) {
                 let enemyConfig = fRoomEnemyConfig.split(':');
-                enemyInfo.push.apply(enemyInfo, this.createEnemys(enemyConfig[0], parseInt(enemyConfig[1]), parseInt(fRoom.sRoomLength)))
+                enemyInfo.push.apply(enemyInfo, this.createEnemys(enemyConfig[0], parseInt(enemyConfig[1]), parseInt(fRoom.sRoomLength), minLocation))
             }
         }
 
@@ -300,23 +312,12 @@ export class GameService {
 
         // todo 计算房间效果
 
-        // 创建玩家信息
-        let playerInfo = {
-            name: role.nickName,
-            spirit: practice.spirit,
-            attitude: attitude,
-            moveForward: 'right',
-            moveSpeed: atkAbout.speed > 0 ? atkAbout.speed : 1,
-            location: 0,
-        };
-
-
         return { code: ErrorCode.OK, enemyInfo: enemyInfo, eventInfo: eventInfo, npcInfo: npcInfo, playerInfo: playerInfo, roomInfo: roomInfo }
     }
 
 
     // 生成敌人
-    private static createEnemys(enemyType: string, count: number, roomLength: number) {
+    private static createEnemys(enemyType: string, count: number, roomLength: number, minLocation: number) {
         let enemyRes = TablesService.getModule('Enemy').getAllRes();
         if (!enemyRes) {
             return { code: ErrorCode.ENEMY_NOT_FOUND, errMsg: 'enemy not found from table!' }
@@ -332,6 +333,7 @@ export class GameService {
             }
         }
 
+        let startLocation = minLocation;
         for (let i = 0; i < count; i++) {
             let index = this.getRandom(0, needEnemys.length - 1);
             let enemy: SeResEnemy = needEnemys[index];
@@ -341,11 +343,17 @@ export class GameService {
                 eQuality: enemy.sEnemyQuality,
                 eName: enemy.sEnemyName,
                 eSpirit: parseFloat(enemy.sEnemySpirit),
-                eLocation: this.getRandom(10, roomLength - 5),
+                eLocation: this.getRandom(startLocation + 1, roomLength - 5),
                 eMoveSpeed: parseFloat(enemy.sEnemyMoveSpeed),
                 eMoveRange: parseFloat(enemy.sEnemyMoveRange),
                 eAttitude: enemy.sEnemyAttitude,
+                // 之后表里配怪物等级范围
+                eRlevel: [1, this.getRandom(3, 8)],
+                eState: 'alive',
             }
+
+            // 保证按顺序排的
+            startLocation = roomEnemyInfo.eLocation;
 
             resultEnemys.push(roomEnemyInfo)
         }

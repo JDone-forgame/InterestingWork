@@ -1,1 +1,1 @@
-{"ro001":{"sID":"ro001","sRoomName":"试炼之地","sRoomInfluence":"stateChange|spirit|multiply|0.8","sRoomOutput":"ma001","sEnemyType":"testEnemy:3","sNpcType":"None","sEventType":"None","sRoomLength":"500"}}
+{"ro001":{"sID":"ro001","sRoomName":"试炼之地","sRoomInfluence":"stateChange|spirit|multiply|0.8","sRoomOutput":"ma001","sEnemyType":"testEnemy:3","sNpcType":"None","sEventType":"None","sRoomLength":"50"}}

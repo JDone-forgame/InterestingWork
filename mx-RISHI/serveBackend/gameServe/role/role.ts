@@ -808,7 +808,7 @@ export class UnitRole {
 
         this.dbInfo.set('fElements', fElements)
         this.dbInfo.set('equipment', equipment);
-        return { code: ErrorCode.OK, role: this.toClient()};
+        return { code: ErrorCode.OK, role: this.toClient() };
     }
 
     // todo获取战斗相关数据
@@ -1077,6 +1077,36 @@ export class UnitRole {
             let eachGroup = parseInt(rLevel.sEachGroup);
 
             return min + eachGroup * rLevelLayer;
+        }
+    }
+
+    // 通过灵气返回修炼阶段值
+    static getRlevelByReiki(reiki: number) {
+        // 检查表中是否有该等级
+        let Rlevels = TablesService.getModule('Rlevel')?.getAllRes();
+
+        // 逐个检查
+        for (let i in Rlevels) {
+            let rLevel: SeResRlevel = Rlevels[i];
+            let needReiki = rLevel.sNeedReiki.split('|');
+
+            // 阶段最低/高灵气
+            let min = parseInt(needReiki[0]);
+            let max = parseInt(needReiki[1]);
+
+            if (reiki >= min && reiki <= max) {
+                // 每阶段所需灵气
+                let eachGroup = parseInt(rLevel.sEachGroup);
+                // 本阶段最大层数
+                let maxLayer = rLevel.sLevelName == SeEnumRlevelsLevelName.LianQi ? 15 : 3;
+
+                for (maxLayer; maxLayer >= 0; maxLayer--) {
+                    if (reiki > (min + maxLayer * eachGroup)) {
+                        return [rLevel.sLevelName, maxLayer]
+                    }
+                }
+            }
+
         }
     }
 
