@@ -14,6 +14,7 @@ $(function () {
     }
 
 
+    let isNew = true;
     let everyTypeMax = 4;
     let playerNum = 3;
     let cups = [0, 0, 0];
@@ -21,6 +22,13 @@ $(function () {
     sessionStorage.clear();
 
     function main() {
+        if (isNew) {
+            $('#newGuide').show();
+            $('#guideOver').click(() => {
+                isNew = false;
+                $('#newGuide').hide();
+            })
+        }
         let originCards = createCards(everyTypeMax);
         let sendResult = sendCards(playerNum, originCards);
 
