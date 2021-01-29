@@ -706,9 +706,14 @@ progress::-webkit-progress-value {
     left: 2rem;
 }
 
-#eRole {
-    right: 2rem;
-    display: none;
+.eRoleDiv {
+    position: absolute;
+    box-sizing: border-box;
+    border: #006331 0.1rem solid;
+    bottom: 20.5rem;
+    width: 8rem;
+    height: 18rem;
+    background: rgb(83, 0, 0);
 }
 
 .roleDiv {

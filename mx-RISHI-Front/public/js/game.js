@@ -28,14 +28,6 @@ $(function () {
     // 本次登录的时间
     let startTime = 0;
 
-    // 副本控制
-    let frc = {
-        // 是否战斗中
-        fighting: false,
-        // 是否在副本中
-        inFroom: false,
-    }
-
     /**-------------------------------------------------流程函数------------------------------------------------------------------ */
 
     // 登录
@@ -132,73 +124,13 @@ $(function () {
         $('#lc_energy').text('[精力]' + role.practice.energy)
     }
 
-    // 打开背包
-    function openPackage() {
-        $('#XIULIAN').hide();
-        $('#ITEMS').show();
-
-        showItems('all');
-    }
-
-    // 点击道具导航
-    function clickItemList() {
-        let choList = $(this).attr("id");
-        console.log('点击了' + choList)
-
-        changeItemList(choList)
-    }
-
-    // 改变道具展示
-    function changeItemList(choList) {
-        let allList = ['cho_all', 'cho_danyao', 'cho_gongfa', 'cho_chailiao', 'cho_zhuangbei'];
-        for (let i = 0; i < allList.length; i++) {
-            let curL = allList[i];
-            if (curL != choList) {
-                $('#' + curL).css('background-color', 'black');
-            }
-        }
-        $('#' + choList).css('background-color', 'teal');
-
-        switch (choList) {
-            case 'cho_all':
-                showItems('all');
-                break;
-            case 'cho_danyao':
-                showItems('1');
-                break;
-            case 'cho_gongfa':
-                showItems('2');
-                break;
-            case 'cho_chailiao':
-                showItems('3');
-                break;
-            case 'cho_zhuangbei':
-                showItems('4');
-                break;
-        }
-    }
+    /**-------------------------------------------------------------- */
 
     // 打开装备页面
     function openEquipInfo() {
         $('#XIULIAN').hide();
         $('#EQUIP').show();
         showEquip();
-    }
-
-    // 展示道具
-    function showItems(itemType) {
-        $('div').remove(".item");
-        let role = JSON.parse(sessionStorage.getItem('role'));
-        let items = role.playerItems;
-        for (let key in items) {
-            if (items[key] > 0) {
-                let item = ITEMS.get(key);
-                if (item.sItemType == itemType || itemType == 'all') {
-                    $('#ITEMS').append('<div id="' + item.sID + '" class="item"><img src="./public/img/items/' + item.sImgUrl + '"><span class="' + item.sQuality + '">' + item.sItemName + '*' + items[key] + '</span></div>')
-                }
-            }
-        }
-        $('.item').click(usePackageItem);
     }
 
     // 展示装备
@@ -273,6 +205,70 @@ $(function () {
                 }
             }
         });
+    }
+
+    /**-------------------------------------------------------------- */
+
+    // 打开背包
+    function openPackage() {
+        $('#XIULIAN').hide();
+        $('#ITEMS').show();
+
+        showItems('all');
+    }
+
+    // 点击道具导航
+    function clickItemList() {
+        let choList = $(this).attr("id");
+        console.log('点击了' + choList)
+
+        changeItemList(choList)
+    }
+
+    // 改变道具展示
+    function changeItemList(choList) {
+        let allList = ['cho_all', 'cho_danyao', 'cho_gongfa', 'cho_chailiao', 'cho_zhuangbei'];
+        for (let i = 0; i < allList.length; i++) {
+            let curL = allList[i];
+            if (curL != choList) {
+                $('#' + curL).css('background-color', 'black');
+            }
+        }
+        $('#' + choList).css('background-color', 'teal');
+
+        switch (choList) {
+            case 'cho_all':
+                showItems('all');
+                break;
+            case 'cho_danyao':
+                showItems('1');
+                break;
+            case 'cho_gongfa':
+                showItems('2');
+                break;
+            case 'cho_chailiao':
+                showItems('3');
+                break;
+            case 'cho_zhuangbei':
+                showItems('4');
+                break;
+        }
+    }
+
+    // 展示道具
+    function showItems(itemType) {
+        $('div').remove(".item");
+        let role = JSON.parse(sessionStorage.getItem('role'));
+        let items = role.playerItems;
+        for (let key in items) {
+            if (items[key] > 0) {
+                let item = ITEMS.get(key);
+                if (item.sItemType == itemType || itemType == 'all') {
+                    $('#ITEMS').append('<div id="' + item.sID + '" class="item"><img src="./public/img/items/' + item.sImgUrl + '"><span class="' + item.sQuality + '">' + item.sItemName + '*' + items[key] + '</span></div>')
+                }
+            }
+        }
+        $('.item').click(usePackageItem);
     }
 
     // 使用背包道具
@@ -361,6 +357,8 @@ $(function () {
             }
         });
     }
+
+    /**-------------------------------------------------------------- */
 
     // 打开机缘页面
     function openLuckChance() {
@@ -470,6 +468,8 @@ $(function () {
         }
     }
 
+    /**-------------------------------------------------------------- */
+
     // 进入副本选择页面
     function openFightRoom() {
         $('#XIULIAN').hide();
@@ -578,12 +578,11 @@ $(function () {
         $('#groundMsg').empty();
 
 
-        frc.inFroom = true;
-
         let frInfo = JSON.parse(sessionStorage.getItem('frInfo'));
         let role = JSON.parse(sessionStorage.getItem('role'));
-
-        console.log(frInfo)
+        let fightRoomState = JSON.parse(sessionStorage.getItem('fightRoomState'));
+        fightRoomState.inFroom = true;
+        sessionStorage.setItem('fightRoomState', JSON.stringify(fightRoomState));
 
         let atkAbout = role.atkAbout;
         let enemyInfo = frInfo.enemyInfo;
@@ -627,329 +626,92 @@ $(function () {
             }
         }
 
+        // 生成敌人形象
+        for (let enemy of enemyInfo) {
+            let enemyRole = `<div class="eRoleDiv" style="left: ` + (enemy.eLocation + 2) + `rem;">` + enemy.eName + `</div>`
+            $('#fr_scene').append(enemyRole)
+        }
+
     }
 
-    // 副本循环判断
+    // 房间检查
     function judgeFroom() {
-
-        moveAction();
-
-        let frInfo = JSON.parse(sessionStorage.getItem('frInfo'));
-        let role = JSON.parse(sessionStorage.getItem('role'));
-
-        let atkAbout = role.atkAbout;
-        let enemyInfo = frInfo.enemyInfo;
-        let eventInfo = frInfo.eventInfo;
-        let npcInfo = frInfo.npcInfo;
-        let playerInfo = frInfo.playerInfo;
-        let roomInfo = frInfo.roomInfo;
-
-        for (let i = 0; i < enemyInfo.length; i++) {
-            let enemy = enemyInfo[i];
-            let distance = enemy.eLocation - playerInfo.location;
-            if (distance <= 0 || enemy.eState == 'death') {
-                continue;
+        // 副本状态
+        let fightRoomState = JSON.parse(sessionStorage.getItem('fightRoomState'));
+        if (!fightRoomState) {
+            fightRoomState = {
+                // 是否战斗中
+                fighting: false,
+                // 是否在副本中
+                inFroom: false,
+                // 开始战斗的时间
+                startFightTime: 0,
+                // 副本是否结束
+                fightRoomOver: false,
+                // 副本暂停
+                frStop: false,
             }
+            sessionStorage.setItem('fightRoomState', JSON.stringify(fightRoomState));
+        }
 
-            if (i > 0 && enemyInfo[i - 1].eState == 'alive') {
-                // 说明第一个敌人还活着，不必计算后面的
-                continue;
-            }
-
-            console.log('distance:' + distance)
-
-            console.log(playerInfo.location, enemy.eLocation)
-
-            if (isInRange(playerInfo, enemy)) {
-                // 双方都进入了己方神识观察内
-                if (playerInfo.spirit >= distance && enemy.eSpirit >= distance) {
-                    console.log('双方都进入了己方神识观察内！')
-                    let judge = judgeOccurEvent(playerInfo, enemy);
-                    console.log(judge)
-                    switch (judge.state) {
-                        case 'fight':
-                            // 进入战斗！
-                            frc.fighting = true;
-                            break;
-                        case 'getLuckChance':
-                        case 'break':
-                        case 'stop':
-                            if (distance > 2) {
-                                $('#groundMsg').append('<p>双方都表示友好，互相靠近中！</p>')
-                            } else {
-                                $('#groundMsg').append('<p>双方靠近了，开始交流！</p>')
-                                playerInfo.moveForward = 'none'
-                                enemy.eMoveSpeed = 0;
-                                setTimeout(() => {
-                                    let str = '双方交流很愉快！'
-                                    if (judge.state == 'getLuckChance') {
-                                        // 执行机缘操作
-                                        str += '通过交流' + '[机缘的描述]。'
-                                    }
-                                    else if (judge.state == 'break') {
-                                        // 执行突破操作  
-                                        str += '通过交流，突破了！'
-                                    }
-                                    playerInfo.moveForword = 'right'
-                                }, judge.time * 1000)
-                            }
-                            break;
-                        case 'retreat':
-                            for (let i = 0; i < enemyInfo.length; i++) {
-                                let enemy = enemyInfo[i];
-                                if (enemy.eState != 'death') {
-                                    enemy.eState = 'death';
-                                    break;
-                                }
-                            }
-                            sessionStorage.setItem('frInfo', JSON.stringify(frInfo));
-                            $('#groundMsg').append("<p>"+judge.msg+"</p>");
-                            break;
-                    }
-                } else {
-                    console.log('一方进入另一方神识了！')
-                    // 一方进入另一方神识了
-                    console.log(enemy)
-                    option(enemy);
+        if (fightRoomState.inFroom) {
+            if (fightRoomState.fighting) {
+                // 战斗中
+                fightRoom.fightingCycle();
+            } else {
+                // 非战斗中
+                // 如果是暂停状态也不判断
+                if (!fightRoomState.frStop) {
+                    // 移动操作
+                    fightRoom.moveAction();
+                    // 循环判断
+                    fightRoom.unFightingCycle();
                 }
             }
+
+            // 更新所有页面数据
+            updataPage();
         }
     }
 
-    // 副本移动处理
-    function moveAction() {
+    // 更新所有页面数据
+    function updataPage() {
         let frInfo = JSON.parse(sessionStorage.getItem('frInfo'));
+        let frMsgs = JSON.parse(sessionStorage.getItem('frMsgs'));
+        if (!frMsgs) {
+            frMsgs = {
+                refresh: true,
+                frMsg: '<p>[战斗信息]</p>',
+            }
+        }
+
         let playerInfo = frInfo.playerInfo;
 
-        // 判断是否结束副本
-        if (playerInfo.location >= frInfo.roomInfo.roomLength) {
-            $('#groundMsg').append('<p>副本结束！</p>')
-            frc.inFroom = false;
-        }
-
-        switch (playerInfo.moveForward) {
-            case 'right':
-                playerInfo.location += playerInfo.moveSpeed;
-                break;
-            case 'none':
-                break;
-            case 'left':
-                playerInfo.location -= playerInfo.moveSpeed
-                break;
-        }
+        // 刷新副本背景
         $('#frBg').css('left', '-' + playerInfo.location + 'rem');
+        // 刷新玩家行走距离
         $('#pLocation').text('行程:' + playerInfo.location + '丈');
-
-        sessionStorage.setItem('frInfo', JSON.stringify(frInfo));
-    }
-
-    // 是否进了一方神识范围
-    function isInRange(playerInfo, enemy) {
-        let inRange = false;
-        let distance = enemy.eLocation - playerInfo.location
-        if ((playerInfo.spirit > distance || enemy.eSpirit > distance) && distance > 0) {
-            inRange = true;
-        }
-        return inRange;
-    }
-
-    // 判断发生的事件
-    function judgeOccurEvent(playerInfo, enemy) {
-        let aAttitude = playerInfo.attitude;
-        let bAttitude = enemy.eAttitude;
-        result = {
-            state: 'none',
-            time: 0,
-            msg: '',
-        }
-
-        switch (aAttitude) {
-            case 'friendly':
-                switch (bAttitude) {
-                    case 'friendly':
-                        // 驻足 + 无事发生|概率机缘|概率突破
-                        let r = Math.floor(Math.random() * 101);
-
-                        // 随机一个时间 1-5 秒
-                        let rTime = 1 + Math.floor(Math.random() * 5);
-                        result.time = rTime;
-
-                        if (r <= 60) {
-                            result.state = 'stop';
-                        } else if (r > 60 && r <= 95) {
-                            result = 'getLuckChance';
-                        } else if (r > 95) {
-                            result.state = 'break';
-                        }
-                        break;
-                    case 'bellicose':
-                        // 如果a等于或低于b阶段则发生战斗
-                        if ((playerInfo.rlevel[0] < enemy.eRlevel[0]) || (playerInfo.rlevel[0] == enemy.eRlevel[0] && playerInfo.rlevel[1] <= enemy.eRlevel[1])) {
-                            result.state = 'fight';
-                        } else {
-                            result.state = 'retreat';
-                            result.msg = '敌人觉得你等级太高，不愿意招惹你。'
-                        }
-                        break;
-                    case 'careful':
-                        // 错开
-                        break;
-                    default:
-                        break;
-                }
-                break;
-            case 'bellicose':
-                switch (bAttitude) {
-                    case 'friendly':
-                        // b等级高则返回提示
-                        if ((playerInfo.rlevel[0] > enemy.eRlevel[0]) || (playerInfo.rlevel[0] == enemy.eRlevel[0] && playerInfo.rlevel[1] >= enemy.eRlevel[1])) {
-                            result.state = 'fight';
-                        }
-                        else {
-                            result.state = 'wait';
-                            result.msg = '敌人等级太高，是否要战斗？'
-                        }
-                        break;
-                    case 'bellicose':
-                        // 发生战斗
-                        result.state = 'fight';
-                        break;
-                    case 'careful':
-                        // 发生战斗
-                        result.state = 'fight';
-                        break;
-                    default:
-                        break;
-                }
-                break;
-            case 'careful':
-                switch (bAttitude) {
-                    case 'friendly':
-                        // 错开
-                        break;
-                    case 'bellicose':
-                        // 发生战斗
-                        result.state = 'fight';
-                        break;
-                    case 'careful':
-                        // 错开
-                        break;
-                    default:
-                        break;
-                }
-                break;
-            default:
-                break;
-        }
-
-        return result;
-    }
-
-    // 一方察觉时操作
-    function option(enemy) {
-        let frInfo = JSON.parse(sessionStorage.getItem('frInfo'));
-        let playerInfo = frInfo.playerInfo;
-
-        let str = '';
-
-        let firstR = playerInfo.name;
-        let foundR = enemy.eName;
-        let firstAttitude = playerInfo.attitude;
-
-        if (enemy.eSpirit > playerInfo.spirit) {
-            firstR = enemy.eName;
-            foundR = playerInfo.name;
-            firstAttitude = enemy.eAttitude;
-            str += `<p>` + foundR + `在` + firstR + `神识范围内!</p>`;
-        } else if (enemy.eSpirit == playerInfo.spirit) {
-            str += '<p>双方同时发现了对方！</p>'
-        } else if (enemy.eSpirit < playerInfo.spirit) {
-            str += `<p>` + foundR + `在` + firstR + `神识范围内!</p>`;
-        }
-
-        $('#groundMsg').append(str);
-        str = '';
-
-        let judge = judgeOccurEvent(playerInfo, enemy);
-        if (judge.state == 'msg') {
-            str += '<p>' + judge.msg + '</p>';
-        }
-        else if (judge.state = 'fight') {
-            str += '<p>进入战斗了!</p>';
-            frc.fighting = true;
-        }
-        $('#groundMsg').append(str);
-
-        // switch (firstAttitude) {
-        //     case 'friendly':
-        //         str += '<p>[' + firstR + ']表示了友善的态度，逐渐靠近' + foundR + '</p>';
-        //         break;
-        //     case 'bellicose':
-        //         let judge = judgeOccurEvent(playerInfo, enemy);
-        //         if (judge.state == 'msg' && a.type == 'player') {
-        //             str += '<p>' + judge.msg + '</p>';
-        //             frc.fighting = true;
-        //         }
-        //         else if (judge.state = 'fight') {
-        //             str += '<p>进入战斗了!</p>';
-        //             frc.fighting = true;
-        //         }
-        //         break;
-        //     case 'careful':
-        //         str += '<p>[' + firstR + ']表示了谨慎的态度，逐渐靠近' + foundR + '</p>';
-        //         break;
-        //     default:
-        //         break;
-        // }
-
-
-    }
-
-    // 战斗逻辑处理
-    let startFightTime = 0;
-    let goNext = true;
-    function fightingCycle() {
-        let frInfo = JSON.parse(sessionStorage.getItem('frInfo'));
-        let role = JSON.parse(sessionStorage.getItem('role'));
-
-        let atkAbout = role.atkAbout;
-        let enemyInfo = frInfo.enemyInfo;
-        let eventInfo = frInfo.eventInfo;
-        let npcInfo = frInfo.npcInfo;
-        let playerInfo = frInfo.playerInfo;
-        let roomInfo = frInfo.roomInfo;
-
-        if (startFightTime == 0) {
-            startFightTime = Date.now();
-            goNext = true;
-        }
-
-
-        if ((Date.now() - startFightTime) / 1000 > 5 && goNext) {
-            frc.fighting = false;
-            let str = '<p>战斗结束！</p>'
-
-            goNext = false;
-
-            for (let i = 0; i < enemyInfo.length; i++) {
-                let enemy = enemyInfo[i];
-                if (enemy.eState != 'death') {
-                    enemy.eState = 'death';
-                    break;
-                }
+        // 刷新敌人位置
+        $('div').remove(".eRoleDiv");
+        for (let enemy of frInfo.enemyInfo) {
+            let enemyRole = '';
+            if (enemy.eState != 'alive') {
+                enemyRole = `<div class="eRoleDiv" style="left: ` + (enemy.eLocation + 2 - playerInfo.location) + `rem;background-color: black;">` + enemy.eName + `</div>`
+            } else {
+                enemyRole = `<div class="eRoleDiv" style="left: ` + (enemy.eLocation + 2 - playerInfo.location) + `rem;">` + enemy.eName + `</div>`
             }
 
-            startFightTime = 0;
-            $('#groundMsg').append(str);
-
-            sessionStorage.setItem('frInfo', JSON.stringify(frInfo));
-        } else {
-            return;
+            $('#fr_scene').append(enemyRole)
         }
 
-
-
+        if (frMsgs.refresh) {
+            $('#groundMsg').html(frMsgs.frMsg);
+            frMsgs.refresh = false;
+            sessionStorage.setItem('frMsgs', JSON.stringify(frMsgs));
+        }
     }
+
+    /**-------------------------------------------------------------- */
 
 
 
@@ -1052,15 +814,8 @@ $(function () {
             getluckday();
         }
 
-        // 只有在进入副本后并且没在战斗中判断
-        if (!frc.fighting && frc.inFroom) {
-            judgeFroom();
-        }
-
-        // 战斗处理
-        if (frc.fighting) {
-            fightingCycle();
-        }
+        // 房间检查
+        judgeFroom();
     }
 
     // 第二层循环

@@ -45,22 +45,3 @@ function tableDataInit() {
 }
 
 tableDataInit();
-
-
-
-// $.ajax({
-//     type: "GET",
-//     url: url,
-//     data: params,
-//     data: param,
-// async: true,
-//     complete(XHR, TS) {
-//         if (TS == 'success') {
-//             let data = XHR.responseJSON;
-//             console.log(data);
-//             return data;
-//         } else {
-//             console.log('failed over!')
-//         }
-//     }
-// });
