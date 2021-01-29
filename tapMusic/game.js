@@ -1,34 +1,39 @@
 let clickRecord = [];
 let startTime = 0;
 
-
 $(function () {
+    // 主循环
     setInterval(() => {
         checkTap();
         changeColor();
     }, 10)
 
+    // 清理 session
     sessionStorage.clear();
+
+    // 默认颜色、点击颜色
     let defaultColor = "#228B22";
     let tapColor = "#FFA500";
 
-
+    // 按键按下
     $(document).keydown(function (event) {
         // console.log("Key: " + event.keyCode);
-        // timeInit();
         recordClick();
         changeDiv(tapColor, 20, 26, 85, 0.75);
     });
 
+    // 按键弹起
     $(document).keyup(function (event) {
         changeDiv(defaultColor, 1000, 25, 80, 0.25);
     });
 
+    // 保存点击记录
     $('#saveTap').click(() => {
         sessionStorage.setItem('musicTap', JSON.stringify(clickRecord));
         $('#saveTap').text('success!')
     })
 
+    // 点击记录
     function recordClick() {
         let record = {
             seq: clickRecord.length + 1,
@@ -39,6 +44,7 @@ $(function () {
         divText('<p>' + record.seq + '</p>')
     }
 
+    // 改变点击块
     function changeDiv(color, time, h, w, o) {
         $('#tap').css({
             "transition": "all " + time + "ms",
@@ -49,10 +55,12 @@ $(function () {
         })
     }
 
+    // 改变点击块文本
     function divText(text) {
         $('#tap').html(text)
     }
 
+    // 初始化时间
     function timeInit() {
         if (startTime == 0) {
             startTime = Date.now();
@@ -60,10 +68,12 @@ $(function () {
         }
     }
 
+    // 计算分数
     function addScore() {
 
     }
 
+    // 检查点击点
     let curTap = 0;
     function checkTap() {
         let nowTime = Date.now() - startTime;
@@ -82,6 +92,7 @@ $(function () {
         }
     }
 
+    // 改变颜色
     function changeColor() {
         let r = Math.floor(Math.random() * tapColors.length);
         tapColor = tapColors[r];
@@ -120,8 +131,7 @@ $(function () {
                 clearInterval(timer)
                 $('#tip').text('解码成功，用时共计:' + count + '秒')
 
-                startTime = Date.now();
-                console.log('start!')
+                timeInit();
 
                 var audioBufferSourceNode = audioContext.createBufferSource();
                 var analyser = audioContext.createAnalyser();
