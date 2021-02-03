@@ -530,7 +530,7 @@ input:focus {
     left: 0rem;
     height: 35rem;
     width: 38rem;
-    background-image: url('../img/bg/18.png');
+    /* background-image: url('../img/bg/18.png'); */
     background-repeat: repeat-x;
     transition: all 1s linear;
 }
@@ -722,6 +722,15 @@ progress::-webkit-progress-value {
     width: 8rem;
     height: 18rem;
     background: rgb(50, 5, 212);
+}
+
+#pSpiritRange{
+    position: absolute;
+    bottom: 20.5rem;
+    left: 2rem;
+    width: 8rem;
+    height: 18rem;
+    background: rgba(5, 80, 45, 0.425);
 }
 
 #pOption2, #pOption3 {

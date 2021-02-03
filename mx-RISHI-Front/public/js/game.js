@@ -592,7 +592,16 @@ $(function () {
         let roomInfo = frInfo.roomInfo;
 
         // 确定房间
-        $('#frBg').css('width', (roomInfo.roomLength + 38) + 'rem')
+        $('#frBg').css({
+            'width': (roomInfo.roomLength + 38) + 'rem',
+            'left': '0rem',
+            'background-image': "url('./public/img/bg/17.png')",
+        })
+
+        // 神识范围
+        $('#pSpiritRange').css({
+            'width': (playerInfo.spirit + 4) + 'rem',
+        })
 
         // 基础信息
         $('#pInfo').html(`<div id='pHead' class="frHead"><img src="./public/img/head/` + role.baseInfo.headUrl + `"></div>

@@ -75,146 +75,232 @@ input:focus {
 
 /* --------------------------------------------------------------------------------------------------------- */
 
-#msg {
+#backBord {
     position: absolute;
-    width: 10%;
+    box-sizing: border-box;
+    border: white solid 10px;
+    background-color: black;
+    z-index: 10;
+    overflow: hidden;
+}
+
+#newGuide {
+    position: absolute;
+    z-index: 5;
+    background-color: black;
+    width: 100%;
     height: 100%;
-    background-color: gray;
-    overflow-y: scroll;
-    overflow-x: hidden;
+    font-size: 2rem;
+}
+
+#guideOver {
+    position: absolute;
+    background-color: black;
+    width: 25%;
+    height: 5%;
+    font-size: 2.5rem;
+    border: white solid 0.2rem;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#guideOver:hover {
+    border: white solid 0.2rem;
+    color: black;
+    background-color: white;
 }
 
 .playerTable {
     position: absolute;
-    left: 55%;
-    top: 75%;
+    left: 50%;
+    top: 87.5%;
     transform: translate(-50%, -50%);
-    width: 70%;
+    width: 100%;
     height: 25%;
-    background-color: rgb(0, 90, 0);
-    border: solid slategrey 1.5rem;
-    border-radius: 0.5rem;
-    overflow: hidden;
-}
-
-.ohterTable {
-    box-sizing: border-box;
-    position: relative;
-    float: left;
-    /* transform: translate(-50%, -50%); */
-    /* width: 30%; */
-    height: 100%;
-    background-color: rgb(0, 90, 0);
-    border: solid slategrey 1.5rem;
-    border-radius: 0.5rem;
-    overflow: hidden;
+    background-color: black;
+    border-top: solid gray 1rem;
+    overflow-y: scroll;
+    overflow-x: hidden;
 }
 
 .handCard {
     box-sizing: border-box;
     position: relative;
     float: left;
-    height: 100%;
-    width: 10%;
-    border: indigo solid 0.5rem;
+    height: 50%;
+    width: 20%;
+    border: white solid 0.2rem;
     border-radius: 0.3rem;
-    background-color: rgb(34, 34, 34);
     text-align: left;
     font-size: 3rem;
     margin-left: 0%;
+    background-size: 100% 100%
+}
+
+.handCard:hover {
+    border: black solid 0.5rem;
+}
+
+#control {
+    position: absolute;
+    box-sizing: border-box;
+    border: black solid 0.5rem;
+    width: 100%;
+    height: 27%;
+    left: 50%;
+    top: 47%;
+    z-index: 2;
+    transform: translate(-50%);
+}
+
+#msg {
+    position: absolute;
+    width: 75%;
+    height: 100%;
+    right: 0%;
+    top: 0%;
+    background-color: rgb(0, 0, 0);
+    box-sizing: border-box;
+    border: gray solid 0.1rem;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    font-size: 1.5rem;
+}
+
+#cupAdd {
+    top: 80%;
+}
+
+#sendCard {
+    top: 60%;
+}
+
+.theBtn {
+    position: absolute;
+    box-sizing: border-box;
+    left: 0%;
+    width: 25%;
+    height: 20%;
+    background-color: indianred;
+    border: ivory solid 0.5rem;
+    border-radius: 0.5rem;
+    text-align: center center;
+    font-size: 1.5rem;
+}
+
+.theBtn:hover {
+    border: steelblue solid 0.5rem;
+}
+
+#cups {
+    position: absolute;
+    border: slategrey solid 0.5rem;
+    box-sizing: border-box;
+    width: 25%;
+    height: 60%;
+    left: 0%;
+    top: 0%;
+    border-radius: 0.5rem;
+    text-align: left;
+    font-size: 1.5rem;
+}
+
+#otherTables {
+    position: absolute;
+    box-sizing: border-box;
+    border: black solid 0.5rem;
+    width: 100%;
+    height: 35%;
+    left: 50%;
+    top: 0%;
+    transform: translate(-50%);
+}
+
+.ohterTable {
+    box-sizing: border-box;
+    position: absolute;
+    width: 40%;
+    height: 100%;
+    background-color: rgb(0, 90, 0);
+    border: solid slategrey 1rem;
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+#oPlayer1 {
+    left: 0%;
+    top: 0%;
+}
+
+#oPlayer2 {
+    right: 0%;
+    top: 0%;
 }
 
 .otherHandCard {
     box-sizing: border-box;
     position: relative;
     float: left;
-    height: 100%;
-    width: 10%;
-    border: indigo solid 0.5rem;
+    height: 25%;
+    width: 33%;
+    border: indigo solid 0.1rem;
     border-radius: 0.3rem;
     background-color: rgb(34, 34, 34);
-    text-align: left;
-    font-size: 3rem;
-    margin-left: 0%;
+    text-align: center center;
+    font-size: 2rem;
     overflow: hidden;
 }
 
-.handCard:hover {
-    border: rgb(0, 217, 233) solid 0.5rem;
-}
-
-#otherTables {
+#outCardArea {
     position: absolute;
-    /* border: slategrey solid 0.5rem; */
-    width: 85%;
-    height: 25%;
-    left: 12%;
+    box-sizing: border-box;
+    border-top: white solid 0.5rem;
+    border-bottom: white solid 0.5rem;
+    width: 100%;
+    height: 12%;
+    left: 50%;
+    top: 35%;
+    transform: translate(-50%);
+    overflow: hidden;
 }
 
-#cupAdd {
+#outCardBord {
     position: absolute;
-    top: 95%;
-    left: 55%;
-    transform: translate(-50%, -50%);
-    width: 10%;
-    height: 5%;
-    background-color: indianred;
-    border: ivory solid 0.5rem;
+    box-sizing: border-box;
+    width: 648%;
+    height: 100%;
+    left: 0rem;
+    overflow-x: scroll;
+    overflow-y: hidden;
 }
 
-#cupAdd:hover {
-    border: steelblue solid 0.5rem;
+.outCard {
+    position: relative;
+    box-sizing: border-box;
+    float: left;
+    height: 100%;
+    width: 2.7%;
+    border: black solid 0.1rem;
 }
 
 .shitu {
     color: #FFDEAD;
     font-style: bold;
+    font-size: 2rem;
+    background-color: rgba(0, 0, 0, 0.493);
 }
 
 .yaoguai {
     color: #B22222;
     font-style: bold;
+    font-size: 2rem;
+    background-color: rgba(0, 0, 0, 0.493);
 }
 
 .fo {
     color: #FFD700;
     font-style: bold;
-}
-
-#cups{
-    position: absolute;
-    border: slategrey solid 0.5rem;
-    width: 15%;
-    height: 20%;
-    left: 12%;
-    top:30%;
-    border-radius: 0.5rem;
-    text-align: left;
-    font-size: large;
-}
-
-#newGuide{
-    position: absolute;
-    z-index: 1;
-    width: 100%;
-    height: 100%;
-    background-color: gray;
-    box-sizing: border-box;
-    border: green solid 0.5rem;
-    font-size: large;
-}
-
-#guideOver{
-    position: absolute;
-    background-color: green;
-    width: 20%;
-    height: 10%;
-    border: white solid 0.2rem;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%,-50%);
-}
-
-#guideOver:hover{
-    border: steelblue solid 0.2rem;
+    font-size: 2rem;
+    background-color: rgba(0, 0, 0, 0.493);
 }

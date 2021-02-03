@@ -1,17 +1,11 @@
 $(function () {
 
-    //判断是否宽屏
-    var winWide = window.screen.width;
-    // alert(winWide);
-    var wideScreen = false;
-    if (winWide <= 1024) {//1024及以下分辨率
-        $("#css").attr("href", "./public/css/index2.css");
-        // alert('小屏');
-    } else {
-        $("#css").attr("href", "./public/css/index.css");
-        // alert('大屏');
-        wideScreen = true; //是宽屏
-    }
+    let winWidth = window.screen.width;
+    let winHeight = window.screen.height;
+    let showWidth = 0;
+    let showHeight = 0;
+    let wideScreen = false;
+    const wh = 1.7;
 
 
     let isNew = true;
@@ -21,54 +15,132 @@ $(function () {
     let curCard = 0;
     sessionStorage.clear();
 
+    // 初始化适合屏幕的样式
+    function initScreen() {
+        //判断是否宽屏
+        let winWide = window.screen.width;
+        // alert(winWide);
+        wideScreen = false;
+        if (winWide <= 1024) {
+            //1024及以下分辨率
+            // 小屏幕 竖屏
+            $("#css").attr("href", "./public/css/index2.css");
+        } else {
+            // 大屏幕 横屏
+            $("#css").attr("href", "./public/css/index.css");
+            //是宽屏
+            wideScreen = true;
+        }
+
+        // 设置总背景块
+        if (wideScreen) {
+            showWidth = winHeight / wh;
+            showHeight = winHeight;
+        } else {
+            showWidth = winWidth;
+            showHeight = showWidth * wh
+        }
+
+        setBackBord(showWidth, showHeight);
+    }
+
+    // 根据屏幕设置背景板大小
+    function setBackBord(width, height) {
+        $('#backBord').css({
+            width: width + 'px',
+            height: height + 'px',
+        })
+    }
+
+    // 主函数
     function main() {
+        // 初始化屏幕
+        initScreen();
+
+        // 如果是新人则弹出提示
         if (isNew) {
             $('#newGuide').show();
             $('#guideOver').click(() => {
                 isNew = false;
+                startGame();
                 $('#newGuide').hide();
             })
         }
-        let originCards = createCards(everyTypeMax);
-        let sendResult = sendCards(playerNum, originCards);
 
-        sessionStorage.setItem('sendResult', JSON.stringify(sendResult));
-
-        let width = Math.floor(100 / (playerNum - 1));
-
-        for (let i = 1; i < sendResult.length; i++) {
-            let cards = toSecret(sendResult[i]);
-            let showCards = '';
-            for (let j = 0; j < cards.length; j++) {
-                let mLeft = -2;
-                if (!wideScreen) {
-                    mLeft = -0.1;
-                }
-                if (j == 0) {
-                    mLeft = 0;
-                }
-                showCards += `<div class="otherHandCard" style="margin-left: ` + mLeft + `%;">*</div>`
-            }
-
-            let str = `<div id="other` + i + `" class="ohterTable" style="width: ` + width + `%;">` + showCards + `</div>`
-            $('#otherTables').append(str);
-        }
-
-        showHandCards(sendResult[0]);
+        // 开始游戏
+        $('#sendCard').click(startGame);
     }
 
+    // 开始游戏
+    function startGame() {
+        // 新到的所有牌
+        let originCards = createCards(everyTypeMax);
+        // 新发的牌组
+        let sendResult = sendCards(playerNum, originCards);
+
+        // 保存牌组
+        sessionStorage.setItem('sendResult', JSON.stringify(sendResult));
+
+        givingCards(sendResult);
+    }
+
+    // 发牌动画
+    function givingCards(sendResult) {
+        let playerCards = sendResult[0];
+        let curGiveRoleSeq = 0;
+        let playerCurCard = 0;
+
+        updateMsg('开始发牌：')
+
+        let givingCard = setInterval(() => {
+            if (curGiveRoleSeq == 0) {
+                // 发玩家的
+                let card = playerCards[playerCurCard];
+                let curCardZH = getZH(card);
+                let str = `<div class="handCard" style="background:` + getImg(card) + `;background-size: 100% 100%;">` + curCardZH + `</div>`
+                $('#playerTable').append(str);
+                playerCurCard++;
+                curGiveRoleSeq = 1;
+            }
+            else if (curGiveRoleSeq == 1) {
+                // 发玩家1的
+                let str = `<div class="otherHandCard">*</div>`
+                $('#oPlayer1').append(str);
+                curGiveRoleSeq = 2;
+            }
+            else if (curGiveRoleSeq == 2) {
+                // 发玩家2的
+                let str = `<div class="otherHandCard">*</div>`
+                $('#oPlayer2').append(str);
+                curGiveRoleSeq = 0;
+            }
+            if (playerCurCard == playerCards.length && curGiveRoleSeq == 0) {
+                // 结束时间循环
+                clearInterval(givingCard);
+                $('.handCard').click(handCardClick);
+                $('#cupAdd').click(cupAdd)
+            }
+        }, 200)
+    }
+
+    // 计算每个玩家得到了什么牌
     function sendCards(playerNum, originCards) {
+        // 每个玩家的牌数
         let all = [];
+        // 总牌数
         let allCardsNum = originCards.length;
+        // 每人应发牌数
         let everyOneCardNum = Math.floor(allCardsNum / playerNum);
+        // 牌的序号
         let originCardSeq = 0;
+        // 重置每个人要喝的酒数量
         cups = [];
 
         for (let i = 0; i < playerNum; i++) {
             cups.push(0);
-            let str = '[player' + i + ' cup]:' + 0 + '<br>';;
+            let str = '[玩家' + i + '要喝酒杯数]:' + 0 + '<br>';
             if (i == 0) {
-                str = '[your cup]:' + 0 + '<br>';
+                str = '[你要喝酒杯数]:' + 0 + '<br>';
             }
             $('#cups').append(str)
             let playerCards = [];
@@ -79,11 +151,10 @@ $(function () {
             all.push(playerCards);
         }
 
-
-
         return all;
     }
 
+    // 创造卡牌池
     function createCards(everyTypeMax) {
         let roles = [3, 5, 8, 10, 11, 12, 13, 15, 16];
         let cards = [];
@@ -101,6 +172,7 @@ $(function () {
         return shuffle(cards);
     }
 
+    // 乱序
     function shuffle(arr) {
         for (let i = arr.length - 1; i >= 0; i--) {
             let rIndex = Math.floor(Math.random() * (i + 1));
@@ -111,14 +183,7 @@ $(function () {
         return arr;
     }
 
-    function toSecret(arr) {
-        let secretArr = [];
-        for (let i = 0; i < arr.length; i++) {
-            secretArr.push('*');
-        }
-        return secretArr;
-    }
-
+    // 通过牌数字获得中文
     function getZH(number) {
         let zh = '';
         switch (number) {
@@ -156,6 +221,7 @@ $(function () {
         return zh;
     }
 
+    // 通过中文获取数字
     function getNum(ZH) {
         let number = 0;
         switch (ZH) {
@@ -190,26 +256,63 @@ $(function () {
         return number;
     }
 
-    function showHandCards(arr) {
-        for (let i = 0; i < arr.length; i++) {
-            let curCardZH = getZH(arr[i]);
-            let mLeft = -2;
-            let str = `<div class="handCard" style="margin-left: ` + mLeft + `%;">` + curCardZH + `</div>`
-            $('#playerTable').append(str);
+    // 通过数字获取图片
+    function getImg(number) {
+        let imgUrl = '';
+        switch (number) {
+            case 3:
+                imgUrl = `url('./public/img/shitu_shaseng.jpg')`;
+                break;
+            case 5:
+                imgUrl = `url('./public/img/shitu_wukong.jpg')`;
+                break;
+            case 8:
+                imgUrl = `url('./public/img/shitu_bajie.jpg')`;
+                break;
+            case 10:
+                imgUrl = `url('./public/img/shitu_shifu.jpg')`;
+                break;
+            case 11:
+                imgUrl = `url('./public/img/yaoguai_hongmang.jpg')`;
+                break;
+            case 12:
+                imgUrl = `url('./public/img/yaoguai_shiziguai.jpg')`;
+                break;
+            case 13:
+                imgUrl = `url('./public/img/yaoguai_baigujing.jpg')`;
+                break;
+            case 15:
+                imgUrl = `url('./public/img/fo_guanyin.jpg')`;
+                break;
+            case 16:
+                imgUrl = `url('./public/img/fo_rulai.jpg')`;
+                break;
+            default:
+                imgUrl = '';
+                break;
         }
-        $('.handCard').click(handCardClick);
-        $('#cupAdd').click(cupAdd)
+        return imgUrl;
     }
 
+    // 喝一杯
     function cupAdd() {
         cups[0] += 1;
         curCard = 0;
-        updateMsg('your cup add!');
+        updateMsg('你喝了一杯！请出牌：');
         updateCups();
     }
 
+    // 出牌
+    let clicking = false;
     function handCardClick() {
+        if (clicking) {
+            return;
+        }
+        clicking = true;
+
+        // 手中有无可压制的牌
         let found = false;
+        // 玩家选中的手牌
         let clickCard = getNum($(this).text());
         if (curCard != 0) {
             let canAtk = rule(curCard);
@@ -223,7 +326,8 @@ $(function () {
         }
 
         if (!found) {
-            updateMsg('this card can not reAtk!');
+            clicking = false;
+            updateMsg('这张牌不能克制对方出的牌!');
             return;
         }
 
@@ -231,46 +335,63 @@ $(function () {
         if (curCard == 0 || found) {
             // console.log('click at ' + clickCard)
             $(this).hide();
-            updateMsg('you send ' + getZH(clickCard));
+            outCardAdd(clickCard);
+            updateMsg('你出了' + getZH(clickCard));
             deleteCard(0, clickCard, sendResult);
         }
 
         curCard = clickCard;
-        for (let i = 1; i < sendResult.length; i++) {
-            let robotCards = sendResult[i];
-            let robotResult = robotTurn(robotCards, curCard);
-            if (!robotResult.canAtk) {
-                updateMsg('player' + i + ' can not reAtk! cup one!');
-                cups[i] += 1;
-                curCard = robotCards[getRandom(0, robotCards.length - 1)];
-                deleteCard(i, curCard, sendResult)
-                updateMsg('player' + i + ' send ' + getZH(curCard) + '!');
-            } else {
-                curCard = robotResult.atkCard;
-                deleteCard(i, curCard, sendResult);
-                updateMsg('player' + i + ' can reAtk! he send ' + getZH(curCard));
+        // 其他玩家的操作
+        let i = 1;
+        let handleTime = setInterval(() => {
+            robotOption(i, sendResult);
+            i++;
+            if (i == 3) {
+                clicking = false;
+                clearInterval(handleTime);
+
+                updateCups();
+
+                // 判断是否游戏结束
+                if (gameOver()) {
+                    updateMsg('--------游戏结束--------');
+                    str = '游戏结束!<br>本局你要喝:' + cups[0] + '杯<br>';
+                    for (let i = 1; i < cups.length; i++) {
+                        str += '玩家' + i + '要喝:' + cups[i] + '杯<br>';
+                    }
+                    updateMsg(str);
+                }
             }
-        }
-
-        updateCups();
-
-        if (gameOver()) {
-            updateMsg('game over!');
-            str = 'game over!<br>your cup:' + cups[0] + '杯<br>';
-            for (let i = 1; i < cups.length; i++) {
-                str += 'player' + i + ' cup:' + cups[i] + '杯<br>';
-            }
-            updateMsg(str);
-        }
-
+        }, 1000)
     }
 
+    // 机器人操作
+    function robotOption(i, sendResult) {
+        let robotCards = sendResult[i];
+        let robotResult = robotTurn(robotCards, curCard);
+        if (!robotResult.canAtk) {
+            updateMsg('玩家' + i + '没有牌可以克制! 他选择喝一杯!');
+            cups[i] += 1;
+            curCard = robotCards[getRandom(0, robotCards.length - 1)];
+            deleteCard(i, curCard, sendResult)
+            outCardAdd(curCard);
+            updateMsg('玩家' + i + '出了' + getZH(curCard) + '来克制!');
+        } else {
+            curCard = robotResult.atkCard;
+            deleteCard(i, curCard, sendResult);
+            outCardAdd(curCard);
+            updateMsg('玩家' + i + '有牌克制! 他出了' + getZH(curCard));
+        }
+    }
+
+    // 更新消息板
     function updateMsg(text) {
         let msg = $('#msg').html();
         let str = text + '<br>';
         $('#msg').html(str + msg)
     }
 
+    // 返回机器人能否克制已经具体克制的牌
     function robotTurn(robotCards, playerSendCard) {
         let result = {
             canAtk: false,
@@ -283,7 +404,7 @@ $(function () {
                 if (robotCard == canCard) {
                     result.canAtk = true;
                     result.atkCard = robotCard;
-                    console.log('found!')
+                    // console.log('found!')
                     return result;
                 }
             }
@@ -292,6 +413,7 @@ $(function () {
         return result;
     }
 
+    // 根据规则，输入这张牌，返回可以克制的牌
     function rule(cardNumber) {
         let canResult = [];
         switch (cardNumber) {
@@ -330,7 +452,9 @@ $(function () {
         return canResult;
     }
 
+    // 删除牌 i是在发牌里的对象 0是玩家 1是玩家1 2是玩家2
     function deleteCard(i, cardNumber, sendResult) {
+        // 数据里删除
         let curCards = sendResult[i];
         let found = false;
         let newNumArr = [];
@@ -344,31 +468,21 @@ $(function () {
         sendResult[i] = newNumArr;
         sessionStorage.setItem('sendResult', JSON.stringify(sendResult));
 
+        // 其他玩家更新牌
         if (i != 0) {
-            $('#other' + i).empty();
-
-            let cards = toSecret(curCards);
-            // let cardsNum = cards.length;
-            // if (cards.length == 0) {
-            //     cardsNum = 1;
-            // }
-            // let width = Math.floor(parseInt($('#other' + i).css('width').split('px')[0]) / cardsNum);
-            // console.log(width)
-            for (let j = 0; j < cards.length - 1; j++) {
-                let mLeft = -2
-                if (j == 0) {
-                    mLeft = 0;
-                }
-
-                $('#other' + i).append(`<div class="otherHandCard" style="margin-left: ` + mLeft + `%;">*</div>`)
+            $('#oPlayer' + i).empty();
+            for (let j = 0; j < curCards.length - 1; j++) {
+                $('#oPlayer' + i).append(`<div class="otherHandCard">*</div>`)
             }
         }
     }
 
+    // 获取一个随机数
     function getRandom(min, max) {
         return min + Math.floor(Math.random() * (max - min + 1));
     }
 
+    // 是否游戏结束
     function gameOver() {
         let sendResult = JSON.parse(sessionStorage.getItem('sendResult'));
         let over = true;
@@ -381,15 +495,39 @@ $(function () {
         return over;
     }
 
+    // 更新喝的杯数
     function updateCups() {
         $('#cups').empty();
         for (let i = 0; i < cups.length; i++) {
-            let str = '[player' + i + ' cup]:' + cups[i] + '<br>';;
+            let str = '[玩家' + i + '要喝酒杯数]:' + cups[i] + '<br>';
             if (i == 0) {
-                str = '[your cup]:' + cups[i] + '<br>';
+                str = '[你要喝酒杯数]:' + cups[i] + '<br>';
             }
             $('#cups').append(str)
         }
+    }
+
+    // 出牌区加牌
+    function outCardAdd(cardNumber) {
+        let outCardNum = $('#outCardBord').children('div').length;
+        console.log(outCardNum)
+
+        if (outCardNum > 4) {
+            if (wideScreen) {
+                $('#outCardBord').css({
+                    left: -(9 * (outCardNum - 4)) + 'rem'
+                })
+            } else {
+                $('#outCardBord').css({
+                    left: -(6.5 * (outCardNum - 4)) + 'rem'
+                })
+            }
+            console.log('位移了')
+            console.log($('#outCardBord').css('left'))
+        }
+
+        let str = `<div class="outCard" style="background:` + getImg(cardNumber) + `;background-size: 100% 100%;"><span class="shitu">` + getZH(cardNumber) + `</span></div>`
+        $('#outCardBord').append(str);
     }
 
     main();
