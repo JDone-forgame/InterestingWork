@@ -34,8 +34,8 @@ $(function () {
 
         // 设置总背景块
         if (wideScreen) {
-            showWidth = winHeight / wh;
-            showHeight = winHeight;
+            showHeight = winHeight - 200;
+            showWidth = showHeight / wh;
         } else {
             showWidth = winWidth;
             showHeight = showWidth * wh
