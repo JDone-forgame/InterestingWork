@@ -375,7 +375,7 @@ $(function () {
             curCard = robotCards[getRandom(0, robotCards.length - 1)];
             deleteCard(i, curCard, sendResult)
             outCardAdd(curCard);
-            updateMsg('玩家' + i + '出了' + getZH(curCard) + '来克制!');
+            updateMsg('卡牌已重置，玩家' + i + '出了' + getZH(curCard) + '');
         } else {
             curCard = robotResult.atkCard;
             deleteCard(i, curCard, sendResult);
