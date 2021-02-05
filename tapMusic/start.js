@@ -18,7 +18,6 @@ http.createServer(function(req, res) {
             // 响应页面
             res.end(data)
         })
-
     }
     else if (pathname.indexOf('/public/') === 0) {
         fs.readFile('.' + pathname, function(err, data) {
