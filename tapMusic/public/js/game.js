@@ -43,6 +43,20 @@ $(function () {
 
         });
 
+        // 设置
+        $("#setting").click(() => {
+            $(".backgroundBord").animate({
+                left: "5%",
+                top: "-1%",
+                borderColor: "red",
+            }, 100, () => {
+                $(".backgroundBord").css({
+                    left: "0%",
+                    top: "0%",
+                    borderColor: "white",
+                })
+            });
+        })
     }
 
     // 主循环方法
