@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/public/css/tapMusic/index.css">
+    <script type="text/javascript" src="/public/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/public/js/tapMusic/game.js"></script>
+    <title>tapMusic</title>
+</head>
+
+<body>
+    <!-- 整体背景 -->
+    <div id="mainBGB" class="backgroundBord">
+        <div id="gameTitle" class="fullScreenBord">
+            <span class="gameTitle">TAP MUSIC</span>
+            <div id="startButton" class="startBtn">start</div>
+            <div id="exitButton" class="startBtn">exit</div>
+        </div>
+
+        <div id="menu">
+            <div id="cycleCD">
+                <div id="kong"></div>
+            </div>
+
+            <canvas id="songCanvas"></canvas>
+
+            <div id="chooseSong" class="menuBtn">
+                <span>选择歌曲</span>
+                <input type="file" name="" value="" id="musicFile">
+            </div>
+            <div id="setting" class="menuBtn" onclick="location.href = '/'">退出</div>
+
+            <div id="playOrPause" class="menuBtn">播放</div>
+
+            <div id="tip"></div>
+
+        </div>
+
+    </div>
+</body>
+
+</html>

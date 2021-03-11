@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/public/css/illusion/center.css">
+    <title>Illusion</title>
+</head>
+
+<script>
+    //关卡（页面）地址
+    var levelUrl;
+
+    // 菜单点击
+    function menuControl(state) {
+        var lC = document.getElementById("leftCon");
+        var lM = document.getElementById("leftMenu");
+        var mM = document.getElementById("menuMark");
+        // 关闭小菜单图标，显示大菜单
+        if (state === 1) {
+            lC.style.left = "-15rem";
+            setTimeout(function () {
+                mM.style.width = "100%";
+                lM.style.left = "-20rem";
+            }, 300);
+        }
+        // 关闭大菜单，显示小菜单图片
+        if (state === 0) {
+            lM.style.left = "-50rem";
+            setTimeout(function () {
+                mM.style.width = "0%";
+                lC.style.left = "0rem";
+            }, 300);
+        }
+        // 大菜单退出点击
+        if (state === 2) {
+            lM.style.left = "-50rem";
+            setTimeout(function () {
+                //跳转
+                window.location.href = '/public/html/illusion/start.html';
+            }, 300);
+        }
+        // 大菜单首页点击
+        if (state === 3) {
+            if (iframe.style.width == "0%") {
+                backClick();
+                openAndCloseMsg(1, "<p>已经在首页了！</p>");
+                return;
+            }
+            // iframe.style.display="none";
+            closeIframe();
+            menuControl(0);
+        }
+        // 大菜单设置点击
+        if (state === 4) {
+            lM.style.left = "-50rem";
+            setTimeout(function () {
+                //跳转
+                window.location.href = '/';
+            }, 300);
+        }
+
+    }
+
+
+    //关闭iframe
+    function closeIframe() {
+        var iframe = document.getElementById("iframe");
+        var iframeCon = document.getElementById("iframeCon");
+        iframe.style.width = "0%";
+        iframeCon.src = "";
+    }
+
+    //右方选项菜单点击
+    function rightTClick(num) {
+        if (levelUrl) {
+            if (levelUrl == "/public/html/illusion/levelPage/level" + num + ".html") {
+                openAndCloseMsg(1, "<p>请勿重复点击关卡！</p>");
+                return;
+            }
+        }
+        var prS = document.getElementById("preShow");
+        var start = document.getElementById("start");
+        prS.setAttribute('class', 'preShow');
+        setTimeout(function () {
+            levelUrl = "/public/html/illusion/levelPage/level" + num + ".html";
+            prS.style.background = "url(/public/img/illusion/level" + num + "PRE.jpg)";
+            prS.style.backgroundSize = "100% 100%";
+        }, 400)
+        setTimeout(function () {
+            start.style.display = "block";
+            prS.setAttribute('class', 'abc');
+        }, 800)
+    }
+
+    //开始点击
+    function startClick() {
+        var iframe = document.getElementById("iframe");
+        var iframeCon = document.getElementById("iframeCon");
+        // iframe.style.display="block";
+        iframe.style.width = "100%";
+        iframeCon.src = levelUrl;
+    }
+
+    //开关msg弹窗
+    function openAndCloseMsg(cho, msgT) {
+        var msg = document.getElementById('msg');
+        var msgCA = document.getElementById('msgConAdd');
+        msgCA.innerHTML = msgT;
+        if (cho === 0) {
+            msg.style.display = "none";
+        }
+        if (cho === 1) {
+            msg.style.display = "block";
+        }
+    }
+
+// onresize="openAndCloseMsg(1,'<p>推荐使用全屏体验！</p>')"
+</script>
+
+<body onresize="openAndCloseMsg(1,'<p>推荐使用全屏体验！</p>')">
+    <!-- 信息提示弹窗 -->
+    <div id=msg>
+        <div class=close onclick="openAndCloseMsg(0)">X</div>
+        <div id=msgCon>
+            <h1>提示</h1>
+            <div id="msgConAdd"></div>
+        </div>
+    </div>
+    <!-- 头部菜单 -->
+    <div id=head></div>
+    <div id=leftCon onclick="menuControl(1)">幻觉&nbsp;&nbsp;&nbsp;</div>
+    <div id=menuMark></div>
+    <div id=leftMenu>
+        <div id=close onclick="menuControl(0)">◀</div>
+        <div class="menuT lm1" onclick="menuControl(2)">首&emsp;&emsp;&emsp;页</div>
+        <div class="menuT lm2" >设&emsp;&emsp;&emsp;置</div>
+        <div class="menuT lm3">信&emsp;&emsp;&emsp;息</div>
+        <div class="menuT lm4" onclick="menuControl(4)">退&emsp;&emsp;&emsp;出</div>
+    </div>
+
+    <!-- 主显示区 -->
+    <div id=content>
+        <!-- 预览区 -->
+        <div id=leftShow>
+            <div id=preShowText>预览</div>
+            <div id=preCon>
+                <div id=preShow class=""></div>
+                <div id=start class="leftT" onclick="startClick()">开始</div>
+            </div>
+
+        </div>
+        <div id="iframe">
+            <iframe id="iframeCon" src="" frameborder="0" scrolling="No" leftmargin="0" topmargin="0"></iframe>
+        </div>
+        <div id=rightCon>
+            <div class="rightT" onclick="rightTClick(1)">第一关&emsp;感知错觉</div>
+            <div class="rightT" onclick="rightTClick(2)">第二关&emsp;程序猿错觉</div>
+            <div class="rightT" onclick="rightTClick(3)">第三关&emsp;人生三错觉</div>
+            <div class="rightT" onclick="rightTClick(99)">第N关&emsp;敬请期待</div>
+
+        </div>
+    </div>
+
+    <div id=nextPage>
+    </div>
+</body>
+
+</html>

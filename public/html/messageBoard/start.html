@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>首页</title>
+    <link rel="stylesheet" href="/public/css/messageBoard/start.css">
+</head>
+
+<script type="text/javascript">
+    function toUrl(url) {
+        window.location.href = url
+    }
+</script>
+
+<body>
+    <div id=title>&emsp;留言·首页</div>
+    <div id=textList>
+        <div id=writeLogBtn class=btn onclick="toUrl('/public/html/messageBoard/postLog.html')">发表留言</div>
+        <div id=exit class=btn onclick="toUrl('/')">退出留言</div>
+        <br> {{each comments}}
+        <div class=content>
+            <div id=deleteLogBtn class=btn onclick="toUrl('/deleteLog?id='+'{{$value.id}}')">删除留言</div>
+            <p><span style="font-size: 20px;"><strong>
+                        【{{$value.name}}】
+                    </strong></span>说：</p>
+            <p>&emsp;&emsp;{{$value.message}}</p>
+            <p style="text-align: right;"><span style="font-size: 15px;">发表于{{$value.dateTime}}&emsp;#{{$value.listId}}楼&emsp;&emsp;</span></p>
+        </div>
+        {{/each}}
+    </div>
+</body>
+
+</html>

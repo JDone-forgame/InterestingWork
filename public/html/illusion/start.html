@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/public/css/illusion/start.css">
+    <title>Illusion</title>
+</head>
+
+
+<script>
+    // 弹窗点击
+    function windowPageControl(state) {
+        var abD = document.getElementById('aboutDetail');
+        var abC = document.getElementById('aboutContent');
+        if (state === 1) {
+            setTimeout(function () {
+                abC.style.display = "block";
+            }, 400);
+            abD.style.width = "90rem";
+            abD.style.left = "20%";
+        }
+        if (state === 0) {
+            abC.style.display = "none";
+            abD.style.width = "0rem";
+            abD.style.left = "50%";
+        }
+    }
+
+    //开始点击
+    function startClick() {
+        var nP = document.getElementById('nextPage');
+        nP.style.top = "0rem";
+        nP.style.left = "0rem";
+        setTimeout(function () {
+            //跳转
+            window.location.href = 'center.html';
+        }, 750);
+    }
+
+</script>
+
+<body>
+    <div id=round1></div>
+    <div id=round2></div>
+    <div id=logoOut>
+        <div id=logo>错觉</div>
+        <div class="text t1">我超越了标准库!</div>
+        <div class="text t2">我比编译器聪明!</div>
+        <div class="text t3">代码没有Bug了!</div>
+        <div class="text t4">工作做完了！</div>
+    </div>
+    <div id=title>illusion</div>
+    <div id=content>
+        <div id=start class=word onclick="startClick()">开启</div>
+        <div id=about class=word onclick="windowPageControl(1)">关于</div>
+    </div>
+    <div id=aboutDetail>
+        <div class=close onclick="windowPageControl(0)">X</div>
+        <div id=aboutContent>
+            <h1>ABOUT-关于</h1>
+            <p>▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼</p>
+            <p>一天天感受错觉的日常。</p>
+            <p>目前开发版本1.1。</p>
+            <p>其实LOGO字并没有移动。</p>
+            <p>
+                <act>--------------------------------------------✈</act>
+            </p>
+            <p>开发中......</p>
+            <p>▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲</p>
+        </div>
+    </div>
+    <div id=footer>推荐使用全屏体验</div>
+    <div id=nextPage>
+        <iframe src="/public/html/illusion/center.html" frameborder="0" scrolling="No" leftmargin="0" topmargin="0"></iframe>
+    </div>
+</body>
+
+</html>

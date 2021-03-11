@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <title>2048</title>
+    <link rel="stylesheet" type="text/css" href="/public/css/2048/index.css">
+    <script type="text/javascript" src="/public/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/public/js/2048/game.js"></script>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="main">
+            <!-- 标题 -->
+            <div class="gameName">Simple-2048</div>
+            <!-- 最高分 -->
+            <div class="maxScore">最高分：
+                <span id="maxScore">2048</span>
+            </div>
+
+            <!-- 游戏主体 -->
+            <div class="gameBody">
+                <div class="row">
+                    <div class="item emptyItem x0y0" x="0" y="0"></div>
+                    <div class="item emptyItem x0y1" x="0" y="1"></div>
+                    <div class="item emptyItem x0y2" x="0" y="2"></div>
+                    <div class="item emptyItem x0y3" x="0" y="3"></div>
+                </div>
+                <div class="row">
+                    <div class="item emptyItem x1y0" x="1" y="0"></div>
+                    <div class="item emptyItem x1y1" x="1" y="1"></div>
+                    <div class="item emptyItem x1y2" x="1" y="2"></div>
+                    <div class="item emptyItem x1y3" x="1" y="3"></div>
+                </div>
+                <div class="row">
+                    <div class="item emptyItem x2y0" x="2" y="0"></div>
+                    <div class="item emptyItem x2y1" x="2" y="1"></div>
+                    <div class="item emptyItem x2y2" x="2" y="2"></div>
+                    <div class="item emptyItem x2y3" x="2" y="3"></div>
+                </div>
+                <div class="row">
+                    <div class="item emptyItem x3y0" x="3" y="0"></div>
+                    <div class="item emptyItem x3y1" x="3" y="1"></div>
+                    <div class="item emptyItem x3y2" x="3" y="2"></div>
+                    <div class="item emptyItem x3y3" x="3" y="3"></div>
+                </div>
+            </div>
+
+            <!-- 游戏提示 -->
+            <div class="gameRule">请按上、下、左、右键进行操作</div>
+            <!-- 分数 -->
+            <div class="scoreAndRefresh">
+                <div class="gameScore">得分：<span id="gameScore">0</span> 分</div>
+                <div class="btn btn-danger refreshBtn">重新开始</div>
+                <div class="btn btn-danger exitBtn" onclick="location.href = '/'">退出</div>
+            </div>
+
+            <!-- 信息提示弹窗 -->
+            <div id=msg>
+                <div class=close onclick="openAndCloseMsg(0)">X</div>
+                <div id=msgCon>
+                    <h1>2048:提示</h1>
+                    <p>GAME OVER!</p>
+                    <div class="msgCenterBtn refreshBtn">再玩一次</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

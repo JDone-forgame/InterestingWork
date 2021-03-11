@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/public/css/illusion/level.css">
+    <title>Document</title>
+</head>
+
+<script>
+    var nowID;
+
+    function leftChoClick(bordIdNum, InHTML) {
+        var bord = document.getElementById('bord' + bordIdNum);
+        nowID = bordIdNum + 1;
+        var preB = document.getElementById('preBord');
+        var preBC = document.getElementById('preBordCon');
+        bord.style.width = "0rem";
+        preB.style.width = "100%";
+        preBC.innerHTML = InHTML;
+        setTimeout(function () {
+            bord.style.display = "none";
+        }, 300);
+    }
+
+    function preChoClick() {
+        var bordId = 'bord' + nowID;
+        var preB = document.getElementById('preBord');
+        var preBC = document.getElementById('preBordCon');
+        if (bordId == "bord4") {
+            //最后返回时禁止按键操作
+            document.getElementById('pCho1').style.display = "none";
+
+            preBC.innerHTML = "<p>恭喜你，已经基本知道什么是错觉了！</p><p>两秒后返回主菜单！</p>";
+            setTimeout(function () {
+                preB.style.width = "0rem";
+                preBC.innerHTML = "";
+                // 通过控制最顶层页面
+                top.location.href = "/public/html/illusion/center.html";
+            }, 2000);
+        } else {
+            var bord = document.getElementById(bordId);
+            bord.style.display = "block";
+            setTimeout(function () {
+                bord.style.width = "100%";
+                preB.style.width = "0rem";
+            }, 100);
+        }
+    }
+</script>
+
+<body>
+    <div id=preBord>
+        <div id=preBordCon></div>
+        <div id=pCho1 class="chooseC" onclick="preChoClick()">确定</div>
+    </div>
+
+    <div id=bord1 class="bord">
+        <div id=moveDiv>错觉</div>
+        <div class=levelCon>｜错觉｜块的背景颜色是否发生了变化？</div>
+        <div class="Cho1 chooseC"
+            onclick="leftChoClick(1,'<p>其实没变哦！</p><p>这种现象被称为‘蒙克·怀特错觉’，最初被心理学家发现，简单来说则是，当你在判断一种颜色时，会被其他颜色干扰，干扰色的饱和度越高，视错觉越明显，所以，黑色、白色在作祟。</p>')">
+            变了</div>
+        <div class="Cho2 chooseC" onclick="leftChoClick(1,'<p>恭喜你，答对咯！</p>')">没变</div>
+    </div>
+
+    <div id=bord2 class="bord">
+        <img src="/public/img/illusion/level1bord2.jpg" alt="">
+        <div class=levelCon>该图中左右两边的路角度是否相同？</div>
+        <div class="Cho1 chooseC" onclick="leftChoClick(2,'<p>恭喜你，答对咯！</p>')">相同</div>
+        <div class="Cho2 chooseC"
+            onclick="leftChoClick(2,'<p>其实相同哦！</p><p>根据视觉经验，两平行线并然会在远端会合。而这个经验之所以会产生，是因为当事物离我们越远时，它在视网膜上的投影就会越小。</p>')">
+            不同</div>
+    </div>
+
+    <div id=bord3 class="bord">
+        <img src="/public/img/illusion/level1bord3.jpg" alt="">
+        <div class=levelCon>女子是向左转还是向右转？</div>
+        <div class="Cho1 chooseC"
+            onclick="leftChoClick(3,'<p>我们之所以有时会看到顺时针旋转、有时会看到逆时针旋转，是因为这张旋转图本身缺乏深度。因此，大脑在试图判读此图的空间深度时，就会主动帮我们补上深度。而在脑补的时候，有两种可能的空间深度补法，我们也就因此可能会看到两种转法。</p>')">
+            向左</div>
+        <div class="Cho2 chooseC"
+            onclick="leftChoClick(3,'<p>我们之所以有时会看到顺时针旋转、有时会看到逆时针旋转，是因为这张旋转图本身缺乏深度。因此，大脑在试图判读此图的空间深度时，就会主动帮我们补上深度。而在脑补的时候，有两种可能的空间深度补法，我们也就因此可能会看到两种转法。</p>')">
+            向右</div>
+        <div class="Cho3 chooseC" onclick="leftChoClick(3,'<p>恭喜你，答对咯！</p>')">无法判断</div>
+    </div>
+
+
+
+</body>
+
+</html>

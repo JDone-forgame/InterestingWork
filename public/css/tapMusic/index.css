@@ -1,0 +1,230 @@
+/* 引用字体 */
+
+@font-face {
+    font-family: mainFont;
+    src: url(../../font/xiangsu.ttf);
+}
+
+/* 隐藏滚动条 */
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+/* 控制整体rem标准 */
+
+html {
+    font-size: 10px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    user-select: none;
+    font-family: mainFont;
+    text-align: center;
+    /* transition: all 0.3s; */
+    color: white;
+}
+
+div {
+    position: absolute;
+    box-sizing: border-box;
+    transition: all 0.5s;
+}
+
+body {
+    background: black;
+}
+
+/* -------------------------------------- */
+
+.backgroundBord {
+    width: 100%;
+    height: 100%;
+    border: white 0.2rem solid;
+    overflow: hidden;
+}
+
+.fullScreenBord {
+    width: 100%;
+    height: 100%;
+    /* background: rgba(0, 0, 0, 0.5); */
+    background: black;
+    z-index: 2;
+}
+
+.fullScreenBord * {
+    transform: translate(-50%, -50%);
+    position: absolute;
+}
+
+.gameTitle {
+    top: 45%;
+    left: 50%;
+    font-size: 10rem;
+    width: 200%;
+    color: white;
+    background: rgba(0, 0, 0, 0.6);
+    border: white solid 0.1rem;
+    /* animation: gameTitle 1s cubic-bezier(0, 0, 0.75, 2) 0s 1 normal; */
+    animation: colorChange 2s linear 0s infinite alternate;
+}
+
+@keyframes colorChange {
+    0% {
+        color: white;
+        border-color: white;
+    }
+    25% {
+        color: #00BFFF;
+        border-color: #00BFFF;
+    }
+    50% {
+        color: #228B22;
+        border-color: #228B22;
+    }
+    75% {
+        color: #FFA500;
+        border-color: #FFA500;
+    }
+    100% {
+        color: #800080;
+        border-color: #800080;
+    }
+}
+
+.startBtn {
+    width: 18rem;
+    height: 5rem;
+    left: 50%;
+    line-height: 5rem;
+    font-size: 2rem;
+    border: solid white 0.1rem;
+}
+
+.startBtn:hover {
+    color: black;
+    background: white;
+}
+
+#startButton {
+    top: 65%;
+}
+
+#exitButton {
+    top: 75%;
+}
+
+#menu {
+    width: 100%;
+    height: 100%;
+    background: black;
+}
+
+#menu * {
+    transform: translate(-50%, -50%);
+    position: absolute;
+}
+
+#cycleCD {
+    width: 30rem;
+    height: 30rem;
+    border: white solid 0.2rem;
+    left: 50%;
+    top: 50%;
+    border-radius: 15rem;
+    /* animation: rotating 8s linear 0s infinite normal; */
+    background-image: url('../img/default.jpg');
+    background-size: 100% 100%;
+    box-shadow: 0 0 5rem white;
+    overflow: hidden;
+    z-index: 1;
+    transition: all 0s;
+}
+
+#songCanvas {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    /* z-index: -1; */
+    top: 50%;
+    left: 50%;
+    width: 56rem;
+    height: 30rem;
+    border-bottom: solid 0.1rem white;
+    animation: colorChange 2s linear 0s infinite alternate;
+}
+
+#kong {
+    width: 8rem;
+    height: 8rem;
+    border: white solid 0.2rem;
+    background-color: black;
+    left: 50%;
+    top: 50%;
+    border-radius: 4rem;
+    animation: colorChange 2s linear 0s infinite alternate;
+    z-index: 1;
+}
+
+@keyframes rotating {
+    0% {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+    100% {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+
+.menuBtn {
+    border: white solid 0.2rem;
+    border-radius: 0.4rem;
+    height: 6rem;
+    width: 6rem;
+    font-size: 1.2rem;
+    line-height: 6rem;
+}
+
+.menuBtn:hover {
+    box-shadow: 0 0 1rem 0.3rem white;
+}
+
+.menuBtn span {
+    left: 50%;
+    top: 50%;
+    width: 100%;
+    height: 100%;
+}
+
+#chooseSong {
+    top: 4rem;
+    left: 4rem;
+}
+
+#musicFile {
+    height: 100%;
+    width: 100%;
+    top: 50%;
+    left: 50%;
+    opacity: 0;
+}
+
+#setting {
+    top: 4rem;
+    left: 11rem;
+}
+
+#playOrPause {
+    top: 4rem;
+    right: -2rem;
+    display: none;
+}
+
+#tip {
+    border: solid white 0.2rem;
+    width: 50%;
+    height: 10%;
+    top: 90%;
+    left: 50%;
+    font-size: 1.5rem;
+}

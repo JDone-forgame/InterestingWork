@@ -1,0 +1,226 @@
+/* 引用字体 */
+
+@font-face {
+    font-family: sanjiguyuan;
+    src: url(../font/sanjiguyuan.ttf);
+}
+
+/* 隐藏滚动条 */
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+/* 控制整体rem标准 */
+
+html {
+    font-size: 10px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    user-select: none;
+    font-family: sanjiguyuan;
+    text-align: center;
+    transition: all 0.3s;
+    color: white;
+    overflow: hidden;
+}
+
+body {
+    background: black;
+}
+
+/* --------------------------------------------------------------------------------------------------------- */
+
+input {
+    outline-style: none;
+    border: none;
+    border-bottom: white 0.2rem solid;
+    background-color: black;
+    /* 设置高度*/
+    padding: 0.9rem 0rem;
+    width: 18rem;
+    color: white;
+    font-size: 1.8rem;
+    font-family: xiangsu;
+}
+
+input:focus {
+    border-color: #F0FFFF;
+    outline: 0;
+    -webkit-box-shadow: inset 0 0.1rem 0.1rem rgba(0, 0, 0, .075), 0 0 0.8rem #F0FFFF;
+    box-shadow: inset 0 0.1rem 0.1rem rgba(0, 0, 0, .075), 0 0 0.8rem #F0FFFF
+}
+
+/* --------------------------------------------------------------------------------------------------------- */
+
+.btn {
+    position: relative;
+    width: 15rem;
+    height: 5rem;
+    font-size: 2rem;
+    line-height: 5rem;
+    transform: translate(-50%, -50%);
+    background-color: black;
+    border: solid 0.2rem gainsboro;
+    color: white;
+    transition: all 0.3s;
+}
+
+.btn:hover {
+    background-color: white;
+    color: black;
+}
+
+/* --------------------------------------------------------------------------------------------------------- */
+
+.maxScreen {
+    position: absolute;
+    box-sizing: border-box;
+    border: #F0FFFF 1rem solid;
+    width: 100%;
+    height: 100%;
+}
+
+#menuDoor div {
+    /* box-sizing: border-box; */
+    position: absolute;
+    width: 50%;
+    height: 100%;
+    /* border: #26ebeb 0.1rem solid; */
+}
+
+#leftDoor {
+    left: 0%;
+    top: 100%;
+    background: gray;
+    animation: leftDoor 2s ease 0s 1 normal forwards;
+}
+
+#rightDoor {
+    right: 0%;
+    top: -100%;
+    background: gray;
+    animation: rightDoor 2s ease 0s 1 normal forwards;
+}
+
+@keyframes leftDoor {
+    0% {
+        top: 100%;
+    }
+    15% {
+        top: 0%;
+        transform: rotate(0deg);
+        width: 50%;
+        height: 100%;
+        left: 0%;
+        background: gray;
+    }
+    75% {
+        top: 0%;
+        transform: rotate(-360deg);
+        width: 200%;
+        height: 50%;
+        left: -50%;
+        background: white;
+    }
+    100% {
+        top: 0%;
+        transform: rotate(-360deg);
+        width: 200%;
+        height: 0%;
+        left: -50%;
+        background: white;
+    }
+}
+
+@keyframes rightDoor {
+    0% {
+        top: -100%;
+    }
+    15% {
+        top: 0%;
+        transform: rotate(0deg);
+        width: 50%;
+        height: 100%;
+        right: 0%;
+        background: gray;
+    }
+    75% {
+        top: 50%;
+        transform: rotate(-360deg);
+        width: 200%;
+        height: 50%;
+        right: -50%;
+        background: black;
+    }
+    100% {
+        top: 0%;
+        transform: rotate(-360deg);
+        width: 200%;
+        height: 100%;
+        right: -50%;
+        background: black;
+    }
+}
+
+#menu {
+    overflow: scroll;
+    opacity: 0;
+    animation: menu 0.5s ease-in 2s 1 normal forwards;
+}
+
+#menuTitle{
+    position: relative;
+    width: 100%;
+    height: 10%;
+    font-size: 2rem;
+}
+
+.menuLiBord {
+    position: relative;
+    float: left;
+    width: 100%;
+    height: 5rem;
+    margin-top: 1rem;
+}
+
+.menuLi {
+    position: absolute;
+    box-sizing: border-box;
+    transform: translate(-50%);
+    left: 60%;
+    width: 60%;
+    height: 100%;
+    font-size: 2rem;
+    line-height: 4rem;
+    background: black;
+    color: white;
+    border: #ffffff solid 0.2rem;
+}
+
+.menuLi:hover{
+    background: white;
+    color: black;
+}
+
+.menuLiIcon{
+    position: absolute;
+    box-sizing: border-box;
+    transform: translate(-50%);
+    left: 20%;
+    width: 5rem;
+    height: 5rem;
+    border-radius: 0.8rem;
+    border: #ffffff 0.1rem solid;
+}
+@keyframes menu {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}

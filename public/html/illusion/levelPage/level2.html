@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/public/css/illusion/level.css">
+    <title>Document</title>
+</head>
+
+
+
+<script>
+    var nowID;//控制不同页面显示与否
+    var grade = 0;//控制分数
+
+    function leftChoClick(bordIdNum,ansNum,InHTML){
+        var bord = document.getElementById('bord'+bordIdNum);
+        if(ansNum === 1){
+            grade = grade + 1;
+        }
+        nowID = bordIdNum+1;
+        var preB = document.getElementById('preBord');
+        var preBC = document.getElementById('preBordCon');
+        bord.style.width="0rem";
+        preB.style.width="100%";
+        preBC.innerHTML=InHTML;
+        setTimeout(function(){
+            bord.style.display="none";   
+        },300);
+    }
+
+    function preChoClick(){
+        var bordId = 'bord'+nowID;
+        var preB = document.getElementById('preBord');
+        var preBC = document.getElementById('preBordCon'); 
+        if(bordId == "bord9"){
+            //最后返回时禁止按键操作
+            document.getElementById('pCho1').style.display="none";
+
+            if(grade >= 0 && grade <= 3){
+                preBC.innerHTML="<p>恭喜你，了解完毕了程序猿错觉了！</p><p>评价：你非常没有B数！</p><p>五秒后返回主菜单！</p>"; 
+            }
+            if(grade > 3 && grade <= 6){
+                preBC.innerHTML="<p>恭喜你，了解完毕了程序猿错觉了！</p><p>评价：你挺自信哈！</p><p>五秒后返回主菜单！</p>"; 
+            }
+            if(grade > 6 && grade <= 8){
+                preBC.innerHTML="<p>恭喜你，了解完毕了程序猿错觉了！</p><p>评价：你要么不是程序猿要么就是太谦虚了！</p><p>五秒后返回主菜单！</p>"; 
+            }
+            
+            setTimeout(function(){
+            preB.style.width="0rem";
+            preBC.innerHTML=""; 
+            // 通过控制最顶层页面
+            top.location.href="/public/html/illusion/center.html";
+            },5000);
+        }else{
+            var bord = document.getElementById(bordId);
+            bord.style.display="block";
+            setTimeout(function(){
+                bord.style.width="100%";
+                preB.style.width="0rem";
+            },100);
+        }    
+    }
+</script>
+
+<body>
+    <div id=preBord>
+        <div id=preBordCon></div>
+        <div id=pCho1 class="chooseC" onclick="preChoClick()">确定</div>
+    </div>
+
+    <div id=bord1 class="bord">
+        <div class=levelCon>1，她喜欢我。</div>
+        <div class="Cho1 chooseC" onclick="leftChoClick(1,0,'<p>是个鬼！</p><p>这就是你的错觉！</p>')">是</div>
+        <div class="Cho2 chooseC" onclick="leftChoClick(1,1,'<p>还行，有点自知之明！</p>')">不是</div>
+    </div>
+
+    <div id=bord2 class="bord bordno">
+        <div class=levelCon>2，今天不加班！</div>
+        <div class="Cho1 chooseC" onclick="leftChoClick(2,1,'<p>回答对了，加班吧！无薪且算休假！</p>')">加班</div>
+        <div class="Cho2 chooseC" onclick="leftChoClick(2,0,'<p>想不加班？</p><p>明天去财务结一下工资。</p>')">不加</div>
+    </div>
+
+    <div id=bord3 class="bord bordno">
+        <div class=levelCon>3，Bug这下改好了。</div>
+        <div class="Cho1 chooseC" onclick="leftChoClick(3,0,'<p>你就是心里最没有B数的那个程序猿吧！</p>')">好了！</div>
+        <div class="Cho2 chooseC" onclick="leftChoClick(3,1,'<p>那还不再检查检查？</p>')">好了？</div>
+    </div>
+
+    <div id=bord4 class="bord bordno">
+        <div class=levelCon>4，我只修改一行代码，不会出问题的。</div>
+        <div class="Cho1 chooseC" onclick="leftChoClick(4,0,'<p>测试人员喊你过去一趟。</p>')">没问题</div>
+        <div class="Cho2 chooseC" onclick="leftChoClick(4,1,'<p>老实点就行。</p>')">再考虑考虑</div>
+    </div>
+
+    <div id=bord5 class="bord bordno">
+        <div class=levelCon>5，我以后将来会重构这段代码。</div>
+        <div class="Cho1 chooseC" onclick="leftChoClick(5,0,'<p>只要没BUG，你会改个鬼！</p>')">肯定会的</div>
+        <div class="Cho2 chooseC" onclick="leftChoClick(5,1,'<p>果然，心里还是有点B数的。</p>')">不会</div>
+    </div>
+
+    <div id=bord6 class="bord bordno">
+        <div class=levelCon>6，测试根本是多余的，有证明就可以了。</div>
+        <div class="Cho1 chooseC" onclick="leftChoClick(6,0,'<p>那个谁，测试又喊你了！</p>')">可以</div>
+        <div class="Cho2 chooseC" onclick="leftChoClick(6,1,'<p>乖乖交给测试，不然要测试干嘛。</p>')">不可以</div>
+    </div>
+
+    <div id=bord7 class="bord bordno">
+        <div class=levelCon>7，我精通XX语言！</div>
+        <div class="Cho1 chooseC" onclick="leftChoClick(7,0,'<p>那你来解决一下这个问题！</p>')">精通</div>
+        <div class="Cho2 chooseC" onclick="leftChoClick(7,1,'<p>年轻人嘛，要谦虚。</p>')">会一点</div>
+    </div>
+
+    <div id=bord8 class="bord bordno">
+        <div class=levelCon>8，我这周就能把这个做出来！</div>
+        <div class="Cho1 chooseC" onclick="leftChoClick(8,1,'<p>确实，作为甲方降低预期心里会舒服很多！</p>')">不太可能吧</div>
+        <div class="Cho2 chooseC" onclick="leftChoClick(8,0,'<p>永远不要相信程序猿的时间观念，都是鬼话。</p>')">必须的</div>
+    </div>
+
+</body>
+</html>
