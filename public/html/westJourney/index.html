@@ -6,12 +6,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- <link rel="stylesheet" type="text/css" href="./public/css/index.css"> -->
     <link href="/public/css/westJourney/index.css" id="css" rel="stylesheet" type="text/css" />
+    <!-- 通用的样式 -->
     <script type="text/javascript" src="/public/js/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/public/css/general.css">
+    <!-- 通用的js控制 -->
+    <script type="text/javascript" src="/public/js/general.js"></script>
     <script type="text/javascript" src="/public/js/westJourney/game.js"></script>
     <title>xyj</title>
 </head>
+<script>
+    // 添加控制按键
+    $(function () {
+        let addControl = `
+        <div class="control_back">
+            <div id="cBtn1" class="control_btn">
+                重新开始
+            </div>
+        </div>
+        `
+        $(".control_area").append(addControl);
+
+        $("#cBtn1").click(() => {
+            location.reload();
+        })
+
+        $(".control_msg_content").html('<p>师徒组：师傅>悟空>八戒>沙僧</p><p>妖怪组：大妖怪>中妖怪>小妖怪</p><p>佛组：佛祖>观音</p><p>妖怪打师傅，师傅压徒儿，观音谁都克，就是怕佛祖</p><p>没有合适牌了喝杯酒就好了</p>');
+    })
+</script>
 
 <body>
+    <div id="controlShow" hidden>show</div>
     <!-- 整体背景 -->
     <div id="backBord">
 
@@ -43,16 +67,6 @@
                     <span class="shitu"><span class="fo">观音</span></span>
                 </div> -->
             </div>
-        </div>
-
-        <!-- 引导 -->
-        <div id="newGuide">
-            <p>师徒组：师傅>悟空>八戒>沙僧</p>
-            <p>妖怪组：大妖怪>中妖怪>小妖怪</p>
-            <p>佛组：佛祖>观音</p>
-            <p>妖怪打师傅，师傅压徒儿，观音谁都克，就是怕佛祖</p>
-            <p>没有合适牌了喝杯酒就好了</p>
-            <div id="guideOver">我知道了</div>
         </div>
     </div>
 

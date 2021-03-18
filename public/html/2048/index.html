@@ -5,12 +5,36 @@
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
     <title>2048</title>
     <link rel="stylesheet" type="text/css" href="/public/css/2048/index.css">
+    <!-- 通用的样式 -->
     <script type="text/javascript" src="/public/js/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/public/css/general.css">
+    <!-- 通用的js控制 -->
+    <script type="text/javascript" src="/public/js/general.js"></script>
     <script type="text/javascript" src="/public/js/2048/game.js"></script>
 </head>
 
-<body>
+<script>
+    // 添加控制按键
+    $(function () {
+        let addControl = `
+        <div class="control_back">
+            <div id="cBtn1" class="control_btn refreshBtn">
+                重新开始
+            </div>
+        </div>
+        `
+        $(".control_area").append(addControl);
 
+        $("#cBtn1").click(() => {
+            location.reload();
+        })
+
+        $(".control_msg_content").html('请按上、下、左、右键进行操作');
+    })
+</script>
+
+<body>
+    <div id="controlShow" hidden>show</div>
     <div class="container">
         <div class="main">
             <!-- 标题 -->
@@ -48,13 +72,9 @@
                 </div>
             </div>
 
-            <!-- 游戏提示 -->
-            <div class="gameRule">请按上、下、左、右键进行操作</div>
             <!-- 分数 -->
             <div class="scoreAndRefresh">
                 <div class="gameScore">得分：<span id="gameScore">0</span> 分</div>
-                <div class="btn btn-danger refreshBtn">重新开始</div>
-                <div class="btn btn-danger exitBtn" onclick="location.href = '/'">退出</div>
             </div>
 
             <!-- 信息提示弹窗 -->

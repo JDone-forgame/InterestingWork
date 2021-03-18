@@ -6,27 +6,47 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>首页</title>
     <link rel="stylesheet" href="/public/css/messageBoard/start.css">
+
+    <!-- 通用的样式 -->
+    <script type="text/javascript" src="/public/js/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/public/css/general.css">
+    <!-- 通用的js控制 -->
+    <script type="text/javascript" src="/public/js/general.js"></script>
 </head>
 
 <script type="text/javascript">
     function toUrl(url) {
         window.location.href = url
     }
+
+    $(function(){
+        let addControl = `
+        <div class="control_back">
+            <div id="cBtn1" class="control_btn">
+                发表留言
+            </div>
+        </div>
+        `
+        $(".control_area").append(addControl);
+
+        $("#cBtn1").click(()=>{
+            toUrl('/public/html/messageBoard/postLog.html');
+        })
+
+        $(".control_msg_content").html('&emsp;&emsp;这是一个测试留言的页面，目前支持发布留言，永久记录留言，删除留言。后续可以尝试来做点权限删除，点击姓名跳转什么的。');
+    })
 </script>
 
 <body>
-    <div id=title>&emsp;留言·首页</div>
     <div id=textList>
-        <div id=writeLogBtn class=btn onclick="toUrl('/public/html/messageBoard/postLog.html')">发表留言</div>
-        <div id=exit class=btn onclick="toUrl('/')">退出留言</div>
         <br> {{each comments}}
         <div class=content>
-            <div id=deleteLogBtn class=btn onclick="toUrl('/deleteLog?id='+'{{$value.id}}')">删除留言</div>
-            <p><span style="font-size: 20px;"><strong>
+            <div id=deleteLogBtn class="gBtn btn" onclick="toUrl('/deleteLog?id='+'{{$value.id}}')">删除留言</div>
+            <p><span style="font-size: 2rem;"><strong>
                         【{{$value.name}}】
                     </strong></span>说：</p>
-            <p>&emsp;&emsp;{{$value.message}}</p>
-            <p style="text-align: right;"><span style="font-size: 15px;">发表于{{$value.dateTime}}&emsp;#{{$value.listId}}楼&emsp;&emsp;</span></p>
+            <p><span style="font-size: 1.5rem;">&emsp;&emsp;{{$value.message}}</span></p>
+            <div class="createTime">发表于{{$value.dateTime}}&emsp;#{{$value.listId}}楼</div>
         </div>
         {{/each}}
     </div>

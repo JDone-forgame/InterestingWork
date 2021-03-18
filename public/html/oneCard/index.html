@@ -5,12 +5,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="/public/css/oneCard/index.css">
+    <!-- 通用的样式 -->
     <script type="text/javascript" src="/public/js/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/public/css/general.css">
+    <!-- 通用的js控制 -->
+    <script type="text/javascript" src="/public/js/general.js"></script>
     <script type="text/javascript" src="/public/js/oneCard/game.js"></script>
-    <title>Document</title>
+    <title>抽卡</title>
 </head>
+<script>
+    // 添加控制按键
+    $(function () {
+        $(".control_msg_content").html('点击1600进行十连抽，点击卡牌即可翻看所抽的卡的稀有度，有保底');
+    })
+</script>
 
 <body>
+    <div id="controlShow" hidden>show</div>
     <!-- 文本展示 -->
     <div id=showText></div>
 
@@ -21,7 +32,6 @@
 
     <!-- 按键 -->
     <div id=getTen class="btn">1600</div>
-    <div id=exit class="btn" onclick="location.href = '/'">退出</div>
 </body>
 
 </html>

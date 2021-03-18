@@ -80,35 +80,8 @@ input:focus {
     box-sizing: border-box;
     border: white solid 10px;
     background-color: black;
-    z-index: 10;
+    z-index: 1;
     overflow: hidden;
-}
-
-#newGuide {
-    position: absolute;
-    z-index: 5;
-    background-color: black;
-    width: 100%;
-    height: 100%;
-    font-size: 2rem;
-}
-
-#guideOver {
-    position: absolute;
-    background-color: black;
-    width: 25%;
-    height: 5%;
-    font-size: 2.5rem;
-    border: white solid 0.2rem;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-}
-
-#guideOver:hover {
-    border: white solid 0.2rem;
-    color: black;
-    background-color: white;
 }
 
 .playerTable {

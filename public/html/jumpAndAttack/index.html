@@ -5,10 +5,65 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=\, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="/public/css/jumpAndAttack/index.css">
+    <!-- 通用的样式 -->
+    <script type="text/javascript" src="/public/js/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/public/css/general.css">
+    <!-- 通用的js控制 -->
+    <script type="text/javascript" src="/public/js/general.js"></script>
     <title>JumpAndAttack</title>
 </head>
 
 <script>
+    // 添加控制按键
+    $(function () {
+        let addControl = `
+        <div class="control_back">
+            <div id="cBtn1" class="control_btn">
+                重新开始
+            </div>
+        </div>
+        <div class="control_back">
+            <div id="cBtn2" class="control_btn cb_c">
+                关闭辅助
+            </div>
+        </div>
+        <div class="control_back">
+            <div id="cBtn3" class="control_btn">
+                作弊模式
+            </div>
+        </div>
+        `
+        $(".control_area").append(addControl);
+
+        $("#cBtn1").click(() => {
+            location.reload();
+        })
+        $("#cBtn2").click(() => {
+            if (isHelp) {
+                isHelp = false;
+                $("#cBtn2").text('关闭辅助');
+                $("#cBtn2").addClass('control_btn_choosed');
+            } else {
+                isHelp = true;
+                $("#cBtn2").text('开启辅助');
+                $("#cBtn2").removeClass('control_btn_choosed');
+            }
+        })
+        $("#cBtn3").click(() => {
+            if (isGod) {
+                isGod = false;
+                $("#cBtn3").removeClass('control_btn_choosed');
+            } else {
+                isGod = true;
+                $("#cBtn3").addClass('control_btn_choosed');
+            }
+        })
+
+
+        $("#cBtn2").addClass('control_btn_choosed')
+
+        $(".control_msg_content").html('<p>按J(攻击)或K(跳跃)开始游戏</p><p>按H关闭辅助模式,按R重新开始</p><p>或者使用下方屏幕按键</p><p>每跳一步加0.1秒</p>');
+    })
     // TOOD:后续改进方向
     // 1,可以设置块的颜色以及块的数字，使得一个块能被多点几次，增加错误率
     // 2,可以再加入血量进行操作容错
@@ -51,12 +106,10 @@
     function help() {
         if (isHelp == false) {
             isHelp = true
-            document.getElementById('help').style.color = "white"
             return
         }
         if (isHelp == true) {
             isHelp = false
-            document.getElementById('help').style.color = "green"
             return
         }
     }
@@ -86,12 +139,10 @@
     function god() {
         if (isGod == false) {
             isGod = true
-            document.getElementById('god').style.color = "green"
             return
         }
         if (isGod == true) {
             isGod = false
-            document.getElementById('god').style.color = "white"
             return
         }
     }
@@ -294,14 +345,9 @@
 </script>
 
 <body>
+    <div id="controlShow" hidden>show</div>
     <div id=score>0分</div>
     <div id=time>计时</div>
-    <div id=info>
-        <p>按J(攻击)或K(跳跃)开始游戏</p>
-        <p>按H关闭辅助模式,按R重新开始</p>
-        <p>或者使用下方屏幕按键</p>
-        <p>每跳一步加0.1秒</p>
-    </div>
 
     <!-- 信息提示弹窗 -->
     <div id=msg>
@@ -355,27 +401,6 @@
 
     </div>
 
-
-    <div id=option_area>
-        <div class=option_Dbtn>
-            <div class="option_btn" onclick="userOption('X')">J攻击</div>
-        </div>
-        <div class=option_Dbtn>
-            <div class="option_btn" onclick="userOption('O')">K跳跃</div>
-        </div>
-        <div class=option_Dbtn>
-            <div class="option_btn" onclick="location.reload()">R重新开始</div>
-        </div>
-        <div class=option_Dbtn>
-            <div id=help class="option_btn" onclick="help()">H关闭辅助</div>
-        </div>
-        <div class=option_Dbtn>
-            <div id=god class="option_btn" onclick="god()">G作弊模式</div>
-        </div>
-        <div class=option_Dbtn>
-            <div class="option_btn" onclick="location.href = '/'">退出</div>
-        </div>
-    </div>
 </body>
 
 </html>

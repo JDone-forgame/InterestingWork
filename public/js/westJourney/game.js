@@ -57,15 +57,15 @@ $(function () {
         // 初始化屏幕
         initScreen();
 
-        // 如果是新人则弹出提示
-        if (isNew) {
-            $('#newGuide').show();
-            $('#guideOver').click(() => {
-                isNew = false;
-                startGame();
-                $('#newGuide').hide();
-            })
-        }
+        // // 如果是新人则弹出提示
+        // if (isNew) {
+        //     $('#newGuide').show();
+        //     $('#guideOver').click(() => {
+        //         isNew = false;
+        //         startGame();
+        //         $('#newGuide').hide();
+        //     })
+        // }
 
         // 开始游戏
         $('#sendCard').click(startGame);

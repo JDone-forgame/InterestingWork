@@ -6,6 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>留言页面</title>
     <link rel="stylesheet" href="/public/css/messageBoard/start.css">
+
+    <!-- 通用的样式 -->
+    <script type="text/javascript" src="/public/js/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/public/css/general.css">
+    <!-- 通用的js控制 -->
+    <script type="text/javascript" src="/public/js/general.js"></script>
 </head>
 
 <script type="text/javascript">
@@ -16,24 +22,38 @@
     function onSubmit() {
         document.getElementById("form").submit()
     }
+
+    $(function(){
+        let addControl = `
+        <div class="control_back">
+            <div id="cBtn1" class="control_btn">
+                返回列表
+            </div>
+        </div>
+        `
+        $(".control_area").append(addControl);
+
+        $("#cBtn1").click(()=>{
+            toUrl('/messageBoard');
+        })
+        
+        $(".control_msg_content").html('&emsp;&emsp;这是一个测试留言的页面，目前支持发布留言，永久记录留言，删除留言。后续可以尝试来做点权限删除，点击姓名跳转什么的。');
+    })
 </script>
 
 <body>
-    <div id=title>&emsp;留言</div>
     <div id=textList>
         <form id="form" action="/sendLog" method="GET">
             <div class="nameInput">
-                <span style="font-size: 20px;">你的大名：</span>
-                <input type="text" name="name" required minlength="2" maxlength="10" placeholder="邮箱或名字">
+                <span style="font-size: 2rem;">你的大名：</span>
+                <input type="text" name="name" required minlength="2" maxlength="10" placeholder="邮箱或名字" autocomplete="off">
             </div>
             <div class="textInput">
-                <span style="font-size: 20px;">留言内容：</span><br>
+                <span style="font-size: 2rem;">留言内容：</span><br>
                 <textarea name="message" cols="25" rows="10" required minlength="5" maxlength="50"
                     placeholder="请填写你的留言"></textarea>
             </div>
-
-            <div id=confirmBtn class=btn onclick="onSubmit()">发表</div>
-            <div id=backBtn class=btn onclick="toUrl('/messageBoard')">返回</div>
+            <div id=confirmBtn class="gBtn" onclick="onSubmit()">发表</div>
         </form>
     </div>
 </body>

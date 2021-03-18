@@ -1,0 +1,248 @@
+/* 引用字体 */
+
+@font-face {
+    font-family: sanjiguyuan;
+    src: url(../font/sanjiguyuan.ttf);
+}
+
+/* 隐藏滚动条 */
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+/* 控制整体rem标准 */
+
+html {
+    font-size: 10px;
+}
+
+/* {
+    margin: 0;
+    padding: 0;
+    user-select: none;
+    font-family: sanjiguyuan;
+    text-align: center;
+    transition: all 0.3s;
+    color: white;
+    overflow: hidden;
+} */
+
+body {
+    background: black;
+}
+
+/*---控制区-----------------------------------------------------------*/
+
+.control_area {
+    position: absolute;
+    box-sizing: border-box;
+    left: 0%;
+    top: 0%;
+    border: 0.2rem solid white;
+    width: 15rem;
+    height: 4rem;
+    z-index: 10;
+    background-color: black;
+    border-bottom-right-radius: 4rem;
+    margin: 0;
+    padding: 0;
+    user-select: none;
+    font-family: sanjiguyuan;
+    transition: all 0.3s;
+    color: white;
+    overflow: hidden;
+    text-align: center;
+}
+
+/* .control_area:hover {
+    box-shadow: 0 0 2rem 1rem white;
+    height: 100%;
+} */
+
+.control_title {
+    float: left;
+    font-size: 2rem;
+    height: 4rem;
+    line-height: 3rem;
+    width: 100%;
+    background-color: white;
+    color: black;
+    margin: 0;
+    padding: 0;
+    user-select: none;
+    font-family: sanjiguyuan;
+    transition: all 0.3s;
+    overflow: hidden;
+}
+
+.control_title_ani:hover {
+    background-color: rgb(182, 182, 182);
+    color: rgb(255, 255, 255);
+}
+
+.control_board {
+    position: absolute;
+    width: 0%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.24);
+    z-index: 9;
+    transition: all 0.2s;
+    margin: 0;
+    padding: 0;
+    user-select: none;
+    font-family: sanjiguyuan;
+    transition: all 0.3s;
+    color: white;
+    overflow: hidden;
+}
+
+.control_back {
+    box-sizing: border-box;
+    border: 0.1rem solid black;
+    width: 100%;
+    height: 4rem;
+    font-size: 2rem;
+    line-height: 3rem;
+    float: left;
+    margin: 0;
+    padding: 0;
+    user-select: none;
+    font-family: sanjiguyuan;
+    transition: all 0.3s;
+    color: white;
+    overflow: hidden;
+}
+
+.control_btn {
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 70%;
+    height: 90%;
+    border-left: 0.2rem solid white;
+    border-right: 0.2rem solid white;
+    margin: 0;
+    padding: 0;
+    user-select: none;
+    font-family: sanjiguyuan;
+    transition: all 0.3s;
+    color: white;
+    overflow: hidden;
+}
+
+.control_btn_choosed{
+    height: 100%;
+    color: #228B22;
+    animation: cb_choosed 1s linear 0s infinite alternate;
+}
+
+@keyframes cb_choosed{
+    0%{
+        width: 70%;
+        box-shadow: 0 0 0.1rem 0.1rem #00FF00;
+    }
+    100%{
+        width: 90%;
+        box-shadow: 0 0 2rem 1rem #228B22;
+    }
+}
+
+.control_btn:hover {
+    box-shadow: 0 0 2rem 1rem rgb(255, 255, 255);
+    width: 90%;
+    height: 100%;
+}
+
+.control_msg_board {
+    position: absolute;
+    z-index: 9;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    left: 50%;
+    width: 0%;
+    height: 50%;
+    /* border: 0.2rem solid white; */
+    font-size: 2rem;
+    /* display: none; */
+    background-color: black;
+    margin: 0;
+    padding: 0;
+    user-select: none;
+    font-family: sanjiguyuan;
+    transition: all 0.3s;
+    color: white;
+    overflow: hidden;
+}
+
+.control_msg_bar {
+    position: relative;
+    width: 100%;
+    height: 3rem;
+    background-color: white;
+    margin: 0;
+    padding: 0;
+    user-select: none;
+    font-family: sanjiguyuan;
+    transition: all 0.3s;
+    color: white;
+    overflow: hidden;
+    text-align: center;
+}
+
+.control_msg_bar_btn{
+    position: relative;
+    float: right;
+    margin-right: 0.1rem;
+    top: 0.1rem;
+    width: 2.8rem;
+    height: 2.8rem;
+    border-radius: 1.4rem;
+    background-color: black;
+    margin: 0;
+    padding: 0;
+    user-select: none;
+    font-family: sanjiguyuan;
+    transition: all 0.3s;
+    color: white;
+    overflow: hidden;
+}
+
+.control_msg_bar_btn:hover{
+    background-color: gray;
+}
+
+.control_msg_content{
+    width: 100%;
+    height: auto;
+    text-align: left;
+    margin: 0;
+    padding: 0;
+    user-select: none;
+    font-family: sanjiguyuan;
+    transition: all 0.3s;
+    color: white;
+    overflow: hidden;
+}
+
+/*---通用区-----------------------------------------------------------*/
+.gBtn{
+    background-color: black;
+    border: 0.1rem solid white;
+    color: white;
+    margin: 0;
+    padding: 0;
+    user-select: none;
+    font-family: sanjiguyuan;
+    transition: all 0.3s;
+    overflow: hidden;
+    text-align: center;
+}
+
+.gBtn:hover{
+    color: black;
+    background-color: white;
+    /* border: 0.1rem solid black; */
+    box-shadow: 0 0 0.5rem 0.1rem white;
+}

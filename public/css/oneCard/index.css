@@ -149,12 +149,3 @@ textarea:focus {
 .getB {
     background-color: #87CEFA;
 }
-
-#exit{
-    position: absolute;
-    left: 50%;
-    top: 60%;
-    width: 10rem;
-    height: 5rem;
-    line-height: 5rem;
-}
