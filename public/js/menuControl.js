@@ -32,6 +32,14 @@ $(function () {
         window.location.href = '/public/html/tapMusic/index.html'
     })
 
+    $("#m9").click(() => {
+        window.location.href = '/public/html/marChess/index.html'
+    })
+
+    $("#m10").click(() => {
+        window.location.href = '/public/html/monopoly/index.html'
+    })
+
     $("#m99").click(() => {
         window.location.href = '/public/html/test.html'
     })

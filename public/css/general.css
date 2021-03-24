@@ -30,6 +30,8 @@ html {
 
 body {
     background: black;
+    margin: 0;
+    padding: 0;
 }
 
 /*---控制区-----------------------------------------------------------*/
@@ -132,18 +134,18 @@ body {
     overflow: hidden;
 }
 
-.control_btn_choosed{
+.control_btn_choosed {
     height: 100%;
     color: #228B22;
     animation: cb_choosed 1s linear 0s infinite alternate;
 }
 
-@keyframes cb_choosed{
-    0%{
+@keyframes cb_choosed {
+    0% {
         width: 70%;
         box-shadow: 0 0 0.1rem 0.1rem #00FF00;
     }
-    100%{
+    100% {
         width: 90%;
         box-shadow: 0 0 2rem 1rem #228B22;
     }
@@ -191,7 +193,7 @@ body {
     text-align: center;
 }
 
-.control_msg_bar_btn{
+.control_msg_bar_btn {
     position: relative;
     float: right;
     margin-right: 0.1rem;
@@ -209,11 +211,11 @@ body {
     overflow: hidden;
 }
 
-.control_msg_bar_btn:hover{
+.control_msg_bar_btn:hover {
     background-color: gray;
 }
 
-.control_msg_content{
+.control_msg_content {
     width: 100%;
     height: auto;
     text-align: left;
@@ -227,7 +229,8 @@ body {
 }
 
 /*---通用区-----------------------------------------------------------*/
-.gBtn{
+
+.gBtn {
     background-color: black;
     border: 0.1rem solid white;
     color: white;
@@ -240,7 +243,7 @@ body {
     text-align: center;
 }
 
-.gBtn:hover{
+.gBtn:hover {
     color: black;
     background-color: white;
     /* border: 0.1rem solid black; */

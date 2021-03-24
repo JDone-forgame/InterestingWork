@@ -1,0 +1,233 @@
+/* 引用字体 */
+
+@font-face {
+    font-family: xiangsu;
+    src: url(../../font/xiangsu.ttf);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    user-select: none;
+    font-family: xiangsu;
+    transition: all 0.5s;
+    overflow: hidden;
+    color: white;
+    text-align: center;
+}
+
+.road_li {
+    position: absolute;
+    height: 5rem;
+    width: 25rem;
+    background-color: rgb(37, 37, 37);
+    /* border: 0.1rem solid white; */
+}
+
+#roadLi1 {
+    top: 15rem;
+    left: 20rem;
+}
+
+#roadLi2 {
+    top: 40rem;
+    left: 15rem;
+    transform: rotate(90deg);
+    transform-origin: right bottom;
+}
+
+#roadLi3 {
+    top: 40rem;
+    left: 15rem;
+    transform: rotate(180deg);
+}
+
+#roadLi4 {
+    top: 40rem;
+    left: 15rem;
+    transform: rotate(270deg);
+    transform-origin: left top;
+}
+
+.building {
+    position: relative;
+    float: left;
+    box-sizing: border-box;
+    border: 0.1rem solid white;
+    width: 5rem;
+    height: 5rem;
+    font-size: 2rem;
+    line-height: 5rem;
+}
+
+#map {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 65rem;
+    height: 65rem;
+    border: solid white 0.1rem;
+    transform: rotateX(50deg) rotateZ(45deg);
+}
+
+#touzi {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    left: 50%;
+    width: 8rem;
+    height: 8rem;
+    /* border: 0.1rem solid white; */
+}
+
+#touzi img {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.inThisBuilding {
+    border: solid 0.3rem #228b22;
+    color: black;
+    background-color: white;
+}
+
+.upBuilding {
+    background-color: #228b22;
+}
+
+#roll {
+    position: absolute;
+    top: 65rem;
+    left: 27.5rem;
+    width: 10rem;
+    height: 5rem;
+    line-height: 5rem;
+    font-size: 3rem;
+}
+
+#diceCount {
+    position: absolute;
+    top: 70rem;
+    left: 27.5rem;
+    width: 10rem;
+    height: 5rem;
+    line-height: 5rem;
+    font-size: 1.5rem;
+}
+
+.mInfo {
+    position: absolute;
+    left: 0rem;
+    width: 10rem;
+    height: 3rem;
+    line-height: 3rem;
+    font-size: 1.5rem;
+    border: solid 0.1rem white;
+    overflow: visible;
+}
+
+#diamondArea {
+    top: 6.5rem;
+}
+
+#coinArea {
+    top: 10rem;
+}
+
+#diamond {
+    color: blueviolet;
+}
+
+#coin {
+    color: rgb(196, 166, 0);
+}
+
+#peopleNumArea {
+    top: 13.5rem;
+}
+
+#cityLevel {
+    top: 17rem;
+    color: white;
+    font-size: 2.5rem;
+}
+
+#coin, #peopleNum, #diamond {
+    text-align: left;
+}
+
+#addCoin, #addPeople, #addDiamond {
+    position: absolute;
+    left: 10.5rem;
+    top: 0rem;
+    color: green;
+}
+
+#buildingDetail {
+    position: absolute;
+    background-color: rgb(46, 46, 46);
+    border: 0.1rem solid white;
+    border-radius: 1rem;
+    top: 15rem;
+    left: 17.5rem;
+    height: 30rem;
+    width: 30rem;
+    display: none;
+}
+
+.bBtn {
+    position: absolute;
+    bottom: 0.5rem;
+    width: 5rem;
+    height: 3rem;
+    line-height: 3rem;
+    font-size: 2rem;
+    border-radius: 0.2rem;
+}
+
+#upBuildingLevel {
+    left: 1rem;
+}
+
+#closeDetail {
+    right: 1rem;
+}
+
+#buildingInfo {
+    color: white;
+    font-size: 3rem;
+}
+
+#tip {
+    position: absolute;
+    width: 100%;
+    top: 20rem;
+    color: red;
+    font-size: 2rem;
+}
+
+.build_vault {
+    border-color: gold;
+    color: gold;
+}
+
+.build_ktv {
+    border-color: rgb(0, 75, 238);
+    color: rgb(0, 75, 238);
+}
+
+.build_foodStreet {
+    border-color: rgb(0, 221, 48);
+    color: rgb(0, 221, 48);
+}
+
+.build_skyscraper {
+    border-color: rgb(151, 0, 197);
+    color: rgb(151, 0, 197);
+}
+
+.build_shower {
+    border-color: rgb(0, 88, 19);
+    color: rgb(0, 88, 19);
+}

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 页面的样式 -->
+    <link rel="stylesheet" type="text/css" href="/public/css/monopoly/index.css">
+    <!-- 通用的样式 -->
+    <script type="text/javascript" src="/public/js/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/public/css/general.css">
+    <!-- 通用的js控制 -->
+    <script type="text/javascript" src="/public/js/general.js"></script>
+    <script type="text/javascript" src="/public/js/monopoly/game.js"></script>
+    <title>大富翁</title>
+</head>
+
+<body>
+    <div id="controlShow" hidden>show</div>
+    
+    <div id="diamondArea" class="mInfo">
+        <div id="diamond">钻石:0</div>
+        <div id="addDiamond"></div>
+    </div>
+    <div id="coinArea" class="mInfo">
+        <div id="coin">金币:150</div>
+        <div id="addCoin"></div>
+    </div>
+    <div id="peopleNumArea" class="mInfo">
+        <div id="peopleNum">人口:20</div>
+        <div id="addPeople"></div>
+    </div>
+    <div id="cityLevel" class="mInfo">新手村</div>
+
+    <div id="map">
+        <div id="roadLi1" class="road_li">
+        </div>
+        <div id="roadLi2" class="road_li">
+        </div>
+        <div id="roadLi3" class="road_li">
+        </div>
+        <div id="roadLi4" class="road_li">
+        </div>
+        <div id="touzi">
+        </div>
+    </div>
+
+    <div id="roll" class="gBtn">掷骰子</div>
+    <div id="diceCount">次数:99</div>
+
+    <div id="buildingDetail">
+        <div id="buildingInfo">
+        </div>
+        <div id="tip"></div>
+        <div id="upBuildingLevel" class="gBtn bBtn">升级建筑</div>
+        <div id="closeDetail" class="gBtn bBtn">关闭</div>
+    </div>
+</body>
+
+</html>

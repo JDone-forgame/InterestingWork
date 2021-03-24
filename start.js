@@ -30,7 +30,6 @@ http.createServer(function (req, res) {
     // 获取公共资源
     else if (pathname.indexOf('/public/') === 0) {
         fs.readFile('.' + pathname, function (err, data) {
-            console.log('.' + pathname)
             if (err) { return res.end('code:' + errorCode.not_found_public_res) }
             res.end(data)
         })
@@ -179,7 +178,7 @@ http.createServer(function (req, res) {
 })
 
 
-Date.prototype.Format = function(fmt) { // author: meizz
+Date.prototype.Format = function (fmt) { // author: meizz
     var o = {
         "M+": this.getMonth() + 1, // 月份
         "d+": this.getDate(), // 日

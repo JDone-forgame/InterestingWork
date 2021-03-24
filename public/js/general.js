@@ -59,6 +59,7 @@ $(function () {
 
     // 点击关闭菜单的动画
     function closeMenuAnim() {
+        closeMsgBoard();
         $(".control_area").css({
             boxShadow: '0 0 0rem 0rem white',
             height: '4rem',
@@ -75,6 +76,7 @@ $(function () {
     }
 
     function closeMsgBoard() {
+        $(".control_msg_content").text('');
         $("#control_msg").removeClass('control_btn_choosed');
         $(".control_msg_board").css('width', '0%');
     }
@@ -84,13 +86,6 @@ $(function () {
         location.href = '/';
     })
 
-    // 按键选择状态
-    function chooseBtnAnim(id) {
-        $("#" + id).addClass('control_btn_choosed');
-    }
-    function dropBtnAnim(id) {
-        $("#" + id).removeClass('control_btn_choosed');
-    }
-
 })
+
 

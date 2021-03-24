@@ -12,12 +12,77 @@
     <link rel="stylesheet" type="text/css" href="/public/css/general.css">
     <!-- 通用的js控制 -->
     <script type="text/javascript" src="/public/js/general.js"></script>
+
+    <script type="text/javascript" src="/public/js/generalJs.js"></script>
     <title>test</title>
 </head>
 
+<script>
+    let isHelp = true;
+    let isGod = false;
+
+    // 添加控制按键
+    $(function () {
+        // 按键选择状态
+        function chooseBtnAnim(id) {
+            $("#" + id).addClass('control_btn_choosed');
+        }
+        function dropBtnAnim(id) {
+            $("#" + id).removeClass('control_btn_choosed');
+        }
+
+        let addControl = `
+        <div class="control_back">
+            <div id="cBtn1" class="control_btn">
+                重新开始
+            </div>
+        </div>
+        <div class="control_back">
+            <div id="cBtn2" class="control_btn cb_c">
+                关闭辅助
+            </div>
+        </div>
+        <div class="control_back">
+            <div id="cBtn3" class="control_btn">
+                作弊模式
+            </div>
+        </div>
+        `
+        $(".control_area").append(addControl);
+
+        $("#cBtn1").click(() => {
+            location.reload();
+        })
+        $("#cBtn2").click(() => {
+            if (isHelp) {
+                isHelp = false;
+                $("#cBtn2").text('关闭辅助');
+                chooseBtnAnim('cBtn2');
+            } else {
+                isHelp = true;
+                $("#cBtn2").text('开启辅助');
+                dropBtnAnim('cBtn2');
+            }
+        })
+        $("#cBtn3").click(() => {
+            if (isGod) {
+                isGod = false;
+                dropBtnAnim('cBtn3');
+            } else {
+                isGod = true;
+                chooseBtnAnim('cBtn3');
+            }
+        })
+
+        chooseBtnAnim('cBtn2');
+
+        $(".control_msg_content").html('<p>按J(攻击)或K(跳跃)开始游戏</p><p>按H关闭辅助模式,按R重新开始</p><p>或者使用下方屏幕按键</p><p>每跳一步加0.1秒</p>');
+    })
+</script>
+
 <body>
 
-    <!-- <div id="controlShow" hidden>show</div> -->
+    <div id="controlShow" hidden>show</div>
 
     <!-- --------------------------------------------------- -->
     <!-- 控制区域 -->

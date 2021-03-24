@@ -1,0 +1,105 @@
+/* 引用字体 */
+
+@font-face {
+    font-family: xiangsu;
+    src: url(../../font/xiangsu.ttf);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    user-select: none;
+    font-family: xiangsu;
+    transition: all 0.5s;
+    overflow: hidden;
+}
+
+#chessBoard {
+    position: absolute;
+    top: 5rem;
+    left: 2rem;
+    ;
+    width: 60rem;
+    height: 60rem;
+    border: 0.3rem solid white;
+}
+
+.chess_block_board {
+    position: relative;
+    float: left;
+    box-sizing: border-box;
+    /* border: 0.1rem white solid; */
+    width: 5rem;
+    height: 5rem;
+    text-align: center;
+    line-height: 5rem;
+    color: white;
+    font-size: 2rem;
+    /* background-color: gray; */
+}
+
+.chess_block {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    left: 50%;
+    top: 50%;
+    height: 50%;
+    border: 0.1rem solid white;
+    width: 80%;
+    height: 80%;
+    /* background-color: black; */
+    transition: all 0.15s;
+}
+
+.chess_block:hover {
+    animation: blockHover 0.4s linear 0s infinite alternate;
+}
+
+.chess_block_choose {
+    border: #228B22 solid 0.3rem;
+    animation: blockChoosed 0.5s linear 0s infinite alternate;
+}
+
+.chess_block_choose_move_area {
+    border: #39eb39 solid 0.3rem;
+    animation: blockChoosed 0.5s linear 0s infinite alternate;
+}
+
+.chess_block_choose_act_area {
+    border: #ff0000 solid 0.3rem;
+    animation: blockChoosed 0.5s linear 0s infinite alternate;
+}
+
+@keyframes blockChoosed {
+    0% {}
+    100% {
+        border: #0c350cb2 solid 0.3rem;
+    }
+}
+
+.chess_block_cavalry {
+    background-color: rgb(34, 15, 15);
+}
+
+.chess_block_marines{
+    background-color: rgb(218, 44, 0);
+}
+
+.chess_block_halberdier{
+    background-color: rgb(98, 0, 255);
+}
+
+@keyframes blockHover {
+    0% {
+        /* background-color: black; */
+        width: 80%;
+        height: 80%;
+        box-shadow: 0 0 0.1rem 0.1rem #00FF00;
+    }
+    100% {
+        background-color: rgb(255, 255, 255);
+        width: 95%;
+        height: 95%;
+        box-shadow: 0 0 2rem 1rem #228B22;
+    }
+}
