@@ -40,6 +40,10 @@ $(function () {
         window.location.href = '/public/html/monopoly/index.html'
     })
 
+    $("#m11").click(() => {
+        window.location.href = '/public/html/museum/index.html'
+    })
+
     $("#m99").click(() => {
         window.location.href = '/public/html/test.html'
     })

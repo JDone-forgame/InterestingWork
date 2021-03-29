@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 页面的样式 -->
+    <link rel="stylesheet" type="text/css" href="/public/css/museum/index.css">
+    <!-- 通用的样式 -->
+    <script type="text/javascript" src="/public/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/public/js/general.js"></script>
+    <link rel="stylesheet" type="text/css" href="/public/css/general.css">
+
+    <title>museum</title>
+</head>
+
+<script>
+    function allowDrop(ev) {
+        ev.preventDefault();
+    }
+
+    function drag(ev) {
+        ev.dataTransfer.setData("itemId", ev.target.id);
+    }
+
+    function drop(ev) {
+        var data = ev.dataTransfer.getData("itemId");
+        ev.target.appendChild(document.getElementById(data));
+        ev.preventDefault();
+    }
+
+    $(function () {
+        $(".widthBoard").mousedown(function (mouseDown) {
+            // 鼠标按下的 x 坐标
+            let divDownLeft = mouseDown.clientX;
+            // 待移动元素此时的 left 值
+            let divOrigLeft = parseInt($('.widthBoard').css('left').split('px')[0]);
+
+            $(this).mousemove(function (mouseMove) {
+                // 鼠标此时所在的 x 坐标
+                let divMoveLeft = mouseMove.clientX;
+                // 此时待移动元素应该的 left 值
+                let curDivLeft = (divMoveLeft - divDownLeft) + divOrigLeft;
+
+                // 防止左边留白
+                if (curDivLeft > 0) {
+                    curDivLeft = 0;
+                }
+
+                $('.widthBoard').css('left', curDivLeft + 'px');
+            });
+
+            $(this).mouseup(function (mouseUp) {
+                $(this).unbind('mousemove');
+            })
+        })
+
+    })
+
+</script>
+
+<body>
+
+    <div id="allItemsBoard" class="ItemArea">
+        <div class="widthBoard">
+            <div class="itemBoard">
+                <div id="i1001" class="item" draggable="true" ondragstart="drag(event)">card1</div>
+            </div>
+            <div class="itemBoard">
+                <div id="i1002" class="item" draggable="true" ondragstart="drag(event)">card2</div>
+            </div>
+            <div class="itemBoard">
+                <div id="i1003" class="item" draggable="true" ondragstart="drag(event)">card3</div>
+            </div>
+            <div class="itemBoard">
+                <div id="i1004" class="item" draggable="true" ondragstart="drag(event)">card4</div>
+            </div>
+            <div class="itemBoard">
+
+            </div>
+            <div class="itemBoard">
+
+            </div>
+            <div class="itemBoard">
+
+            </div>
+            <div class="itemBoard">
+
+            </div>
+            <div class="itemBoard">
+
+            </div>
+            <div class="itemBoard">
+
+            </div>
+            <div class="itemBoard">
+
+            </div>
+            <div class="itemBoard">
+
+            </div>
+            <div class="itemBoard">
+
+            </div>
+        </div>
+    </div>
+
+    <div id="basketBoard" class="ItemArea">
+        <div class="itemBoard" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+        <div class="itemBoard" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+        <div class="itemBoard" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+        <div class="itemBoard" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+        <div class="itemBoard" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+        <div class="itemBoard" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+        <div class="itemBoard" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+        <div class="itemBoard" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+        <div class="itemBoard" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+        <div class="itemBoard" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+    </div>
+
+</body>
+
+</html>

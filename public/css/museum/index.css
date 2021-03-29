@@ -1,0 +1,54 @@
+body {
+    overflow: hidden;
+}
+
+#allItemsBoard {
+    top: 30%;
+}
+
+#basketBoard {
+    top: 70%;
+}
+
+.ItemArea {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    left: 50%;
+    width: 80%;
+    height: 35%;
+    border: 0.2rem solid white;
+    background-color: black;
+    overflow-x: hidden;
+    /* white-space:nowrap; */
+}
+
+.widthBoard{
+    position: absolute;
+    height: 100%;
+    width: 300%;
+    overflow-y: hidden;
+    overflow-x: scroll;
+}
+
+.itemBoard {
+    position: relative;
+    float: left;
+    box-sizing: border-box;
+    width: 7rem;
+    height: 100%;
+    border: 0.1rem solid white;
+    background-color: rgb(29, 29, 29);
+}
+
+.item {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    left: 50%;
+    top: 50%;
+    height: 5rem;
+    width: 5rem;
+    background-color: green;
+    text-align: center;
+    color:white;
+    line-height: 5rem;
+}

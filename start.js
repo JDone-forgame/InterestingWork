@@ -3,6 +3,7 @@ let fs = require('fs')
 let url = require('url')
 var template = require('art-template')
 let errorCode = require('./public/js/errorCode').ErrorCode
+let monopoly = require('./public/js/monopoly/gameServe');
 
 // ! ip 和 端口
 let host = '10.0.0.180';
@@ -165,6 +166,22 @@ http.createServer(function (req, res) {
 
         })
     }
+
+    // // 大富翁的请求
+    // else if (pathname.indexOf('/monopoly/') === 0) {
+    //     let origParam = parseObj.query;
+    //     let param = new Map();
+    //     for (let key in origParam) {
+    //         if (key != '_') {
+    //             param.set(key, origParam[key]);
+    //         }
+    //     }
+    //     monopoly.monopoly.urlToFunction(pathname, param).then((ret) => {
+    //         console.log(ret);
+    //         res.end(JSON.stringify(ret));
+    //     }
+    //     );
+    // }
 
     // 未定义路由
     else {

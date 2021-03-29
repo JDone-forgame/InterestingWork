@@ -68,6 +68,7 @@
     height: 65rem;
     border: solid white 0.1rem;
     transform: rotateX(50deg) rotateZ(45deg);
+    background-color: 	#696969;
 }
 
 #touzi {
@@ -96,24 +97,42 @@
     background-color: #228b22;
 }
 
-#roll {
+.diceArea {
     position: absolute;
-    top: 65rem;
-    left: 27.5rem;
+    transform: translate(-50%);
+    left: 32.5rem;
     width: 10rem;
     height: 5rem;
     line-height: 5rem;
     font-size: 3rem;
 }
 
+#roll {
+    top: 65rem;
+    font-size: 3rem;
+}
+
 #diceCount {
-    position: absolute;
     top: 70rem;
-    left: 27.5rem;
-    width: 10rem;
-    height: 5rem;
-    line-height: 5rem;
+    height: 3rem;
+    line-height: 3rem;
     font-size: 1.5rem;
+}
+
+#diceCountRe {
+    top: 72rem;
+    width: 20rem;
+    height: 3rem;
+    line-height: 3rem;
+    font-size: 1.5rem;
+    color: #e0822b;
+}
+
+#cityName {
+    top: 10rem;
+    width: 30rem;
+    color: #e0822b;
+    display: none;
 }
 
 .mInfo {
@@ -125,6 +144,7 @@
     font-size: 1.5rem;
     border: solid 0.1rem white;
     overflow: visible;
+    z-index: 1;
 }
 
 #diamondArea {
@@ -228,6 +248,35 @@
 }
 
 .build_shower {
-    border-color: rgb(0, 88, 19);
-    color: rgb(0, 88, 19);
+    border-color: rgba(223, 59, 160, 0.966);
+    color: rgba(223, 59, 160, 0.966);
+}
+
+.build_station {
+    border-color: rgba(238, 115, 15, 0.966);
+    color: rgba(238, 115, 15, 0.966);
+}
+
+#cityList {
+    position: absolute;
+    transform: translate(-50%);
+    top: 15rem;
+    left: 32.5rem;
+    width: 30rem;
+    height: 40rem;
+    line-height: 5rem;
+    font-size: 1.5rem;
+    border: #e0822b solid 0.2rem;
+    background-color: rgb(26, 26, 26);
+    border-radius: 0.5rem;
+    overflow-y: scroll;
+    display: none;
+}
+
+#cityList div {
+    float: left;
+    width: 100%;
+    box-sizing: border-box;
+    height: 5rem;
+    border: white solid 0.1rem;
 }

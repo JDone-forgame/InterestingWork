@@ -17,8 +17,8 @@
 </head>
 
 <body>
-    <div id="controlShow" hidden>show</div>
-    
+    <!-- <div id="controlShow" hidden>show</div> -->
+
     <div id="diamondArea" class="mInfo">
         <div id="diamond">钻石:0</div>
         <div id="addDiamond"></div>
@@ -46,8 +46,10 @@
         </div>
     </div>
 
-    <div id="roll" class="gBtn">掷骰子</div>
-    <div id="diceCount">次数:99</div>
+    <div id="roll" class="gBtn diceArea">掷骰子</div>
+    <div id="diceCount" class="diceArea">次数:20</div>
+    <div id="diceCountRe" class="diceArea">距离下次恢复剩余时间:60s</div>
+    <div id="cityName" class="diceArea">显示板</div>
 
     <div id="buildingDetail">
         <div id="buildingInfo">
@@ -56,6 +58,13 @@
         <div id="upBuildingLevel" class="gBtn bBtn">升级建筑</div>
         <div id="closeDetail" class="gBtn bBtn">关闭</div>
     </div>
+
+    <div id="cityList">
+        <div style="background-color: rgb(88, 88, 88);">请选择一个城市进行拜访：</div>
+        <div class="gBtn otherCity">主角的城市</div>
+    </div>
+
+    
 </body>
 
 </html>

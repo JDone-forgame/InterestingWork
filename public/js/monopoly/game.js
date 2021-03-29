@@ -1,8 +1,49 @@
 $(function () {
-    // 玩家的地图
-    let playerMap = [];
+
+    // 开场语
+    $(".control_msg_content").html('<p>仿照的大富翁玩法，体验一下？</p><p>万丈高楼平地起，辉煌只能靠自己</p>');
+
+    let updateInterval = setInterval(updateWorld, 1000);
+
+    let player = {
+        // 玩家的地图
+        map: [],
+        // 金币
+        coin: 0,
+        // 钻石
+        diamond: 0,
+        // 当前所在的建筑ID
+        curBuildingSeq: 1,
+        // 骰子个数
+        diceCount: 20,
+        // 总人口
+        sumPeople: 20,
+        // 城市等级
+        cityLevel: 1,
+
+        // 上次更新时间
+        lastUpdataTime: 0,
+    }
+
+    // 当前所在的城市的数据
+    let otherCityData = null;
+
+    // 每列最大值
+    const liMax = 5;
+    // 每次骰子点数 为 0 则代表随机
+    const dicePoint = 0;
+    // 当前展示的建筑
+    let curShowBuildSite = null;
+    // 每多少秒恢复 1 骰子
+    const diceRecoverInterval = 60;
+    // 骰子上限
+    const diceCountMax = 25;
+    // 是否在自己城市
+    let inSelfCity = true;
+
     // 在建筑时的css类
     const inBuilding = 'inThisBuilding';
+
     // 建筑的css类
     const BUILDCLASS = {
         build_vault: 'build_vault',
@@ -10,23 +51,9 @@ $(function () {
         build_foodStreet: 'build_foodStreet',
         build_skyscraper: 'build_skyscraper',
         build_shower: 'build_shower',
+        build_station: 'build_station',
     };
-    // 金币
-    let coin = 150;
-    // 钻石
-    let diamond = 0;
-    // 每列最大值
-    let liMax = 5;
-    // 当前展示的建筑ID
-    let curBuildingSeq = 0;
-    // 当前展示的建筑
-    let curShowBuildSeq = [];
-    // 骰子个数
-    let diceCount = 99;
-    // 总人口
-    let sumPeople = 20;
-    // 城市等级
-    let cityLevel = 1;
+
     // 建筑type收益类型
     const BTYPE = {
         // 金币
@@ -34,6 +61,7 @@ $(function () {
         // 钻石
         diamond: 1,
     };
+
     // 城市各个等级
     const CITY_LEVEL = [
         {
@@ -75,6 +103,7 @@ $(function () {
             cityLable: '小村落',
         }
     ];
+
     // 特殊建筑
     const SPE_BUILD = [
         {
@@ -135,9 +164,20 @@ $(function () {
                 eachEarn: 10,
                 buildClass: BUILDCLASS.build_shower,
             },
+            {
+                type: 0,
+                buildingName: '车站',
+                buildingId: 15,
+                earn: 10,
+                event: 'e005',
+                eachLevel: 200,
+                eachEarn: 10,
+                buildClass: BUILDCLASS.build_station,
+            },
             ]
         }
     ];
+
     // 特殊建筑事件
     const EVENTS = [
         {
@@ -154,7 +194,7 @@ $(function () {
         },
         {
             eId: 'e003',
-            desi: '在摩天大楼俯瞰你的城市！钻石+5',
+            desi: '在摩天大楼俯瞰城市！钻石+5',
             effect: 'addDiamond',
             count: 5,
         },
@@ -164,62 +204,149 @@ $(function () {
             effect: 'addDice',
             count: 5,
         },
+        {
+            eId: 'e005',
+            desi: '去拜访其他的城市吧！',
+            effect: 'goOtherCity',
+            count: 1,
+        },
     ]
 
+    // 默认的土地
+    const DEFBUILDING = {
+        type: BTYPE.coin,
+        name: '空地',
+        earn: 10,
+        event: '',
+        level: 1,
+        people: 1,
+        eachLevel: 200,
+        eachEarn: 10,
+        eachPeople: 1,
+    }
+
+    // 主角的城市
+    let otherCity1 = `{"map":[[{"type":0,"name":"空地","earn":10,"event":"","level":1,"people":1,"eachLevel":200,"eachEarn":10,"eachPeople":1},{"type":0,"name":"洗浴","earn":10,"event":"e004","level":1,"people":1,"eachLevel":200,"eachEarn":10,"eachPeople":1},{"type":0,"name":"空地","earn":10,"event":"","level":1,"people":1,"eachLevel":200,"eachEarn":10,"eachPeople":1},{"type":0,"name":"空地","earn":10,"event":"","level":1,"people":1,"eachLevel":200,"eachEarn":10,"eachPeople":1},{"type":0,"name":"空地","earn":10,"event":"","level":1,"people":1,"eachLevel":200,"eachEarn":10,"eachPeople":1}],[{"type":0,"name":"空地","earn":10,"event":"","level":1,"people":1,"eachLevel":200,"eachEarn":10,"eachPeople":1},{"type":0,"name":"空地","earn":10,"event":"","level":1,"people":1,"eachLevel":200,"eachEarn":10,"eachPeople":1},{"type":0,"name":"空地","earn":20,"event":"","level":2,"people":2,"eachLevel":400,"eachEarn":20,"eachPeople":1},{"type":0,"name":"空地","earn":10,"event":"","level":1,"people":1,"eachLevel":200,"eachEarn":10,"eachPeople":1},{"type":1,"name":"金库","earn":1,"event":"e001","level":1,"people":1,"eachLevel":1000,"eachEarn":1,"eachPeople":1}],[{"type":0,"name":"空地","earn":10,"event":"","level":1,"people":1,"eachLevel":200,"eachEarn":10,"eachPeople":1},{"type":0,"name":"空地","earn":10,"event":"","level":1,"people":1,"eachLevel":200,"eachEarn":10,"eachPeople":1},{"type":0,"name":"空地","earn":10,"event":"","level":1,"people":1,"eachLevel":200,"eachEarn":10,"eachPeople":1},{"type":0,"name":"空地","earn":10,"event":"","level":1,"people":1,"eachLevel":200,"eachEarn":10,"eachPeople":1},{"type":0,"name":"车站","earn":10,"event":"e005","level":1,"people":1,"eachLevel":200,"eachEarn":10,"eachPeople":1}],[{"type":0,"name":"空地","earn":10,"event":"","level":1,"people":1,"eachLevel":200,"eachEarn":10,"eachPeople":1},{"type":0,"name":"空地","earn":10,"event":"","level":1,"people":1,"eachLevel":200,"eachEarn":10,"eachPeople":1},{"type":0,"name":"空地","earn":10,"event":"","level":1,"people":1,"eachLevel":200,"eachEarn":10,"eachPeople":1},{"type":0,"name":"空地","earn":10,"event":"","level":1,"people":1,"eachLevel":200,"eachEarn":10,"eachPeople":1},{"type":0,"name":"空地","earn":10,"event":"","level":1,"people":1,"eachLevel":200,"eachEarn":10,"eachPeople":1}]],"coin":140,"diamond":1,"curBuildingSeq":15,"diceCount":12,"sumPeople":90,"cityLevel":4,"lastUpdataTime":1616752681543}`
+
     //---------------------------------------------------------------//
+    // 读取本地数据
+    function initData() {
+        if (localStorage.getItem('player')) {
+            player = JSON.parse(localStorage.getItem('player'));
+            updateDice();
+        } else {
+            // 初始化玩家的 map
+            for (let j = 0; j < 4; j++) {
+                let buildingLi = [];
+                for (let i = 0; i < liMax; i++) {
+                    buildingLi.push(DEFBUILDING);
+                }
+                player.map.push(buildingLi)
+            }
+            player.lastUpdataTime = Date.now();
+            saveData(player);
+        }
+    }
+
+    // 保存数据
+    function saveData(player) {
+        localStorage.setItem('player', JSON.stringify(player));
+    }
+
+    // 更新骰子
+    function updateDice() {
+        let nowTime = Date.now();
+        if ((nowTime - player.lastUpdataTime) > 1) {
+            let second = Math.floor((nowTime - player.lastUpdataTime) / 1000);
+            let addDiceCount = Math.floor(second / diceRecoverInterval);
+            if (addDiceCount >= 1) {
+                player.diceCount += addDiceCount;
+                if (player.diceCount > diceCountMax) {
+                    player.diceCount = diceCountMax;
+                    $("#diceCountRe").hide();
+                } else {
+                    $("#diceCountRe").show();
+                }
+                player.lastUpdataTime = nowTime;
+            } else {
+                let diceRe = diceRecoverInterval - second;
+                updateInfo('diceRe', diceRe);
+            }
+        }
+        updateInfo('dice', player.diceCount);
+    }
 
     // 初始化游戏
     function initGame() {
-        let step = 1;
-        for (let j = 0; j < 4; j++) {
-            let buildingLi = [];
-            for (let i = 0; i < liMax; i++) {
-                let defBuilding = {
-                    type: BTYPE.coin,
-                    name: '空地',
-                    earn: 10,
-                    event: '',
-                    level: 1,
-                    people: 1,
-                    eachLevel: 200,
-                    eachEarn: 10,
-                    eachPeople: 1,
-
-                }
-
-                if (step == 1) {
-                    curBuildingSeq = 1;
-                    $('#roadLi' + (j + 1)).append(`<div id="` + step + `" class="building ` + inBuilding + `">` + defBuilding.name + `</div>`)
-                } else {
-                    $('#roadLi' + (j + 1)).append(`<div id="` + step + `" class="building">` + defBuilding.name + `</div>`)
-                }
-
-                buildingLi.push(defBuilding);
-                step++;
-            }
-            playerMap.push(buildingLi);
-        }
-        console.log(playerMap);
+        initMap();
 
         $('#roll').click(rollTheDice);
         $("#closeDetail").click(() => {
             curShowBuildSeq = [];
             openAndClosMsg(false, '')
         });
+
+        $("#upBuildingLevel").click(upBuildingLevel);
+        $("#control_msg_close").click(() => {
+            $(".control_board").css('width', '0%');
+        })
+
+        updateInfo('all', 0);
+
+    }
+
+    // 初始化地图
+    function initMap() {
+        let buildId = 1;
+        for (let j = 0; j < 4; j++) {
+            $('#roadLi' + (j + 1)).empty();
+            for (let i = 0; i < liMax; i++) {
+                let site = idToSite(buildId);
+                $('#roadLi' + (j + 1)).append(`<div id="` + buildId + `" class="building">` + player.map[site.li][site.lic].name + `</div>`);
+                if (buildId == player.curBuildingSeq) {
+                    $('#' + player.curBuildingSeq).addClass(inBuilding);
+                }
+                buildId++;
+            }
+        }
+
+        // 检查该等级已解锁的建筑
+        checkUnlockBuilding(player.cityLevel);
+
         $(".building").on('click', function () {
             let id = $(this).attr("id");
             clickBuilding(id);
         })
-        $("#upBuildingLevel").click(upBuildingLevel)
-
-        $(".control_msg_content").html('<p></p>');
     }
 
-    // 弹窗
+    // 初始化其他城市
+    function loadOtherCity(cityData) {
+        let buildId = 1;
+        for (let j = 0; j < 4; j++) {
+            $('#roadLi' + (j + 1)).empty();
+            for (let i = 0; i < liMax; i++) {
+                let site = idToSite(buildId);
+                let thisBuild = cityData.map[site.li][site.lic];
+                $('#roadLi' + (j + 1)).append(`<div id="` + buildId + `" class="building">` + thisBuild.name + `</div>`);
+                buildId++;
+            }
+        }
+        console.log(cityData.map);
+        checkUnlockBuilding(cityData.cityLevel);
+    }
+
+    // 初始化玩家刚到其他城市信息
+    function initPlayerInOtherCity() {
+        $("#15").addClass(inBuilding);
+        player.curBuildingSeq = 15;
+    }
+
+    // 控制菜单弹窗
     function openAndClosMsg(open, msg = '') {
         $(".control_msg_content").html(msg);
         if (open) {
             $("#control_msg").addClass('control_btn_choosed');
+            $(".control_board").css('width', '100%');
             $(".control_msg_board").css('width', '50%');
         } else {
             $("#buildingDetail").hide();
@@ -228,20 +355,31 @@ $(function () {
 
     // 掷骰子
     function rollTheDice() {
-        if (diceCount <= 0) {
+        if (player.diceCount <= 0 && inSelfCity) {
             openAndClosMsg(true, '<p>骰子点数不足！</p>')
             return;
         }
 
-        let point = 1 + Math.floor(Math.random() * 6);
-        $('#touzi').empty();
-        $('#touzi').append(`<img src="/public/img/monopoly/t` + point + `.png">`)
+        // 测试模式使用
+        let point = dicePoint;
+        if (dicePoint == 0) {
+            point = 1 + Math.floor(Math.random() * 6);
+        }
 
+        // 骰子图片展示
+        let imgName = dicePoint != 0 ? 7 : point;
+        $('#touzi').empty();
+        $('#touzi').append(`<img src="/public/img/monopoly/t` + imgName + `.png">`)
+
+        // 移动及收益
         $('#roll').unbind("click");
         moveBlock(point);
 
-        diceCount--;
-        updateInfo('dice',diceCount);
+        // 扣次数
+        if (inSelfCity) {
+            player.diceCount--;
+            updateInfo('dice', player.diceCount);
+        }
     }
 
     // 移动
@@ -250,12 +388,11 @@ $(function () {
         let sumAddCoin = 0;
         let sumAddDiamond = 0;
 
-
         let goSteps = setInterval(() => {
-            let li = Math.floor((curBuildingSeq + 1) / liMax);
-            let lic = (curBuildingSeq + 1) % liMax;
+            let li = Math.floor((player.curBuildingSeq + 1) / liMax);
+            let lic = (player.curBuildingSeq + 1) % liMax;
 
-            $('#' + (curBuildingSeq + 1)).addClass(inBuilding);
+            $('#' + (player.curBuildingSeq + 1)).addClass(inBuilding);
 
             if (lic == 0) {
                 li--;
@@ -268,35 +405,35 @@ $(function () {
                 li = 0;
             }
 
-            console.log('li:' + li + ',lic:' + lic)
-            console.log(curBuildingSeq)
-
-            let curBuilding = playerMap[li][lic];
+            let curBuilding = inSelfCity ? player.map[li][lic] : otherCityData.map[li][lic];
 
             if (curBuilding.type == BTYPE.coin) {
-                coin += curBuilding.earn;
+                player.coin += curBuilding.earn;
                 sumAddCoin += curBuilding.earn;
-                updateInfo('coin', coin);
+                updateInfo('coin', player.coin);
                 showInfo('coin', sumAddCoin);
             } else if (curBuilding.type == BTYPE.diamond) {
-                diamond += curBuilding.earn;
+                player.diamond += curBuilding.earn;
                 sumAddDiamond += curBuilding.earn;
-                updateInfo('diamond', diamond);
+                updateInfo('diamond', player.diamond);
                 showInfo('diamond', sumAddDiamond);
             }
 
-
-
             // 清除前面的效果
-            let lastId = curBuildingSeq;
+            let lastId = player.curBuildingSeq;
             if (lastId == 0) {
                 lastId = 20;
             }
             $('#' + (lastId)).removeClass(inBuilding);
 
-            curBuildingSeq++;
-            if (curBuildingSeq > (4 * liMax - 1)) {
-                curBuildingSeq = 0;
+            // 在别人城市判断经过车站回来
+            if (player.curBuildingSeq == 15 && !inSelfCity) {
+                triggerEvent(curBuilding.event);
+            }
+
+            player.curBuildingSeq++;
+            if (player.curBuildingSeq > (4 * liMax - 1)) {
+                player.curBuildingSeq = 0;
             }
 
             // 最后一步、触发最后一个建筑的事件
@@ -315,6 +452,7 @@ $(function () {
                     showInfo('diamond', sumAddDiamond, true);
                 }
                 clearInterval(goSteps);
+                saveData(player);
             }
         }, 300);
     }
@@ -325,34 +463,46 @@ $(function () {
             if (eId == event.eId) {
                 switch (event.effect) {
                     case "addCoin":
-                        coin += event.count;
-                        updateInfo('coin', coin);
+                        player.coin += event.count;
+                        updateInfo('coin', player.coin);
                         showInfo('coin', event.count, true);
                         break;
                     case "addDiamond":
-                        diamond += event.count;
-                        updateInfo('diamond', diamond);
+                        player.diamond += event.count;
+                        updateInfo('diamond', player.diamond);
                         showInfo('diamond', event.count, true);
                         break;
                     case "addDice":
-                        diceCount += event.count;
-                        updateInfo('dice', diceCount);
+                        player.diceCount += event.count;
+                        updateInfo('dice', player.diceCount);
+                        break;
+                    case "goOtherCity":
+                        if (inSelfCity) {
+                            showCanGoCityList();
+                        } else {
+                            backToSelfCity();
+                        }
                         break;
                 }
                 openAndClosMsg(true, "<p>" + event.desi + "</p>");
             }
         }
+        saveData(player);
     }
 
     // 更新数值信息
     function updateInfo(infoType, number) {
         switch (infoType) {
             case "coin":
-                checkUpBuild();
+                if (inSelfCity) {
+                    checkUpBuild();
+                }
                 $("#coin").text("金币:" + number);
                 break;
             case "people":
-                checkUpCity();
+                if (inSelfCity) {
+                    checkUpCity();
+                }
                 $("#peopleNum").text("人口:" + number);
                 break;
             case "diamond":
@@ -361,9 +511,16 @@ $(function () {
             case "dice":
                 $("#diceCount").text('次数:' + number);
                 break;
+            case "diceRe":
+                $("#diceCountRe").text('距离下次恢复剩余时间:' + number + 's');
+                break;
+            case "all":
+                $("#coin").text("金币:" + player.coin);
+                $("#peopleNum").text("人口:" + player.sumPeople);
+                $("#diamond").text("钻石:" + player.diamond);
+                $("#diceCount").text('次数:' + player.diceCount);
+                break;
         }
-
-        console.log(infoType, number)
     }
 
     // 更新数值加减展示信息
@@ -414,10 +571,10 @@ $(function () {
 
         let site = idToSite(id);
 
-        let building = playerMap[site.li][site.lic];
+        let building = player.map[site.li][site.lic];
         showBuildInfo(building);
 
-        curShowBuildSeq = [site.li, site.lic];
+        curShowBuildSite = site;
     }
 
     // 展示建筑信息
@@ -434,23 +591,24 @@ $(function () {
 
     // 升级建筑
     function upBuildingLevel() {
-        let curBuilding = playerMap[curShowBuildSeq[0]][curShowBuildSeq[1]];
-        if (curShowBuildSeq.length > 0 && coin >= curBuilding.eachLevel) {
-            coin -= curBuilding.eachLevel;
-            updateInfo('coin', coin);
+        let curBuilding = player.map[curShowBuildSite.li][curShowBuildSite.lic];
+        if (curShowBuildSite != null && player.coin >= curBuilding.eachLevel) {
+            player.coin -= curBuilding.eachLevel;
+            updateInfo('coin', player.coin);
             showInfo('coin', 0 - curBuilding.eachLevel, true);
 
             curBuilding.level += 1;
             curBuilding.earn += curBuilding.eachEarn;
             curBuilding.eachEarn = curBuilding.eachEarn * 2;
             curBuilding.eachLevel = curBuilding.eachLevel * curBuilding.level;
-            sumPeople += curBuilding.eachPeople;
-            updateInfo('people', sumPeople);
+            player.sumPeople += curBuilding.eachPeople;
+            updateInfo('people', player.sumPeople);
             showInfo('people', curBuilding.eachPeople);
             curBuilding.people += curBuilding.eachPeople;
             curBuilding.people = curBuilding.eachPeople * 2;
 
-            playerMap[curShowBuildSeq[0]][curShowBuildSeq[1]] = curBuilding;
+            player.map[curShowBuildSite.li][curShowBuildSite.lic] = curBuilding;
+            saveData(player);
             showBuildInfo(curBuilding);
             $("#tip").text("升级成功！");
         } else {
@@ -460,63 +618,135 @@ $(function () {
 
     // 检查建筑是否可以升级
     function checkUpBuild() {
-        let step = 1;
+        let buildId = 1;
         for (let j = 0; j < 4; j++) {
             for (let i = 0; i < liMax; i++) {
-                let curBuild = playerMap[j][i];
-                if (coin >= curBuild.eachLevel) {
-                    $("#" + step).text('升级');
-                    $("#" + step).addClass('upBuilding');
+                let curBuild = player.map[j][i];
+                if (player.coin >= curBuild.eachLevel) {
+                    $("#" + buildId).text('升级');
+                    $("#" + buildId).addClass('upBuilding');
                 } else {
-                    $("#" + step).text(curBuild.name);
-                    $("#" + step).removeClass('upBuilding');
+                    $("#" + buildId).text(curBuild.name);
+                    $("#" + buildId).removeClass('upBuilding');
                 }
-                step++;
+                buildId++;
             }
         }
     }
 
     // 检查城市等级是否可以升级
     function checkUpCity() {
+        let level = inSelfCity ? player.cityLevel : otherCityData.cityLevel;
+        let sumPeople = inSelfCity ? player.sumPeople : otherCityData.sumPeople;
         for (let i = 0; i < CITY_LEVEL.length; i++) {
-            if (cityLevel < CITY_LEVEL[i].cityLevel && sumPeople >= CITY_LEVEL[i].pLimit) {
+            if (level < CITY_LEVEL[i].cityLevel && sumPeople >= CITY_LEVEL[i].pLimit) {
                 $("#cityLevel").text(CITY_LEVEL[i].cityLable);
-                cityLevel++;
-                let unlockBuilds = checkUnlockBuilding();
-                openAndClosMsg(true, '<p>您的城市已经升级至' + CITY_LEVEL[i].cityLable + '!</p><p>解锁建筑：' + unlockBuilds + '</p>');
+                let unlockBuilds = checkUnlockBuilding(level);
+                if (inSelfCity) {
+                    player.cityLevel++;
+                    openAndClosMsg(true, '<p>您的城市已经升级至' + CITY_LEVEL[i].cityLable + '!</p><p>解锁建筑：' + unlockBuilds + '</p>');
+                }
             }
         }
     }
 
     // 检查解锁的建筑
-    function checkUnlockBuilding() {
+    function checkUnlockBuilding(curCityLevel) {
         let unlockBuildStr = '';
         for (let i = 0; i < SPE_BUILD.length; i++) {
             let curSpeBuild = SPE_BUILD[i];
-            if (cityLevel >= curSpeBuild.cityLevel) {
+            if (curCityLevel >= curSpeBuild.cityLevel) {
                 for (let unlockBuilding of curSpeBuild.unlockBuild) {
                     let site = idToSite(unlockBuilding.buildingId);
                     $("#" + unlockBuilding.buildingId).addClass(unlockBuilding.buildClass);
                     $("#" + unlockBuilding.buildingId).text(unlockBuilding.buildingName);
 
-                    let curBuilding = playerMap[site.li][site.lic];
-                    curBuilding.type = unlockBuilding.type;
-                    curBuilding.earn = unlockBuilding.earn;
-                    curBuilding.event = unlockBuilding.event;
-                    curBuilding.level = 1;
-                    curBuilding.eachLevel = unlockBuilding.eachLevel;
-                    curBuilding.eachEarn = unlockBuilding.eachEarn;
-                    curBuilding.name = unlockBuilding.buildingName;
+                    let curBuilding = player.map[site.li][site.lic];
+                    if (!inSelfCity) {
+                        curBuilding = otherCityData.map[site.li][site.lic];
+                    }
 
-                    playerMap[site.li][site.lic] = curBuilding;
+                    if (curBuilding.name != unlockBuilding.buildingName) {
+                        curBuilding.type = unlockBuilding.type;
+                        curBuilding.earn = unlockBuilding.earn;
+                        curBuilding.event = unlockBuilding.event;
+                        curBuilding.level = 1;
+                        curBuilding.eachLevel = unlockBuilding.eachLevel;
+                        curBuilding.eachEarn = unlockBuilding.eachEarn;
+                        curBuilding.name = unlockBuilding.buildingName;
+                    }
+
+                    if (inSelfCity) {
+                        player.map[site.li][site.lic] = curBuilding;
+                    }
 
                     unlockBuildStr += unlockBuilding.buildingName + ',';
                 }
             }
         }
+        if (inSelfCity) { saveData(player); }
 
         return unlockBuildStr.slice(0, unlockBuildStr.length - 1);
     }
 
+    // 展示可去城市弹窗
+    function showCanGoCityList() {
+        $("#cityList").show();
+        $(".control_board").css('width', '100%');
+
+        $(".otherCity").click(function () {
+
+            let cityName = $(this).text();
+            let cityData = null;
+            inSelfCity = false;
+            switch (cityName) {
+                case "主角的城市":
+                    cityData = JSON.parse(otherCity1);
+                    break;
+            }
+
+            otherCityData = cityData;
+            loadOtherCity(cityData);
+
+            goToOtherCity(cityName);
+        })
+    }
+
+    // 加载完数据点击城市后执行的样式变化
+    function goToOtherCity(cityName) {
+        $("#cityList").hide();
+        $("#map").css({
+            borderColor: '#A0522D',
+            backgroundColor: '#D2B48C'
+        });
+        $("#cityName").show();
+        $("#cityName").text(cityName);
+
+        $("#diceCount").hide();
+        $("#diceCountRe").hide();
+        initPlayerInOtherCity();
+    }
+
+    // 返回自己的城市
+    function backToSelfCity() {
+        otherCityData = null;
+        inSelfCity = true;
+
+        $("#map").css({
+            borderColor: 'white',
+            backgroundColor: '#696969'
+        });
+        $("#cityName").hide();
+        $("#diceCount").show();
+        $("#diceCountRe").show();
+
+        initMap();
+    }
+
+    function updateWorld() {
+        updateDice();
+    }
+
+    initData();
     initGame();
 })
