@@ -99,6 +99,12 @@ body {
     overflow: hidden;
 }
 
+.JDone{
+    position: absolute;
+    left: 0;
+    height: 100%;
+}
+
 .control_back {
     box-sizing: border-box;
     border: 0.1rem solid black;

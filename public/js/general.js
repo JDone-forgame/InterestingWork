@@ -1,6 +1,6 @@
 $(function () {
     // 控制页面
-    let controlHtml = `<div class="control_board"></div>
+    let controlHtml = `<div class="control_board"><img src="/public/img/JDone.png" class="JDone"></div>
     <div class="control_msg_board">
         <div class="control_msg_bar">
             <div id="control_msg_close" class="control_msg_bar_btn">X</div>
@@ -29,8 +29,8 @@ $(function () {
             <div id="control_msg" class="control_btn">
                 消息面板
             </div>
-        </div>
-        
+        </div>   
+
     </div>`
 
     // 判断是否需要直接显示该控件
