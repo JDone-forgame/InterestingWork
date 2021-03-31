@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- 页面的样式 -->
+    <link rel="stylesheet" type="text/css" href="/public/css/threeJS/index.css">
+    <!-- 通用的样式 -->
+    <script type="text/javascript" src="/public/js/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/public/css/general.css">
+    <!-- 通用的js控制 -->
+    <script type="text/javascript" src="/public/js/general.js"></script>
+
+    <script src="/public/js/three.js"></script>
+    <!-- 性能监视器 -->
+    <script src="/public/js/Stats.js"></script>
+    <!-- 动画引擎 -->
+    <script src="/public/js/tween.min.js"></script>
+
+    <title>threeJS</title>
+</head>
+
+<style type="text/css">
+    div#canvas-frame {
+        position: absolute;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+        height: 100%;
+        background-color: #000000;
+    }
+</style>
+
+<script>
+    $(function () {
+        let addControl = `
+        <div class="control_back">
+            <div id="cBtn0" class="control_btn">
+                重新开始
+            </div>
+        </div>
+
+        <div class="control_back">
+            <div id="cBtn1" class="control_btn closeMenu">
+                1基础模型
+            </div>
+        </div>
+
+        <div class="control_back">
+            <div id="cBtn2" class="control_btn closeMenu">
+                2点和线
+            </div>
+        </div>
+
+        <div class="control_back">
+            <div id="cBtn3" class="control_btn">
+                3坐标系
+            </div>
+        </div>
+
+        <div class="control_back">
+            <div id="cBtn4" class="control_btn">
+                4投影光源
+            </div>
+        </div>
+
+        <div class="control_back">
+            <div id="cBtn5" class="control_btn">
+                5材质光源
+            </div>
+        </div>
+
+        <div class="control_back">
+            <div id="cBtn6" class="control_btn">
+                6纹理
+            </div>
+        </div>
+
+        <div class="control_back">
+            <div id="cBtn7" class="control_btn">
+                7旋转
+            </div>
+        </div>
+        `
+
+
+        $(".control_area").append(addControl);
+        addOver();
+        
+
+        $("#cBtn0").click(() => {
+            window.location.href = '/';
+        })
+        $("#cBtn1").click(() => {
+            $("#canvas-frame").empty();
+            startExample1();
+        })
+        $("#cBtn2").click(() => {
+            $("#canvas-frame").empty();
+            startExample2();
+        })
+        $("#cBtn3").click(() => {
+            $("#canvas-frame").empty();
+            startExample3();
+        })
+        $("#cBtn4").click(() => {
+            $("#canvas-frame").empty();
+            startExample4();
+        })
+        $("#cBtn5").click(() => {
+            $("#canvas-frame").empty();
+            startExample5();
+        })
+        $("#cBtn6").click(() => {
+            $("#canvas-frame").empty();
+            startExample6();
+        })
+        $("#cBtn7").click(() => {
+            $("#canvas-frame").empty();
+            startExample7();
+        })
+
+        $(".control_msg_content").html('<p>&emsp;&emsp;简单学习了一下THREEJS相关的知识，为之后进入3D领域开路！</p>');
+    })
+</script>
+
+<body>
+    <script title="基础的一个3D尝试" src="/public/js/threeJS/first.js"></script>
+
+    <script title="一条线" src="/public/js/threeJS/second.js"></script>
+
+    <script title="平面坐标系" src="/public/js/threeJS/third.js"></script>
+
+    <script title="动画、性能监视器、动画引擎、正投影、透视投影、光源" src="/public/js/threeJS/fourth.js"></script>
+
+    <script title="材质与光源" src="/public/js/threeJS/fifth.js"></script>
+
+    <script title="纹理" src="/public/js/threeJS/sixth.js"></script>
+
+    <script title="旋转" src="/public/js/threeJS/seventh.js"></script>
+
+    <div id="canvas-frame"></div>
+</body>
+
+</html>

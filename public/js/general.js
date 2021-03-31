@@ -14,7 +14,7 @@ $(function () {
         <div class="control_title control_title_ani">控制菜单</div>
 
         <div class="control_back">
-            <div id="control_close" class="control_btn">
+            <div class="control_btn closeMenu">
                 关闭菜单
             </div>
         </div>
@@ -42,52 +42,56 @@ $(function () {
     }
 
     $(".control_title").click(clickTitleAnim);
-    $("#control_close").click(closeMenuAnim);
     $("#control_msg").click(openMsgBoard);
     $("#control_msg_close").click(closeMsgBoard);
-
-    // 点击菜单的动画
-    function clickTitleAnim() {
-        $(".control_area").css({
-            boxShadow: '0 0 2rem 1rem white',
-            height: '100%',
-            borderBottomRightRadius: '0rem',
-        });
-        $(".control_board").css('width', '100%');
-        $(".control_title").removeClass("control_title_ani");
-    }
-
-    // 点击关闭菜单的动画
-    function closeMenuAnim() {
-        closeMsgBoard();
-        $(".control_area").css({
-            boxShadow: '0 0 0rem 0rem white',
-            height: '4rem',
-            borderBottomRightRadius: '4rem',
-        });
-        $(".control_board").css('width', '0%');
-        $(".control_title").addClass("control_title_ani");
-    }
-
-    // 消息面板打开与关闭
-    function openMsgBoard() {
-        $("#control_msg").addClass('control_btn_choosed');
-        $(".control_msg_board").css('width', '50%');
-    }
-
-    function closeMsgBoard() {
-        $(".control_msg_content").text('');
-        $("#control_msg").removeClass('control_btn_choosed');
-        $(".control_msg_board").css('width', '0%');
-    }
+    $(".closeMenu").on('click', closeMenuAnim);
 
     // 退出至首页
     $("#control_exit").click(() => {
         location.href = '/';
     })
 
-
-    
 })
+
+// 添加完毕后的重新绑定
+function addOver() {
+    $(".closeMenu").on('click', closeMenuAnim);
+}
+
+
+// 点击菜单的动画
+function clickTitleAnim() {
+    $(".control_area").css({
+        boxShadow: '0 0 2rem 1rem white',
+        height: '100%',
+        borderBottomRightRadius: '0rem',
+    });
+    $(".control_board").css('width', '100%');
+    $(".control_title").removeClass("control_title_ani");
+}
+
+// 点击关闭菜单的动画
+function closeMenuAnim() {
+    closeMsgBoard();
+    $(".control_area").css({
+        boxShadow: '0 0 0rem 0rem white',
+        height: '4rem',
+        borderBottomRightRadius: '4rem',
+    });
+    $(".control_board").css('width', '0%');
+    $(".control_title").addClass("control_title_ani");
+}
+
+// 消息面板打开与关闭
+function openMsgBoard() {
+    $("#control_msg").addClass('control_btn_choosed');
+    $(".control_msg_board").css('width', '50%');
+}
+
+function closeMsgBoard() {
+    $(".control_msg_content").text('');
+    $("#control_msg").removeClass('control_btn_choosed');
+    $(".control_msg_board").css('width', '0%');
+}
 
 

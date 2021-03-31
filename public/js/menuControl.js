@@ -44,6 +44,10 @@ $(function () {
         window.location.href = '/public/html/museum/index.html'
     })
 
+    $("#m12").click(() => {
+        window.location.href = '/public/html/threeJS/index.html'
+    })
+
     $("#m99").click(() => {
         window.location.href = '/public/html/test.html'
     })
