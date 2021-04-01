@@ -17,19 +17,6 @@
 <script>
     // 添加控制按键
     $(function () {
-        let addControl = `
-        <div class="control_back">
-            <div id="cBtn1" class="control_btn">
-                重新开始
-            </div>
-        </div>
-        `
-        $(".control_area").append(addControl);
-
-        $("#cBtn1").click(() => {
-            location.reload();
-        })
-
         $(".control_msg_content").html('<p>师徒组：师傅>悟空>八戒>沙僧</p><p>妖怪组：大妖怪>中妖怪>小妖怪</p><p>佛组：佛祖>观音</p><p>妖怪打师傅，师傅压徒儿，观音谁都克，就是怕佛祖</p><p>没有合适牌了喝杯酒就好了</p>');
     })
 </script>

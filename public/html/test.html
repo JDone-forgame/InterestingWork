@@ -20,22 +20,30 @@
 <script>
     // 添加控制按键
     $(function () {
-        // 鼠标点击事件
-        $(document).mousedown(function (e) {
-            let x = e.pageX;
-            let y = e.pageY;
-            $("div.mouseMenu").show();
-            $("div.mouseMenu").css({
-                top: y + 'px',
-                left: x + 'px'
+        $("").mousedown(function (mouseDown) {
+            // 鼠标按下的 x 坐标
+            let divDownLeft = mouseDown.clientX;
+            // 待移动元素此时的 left 值
+            let divOrigLeft = parseInt($('.widthBoard').css('left').split('px')[0]);
+
+            $(this).mousemove(function (mouseMove) {
+                // 鼠标此时所在的 x 坐标
+                let divMoveLeft = mouseMove.clientX;
+                // 此时待移动元素应该的 left 值
+                let curDivLeft = (divMoveLeft - divDownLeft) + divOrigLeft;
+
+                // 防止左边留白
+                if (curDivLeft > 0) {
+                    curDivLeft = 0;
+                }
+
+                $('.widthBoard').css('left', curDivLeft + 'px');
+            });
+
+            $(this).mouseup(function (mouseUp) {
+                $(this).unbind('mousemove');
             })
-
-
-            // $("div").remove(".mouseMenu");
-
-            // let mouseMenuHtml = `<div class="mouseMenu" style="top: ` + y + `px;left: ` + x + `px;></div>`;
-            // $("body").append(mouseMenuHtml);
-        });
+        })
     })
 </script>
 

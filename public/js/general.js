@@ -1,6 +1,6 @@
 $(function () {
     // 控制页面
-    let controlHtml = `<div class="control_board"><img src="/public/img/JDone.png" class="JDone"></div>
+    let controlHtml = `<div class="control_board closeMenu"><img src="/public/img/JDone.png" class="JDone"></div>
     <div class="control_msg_board">
         <div class="control_msg_bar">
             <div id="control_msg_close" class="control_msg_bar_btn">X</div>
@@ -29,7 +29,13 @@ $(function () {
             <div id="control_msg" class="control_btn">
                 消息面板
             </div>
-        </div>   
+        </div>  
+        
+        <div class="control_back">
+            <div id="control_reload" class="control_btn">
+                重新开始
+            </div>
+        </div> 
 
     </div>`
 
@@ -45,6 +51,10 @@ $(function () {
     $("#control_msg").click(openMsgBoard);
     $("#control_msg_close").click(closeMsgBoard);
     $(".closeMenu").on('click', closeMenuAnim);
+    $(".gDiv").hover(checkDiv);
+    $("#control_reload").click(() => {
+        location.reload();
+    })
 
     // 退出至首页
     $("#control_exit").click(() => {
@@ -52,6 +62,17 @@ $(function () {
     })
 
 })
+
+// 添加控制按键
+let cBtnSeq = 1;
+function addConBtn(btnName, func, isStateBtn = false) {
+    let state = isStateBtn ? 'control_btn_choosed' : '';
+    let add = `<div class="control_back"><div id="cBtn` + cBtnSeq + `" class="control_btn closeMenu ` + state + `">` + btnName + `</div></div>`;
+    $(".control_area").append(add);
+    $("#cBtn" + cBtnSeq).click(func);
+    cBtnSeq++;
+    $(".closeMenu").on('click', closeMenuAnim);
+}
 
 // 添加完毕后的重新绑定
 function addOver() {
@@ -94,4 +115,44 @@ function closeMsgBoard() {
     $(".control_msg_board").css('width', '0%');
 }
 
+// 有状态的按键
+function changeState(id, state, name = '') {
+    if (name != '') {
+        $('#' + id).text(name);
+    }
+
+    if (state == 'open') {
+        $('#' + id).addClass('control_btn_choosed');
+    } else if (state == 'close') {
+        $('#' + id).removeClass('control_btn_choosed');
+    }
+}
+
+
+// gDiv检查信息
+function checkDiv() {
+    console.log($(this).attr('id'));
+    let divBgColor = '';
+
+    $(this).mousedown(function (mouseDown) {
+        divBgColor = $(this).css('background');
+
+        let mLeft = mouseDown.clientX;
+        let mRight = mouseDown.clientY;
+        console.log(mLeft, mRight);
+
+        let divInfo = `<div class="divInfo" style="left: ` + mLeft + `px;top: ` + mRight + `px;">
+        <p>ID:`+ $(this).attr('id') + `</p>
+        <p>宽:`+ $(this).css('width') + `</p>
+        <p>高:`+ $(this).css('height') + `</p>
+        <p>左:`+ $(this).css('left') + `</p>
+        <p>上:`+ $(this).css('top') + `</p>
+        </div>`;
+        $(document.body).append(divInfo);
+    });
+
+    $(this).mouseup(function () {
+        $(".divInfo").remove();
+    })
+}
 

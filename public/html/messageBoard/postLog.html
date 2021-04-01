@@ -24,19 +24,10 @@
     }
 
     $(function(){
-        let addControl = `
-        <div class="control_back">
-            <div id="cBtn1" class="control_btn">
-                返回列表
-            </div>
-        </div>
-        `
-        $(".control_area").append(addControl);
-
-        $("#cBtn1").click(()=>{
+        addConBtn('返回列表', () => {
             toUrl('/messageBoard');
-        })
-        
+        });
+
         $(".control_msg_content").html('&emsp;&emsp;这是一个测试留言的页面，目前支持发布留言，永久记录留言，删除留言。后续可以尝试来做点权限删除，点击姓名跳转什么的。');
     })
 </script>

@@ -16,19 +16,6 @@
 <script>
     // 添加控制按键
     $(function () {
-        let addControl = `
-        <div class="control_back">
-            <div id="cBtn1" class="control_btn">
-                重新开始
-            </div>
-        </div>
-        `
-        $(".control_area").append(addControl);
-
-        $("#cBtn1").click(() => {
-            location.reload();
-        })
-
         $(".control_msg_content").html('<p>&emsp;&emsp;该机器人由权重算法来与你博弈，有且仅有一种方法可以打败它！</p><p>&emsp;&emsp;如何绝杀就看你的了！</p>');
     })
 

@@ -14,23 +14,7 @@
 </head>
 
 <script>
-    // 添加控制按键
-    $(function () {
-        let addControl = `
-        <div class="control_back">
-            <div id="cBtn1" class="control_btn refreshBtn">
-                重新开始
-            </div>
-        </div>
-        `
-        $(".control_area").append(addControl);
-
-        $("#cBtn1").click(() => {
-            location.reload();
-        })
-
-        $(".control_msg_content").html('请按上、下、左、右键进行操作');
-    })
+    $(".control_msg_content").html('请按上、下、左、右键进行操作');
 </script>
 
 <body>

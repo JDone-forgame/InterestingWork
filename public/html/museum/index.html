@@ -16,107 +16,116 @@
 </head>
 
 <script>
-    function allowDrop(ev) {
-        ev.preventDefault();
-    }
+    $(function () {
+        function initCardItem() {
+            let itemMax = 6;
+            $('.widthBoard').css('width', $('.widthBoard').css('height') * itemMax);
+            for (let i = 1; i <= itemMax; i++) {
+                let itemStr = `<div id="itemBoard` + i + `" class="itemBoard" draggable="true" ondragstart="drag(event)">
+                    <div class="item" >
+                        <img draggable="false" src="/public/img/card/card`+ i + `.png">
+                    </div>
+                </div>`;
+                $('.widthBoard').append(itemStr);
+            }
+        }
 
+        initCardItem();
+
+
+        addConBtn('默认案例', () => {
+            $("#museum").show();
+            $("#testArea").hide();
+        });
+
+        addConBtn('失败案例', () => {
+            $("#museum").hide();
+            $("#testArea").show();
+            openTheFaild();
+        });
+
+
+        // 曲线救国
+        $(".itemBoard").click(function () {
+            console.log($(this).attr('id'), $(this).parent().attr('class'))
+
+            if ($(this).parent().attr('class') == 'basket') {
+                $(".widthBoard").prepend($(this));
+                $(this).parent().remove(".itemBoard");
+            }
+        })
+
+
+        // 打开失败案例
+        function openTheFaild() {
+            let i = 1;
+            setInterval(() => {
+                $("#bodyUse").attr('src', "/public/img/museum/body/body" + i + ".png")
+                i++;
+                if (i >= 35) {
+                    i = 1;
+                }
+            }, 1000)
+        }
+
+    })
+
+
+
+    // 拽动
     function drag(ev) {
         ev.dataTransfer.setData("itemId", ev.target.id);
     }
 
-    function drop(ev) {
+    // 经过可放区域时
+    function allowDrop(ev, id) {
+        // 如果内里没有元素的话允许放
+        if (document.getElementById(id).childNodes.length < 1) {
+            ev.preventDefault();
+        }
+    }
+
+    // 放下
+    function drop(ev, id) {
         var data = ev.dataTransfer.getData("itemId");
         ev.target.appendChild(document.getElementById(data));
         ev.preventDefault();
     }
 
-    $(function () {
-        $(".widthBoard").mousedown(function (mouseDown) {
-            // 鼠标按下的 x 坐标
-            let divDownLeft = mouseDown.clientX;
-            // 待移动元素此时的 left 值
-            let divOrigLeft = parseInt($('.widthBoard').css('left').split('px')[0]);
-
-            $(this).mousemove(function (mouseMove) {
-                // 鼠标此时所在的 x 坐标
-                let divMoveLeft = mouseMove.clientX;
-                // 此时待移动元素应该的 left 值
-                let curDivLeft = (divMoveLeft - divDownLeft) + divOrigLeft;
-
-                // 防止左边留白
-                if (curDivLeft > 0) {
-                    curDivLeft = 0;
-                }
-
-                $('.widthBoard').css('left', curDivLeft + 'px');
-            });
-
-            $(this).mouseup(function (mouseUp) {
-                $(this).unbind('mousemove');
-            })
-        })
-
-    })
-
 </script>
 
 <body>
-
-    <div id="allItemsBoard" class="ItemArea">
-        <div class="widthBoard">
-            <div class="itemBoard">
-                <div id="i1001" class="item" draggable="true" ondragstart="drag(event)">card1</div>
-            </div>
-            <div class="itemBoard">
-                <div id="i1002" class="item" draggable="true" ondragstart="drag(event)">card2</div>
-            </div>
-            <div class="itemBoard">
-                <div id="i1003" class="item" draggable="true" ondragstart="drag(event)">card3</div>
-            </div>
-            <div class="itemBoard">
-                <div id="i1004" class="item" draggable="true" ondragstart="drag(event)">card4</div>
-            </div>
-            <div class="itemBoard">
-
-            </div>
-            <div class="itemBoard">
-
-            </div>
-            <div class="itemBoard">
-
-            </div>
-            <div class="itemBoard">
-
-            </div>
-            <div class="itemBoard">
-
-            </div>
-            <div class="itemBoard">
-
-            </div>
-            <div class="itemBoard">
-
-            </div>
-            <div class="itemBoard">
-
-            </div>
-            <div class="itemBoard">
-
+    <div id="museum">
+        <div id="allItemsBoard" class="ItemArea">
+            <div id="allItemsWidthBoard" class="widthBoard">
             </div>
         </div>
+
+        <div id="basketBoard" class="ItemArea gDiv">
+            <div id="basket1" class="basket" ondrop="drop(event,this.id)" ondragover="allowDrop(event,this.id)"></div>
+            <div id="basket2" class="basket" ondrop="drop(event,this.id)" ondragover="allowDrop(event,this.id)"></div>
+            <div id="basket3" class="basket" ondrop="drop(event,this.id)" ondragover="allowDrop(event,this.id)"></div>
+        </div>
+    </div>
     </div>
 
-    <div id="basketBoard" class="ItemArea">
-        <div class="itemBoard" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
-        <div class="itemBoard" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
-        <div class="itemBoard" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
-        <div class="itemBoard" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
-        <div class="itemBoard" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
-        <div class="itemBoard" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
-        <div class="itemBoard" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
-        <div class="itemBoard" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
-        <div class="itemBoard" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
-        <div class="itemBoard" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+
+    <!-- ------------------------------------------------------- -->
+
+
+    <div id="testArea" class="gDiv">
+        <p>这是一个失败的案例，失败在对图片的要求蛮多！</p>
+        <div id="bodyArea" class="gDiv">
+            <img id="bodyUse" src="/public/img/museum/body/body5.png">
+        </div>
+
+        <div id="headArea" class="gDiv">
+            <img src="/public/img/museum/face/face.png">
+        </div>
+
+        <div id="hairArea" class="gDiv">
+            <img src="/public/img/museum/hair/hair1.png">
+        </div>
     </div>
 
 </body>

@@ -36,92 +36,34 @@
 
 <script>
     $(function () {
-        let addControl = `
-        <div class="control_back">
-            <div id="cBtn0" class="control_btn">
-                重新开始
-            </div>
-        </div>
-
-        <div class="control_back">
-            <div id="cBtn1" class="control_btn closeMenu">
-                1基础模型
-            </div>
-        </div>
-
-        <div class="control_back">
-            <div id="cBtn2" class="control_btn closeMenu">
-                2点和线
-            </div>
-        </div>
-
-        <div class="control_back">
-            <div id="cBtn3" class="control_btn">
-                3坐标系
-            </div>
-        </div>
-
-        <div class="control_back">
-            <div id="cBtn4" class="control_btn">
-                4投影光源
-            </div>
-        </div>
-
-        <div class="control_back">
-            <div id="cBtn5" class="control_btn">
-                5材质光源
-            </div>
-        </div>
-
-        <div class="control_back">
-            <div id="cBtn6" class="control_btn">
-                6纹理
-            </div>
-        </div>
-
-        <div class="control_back">
-            <div id="cBtn7" class="control_btn">
-                7旋转
-            </div>
-        </div>
-        `
-
-
-        $(".control_area").append(addControl);
-        addOver();
-        
-
-        $("#cBtn0").click(() => {
-            window.location.href = '/';
-        })
-        $("#cBtn1").click(() => {
+        addConBtn('基础模型', () => {
             $("#canvas-frame").empty();
             startExample1();
-        })
-        $("#cBtn2").click(() => {
+        });
+        addConBtn('点和线', () => {
             $("#canvas-frame").empty();
             startExample2();
-        })
-        $("#cBtn3").click(() => {
+        });
+        addConBtn('坐标系', () => {
             $("#canvas-frame").empty();
             startExample3();
-        })
-        $("#cBtn4").click(() => {
+        });
+        addConBtn('投影光源', () => {
             $("#canvas-frame").empty();
             startExample4();
-        })
-        $("#cBtn5").click(() => {
+        });
+        addConBtn('材质光源', () => {
             $("#canvas-frame").empty();
             startExample5();
-        })
-        $("#cBtn6").click(() => {
+        });
+        addConBtn('纹理', () => {
             $("#canvas-frame").empty();
             startExample6();
-        })
-        $("#cBtn7").click(() => {
+        });
+        addConBtn('旋转', () => {
             $("#canvas-frame").empty();
             startExample7();
-        })
+        });
 
         $(".control_msg_content").html('<p>&emsp;&emsp;简单学习了一下THREEJS相关的知识，为之后进入3D领域开路！</p>');
     })

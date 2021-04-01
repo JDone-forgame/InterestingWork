@@ -12,19 +12,6 @@ $(function () {
 
     // 初始化控制菜单
     function initControlMenu() {
-        let addControl = `
-        <div class="control_back">
-            <div id="cBtn1" class="control_btn">
-                重新开始
-            </div>
-        </div>
-        `
-        $(".control_area").append(addControl);
-
-        $("#cBtn1").click(() => {
-            location.reload();
-        })
-
         $(".control_msg_content").html('小时候自己设计了一种棋，蛮有意思，现在可以用代码实现当然最好了！');
     }
 

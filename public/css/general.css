@@ -99,7 +99,7 @@ body {
     overflow: hidden;
 }
 
-.JDone{
+.JDone {
     position: absolute;
     left: 0;
     height: 100%;
@@ -254,4 +254,30 @@ body {
     background-color: white;
     /* border: 0.1rem solid black; */
     box-shadow: 0 0 0.5rem 0.1rem white;
+}
+
+.gDiv {
+    border: white solid 0.1rem;
+    animation: gDivBoard 4s linear 0s infinite alternate;
+}
+
+@keyframes gDivBoard {
+    0% {
+        border: rgba(255, 255, 255, 0) solid 0.1rem;
+    }
+    100% {
+        border: white solid 0.1rem;
+    }
+}
+
+.divInfo {
+    position: fixed;
+    z-index: 10;
+    width: 10rem;
+    height: 15rem;
+    background: #696969;
+    border: white solid 0.1rem;
+    border-radius: 0.5rem;
+    color: white;
+    text-align: center;
 }
